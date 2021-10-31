@@ -69,22 +69,24 @@ public class MainActivity extends AppCompatActivity {
                 final String conPassword = suConPassword.getText().toString();
                 HashMap<String, String> data = new HashMap<>();
                 for (User user: userDataList){
-                    if (userName.equals(user.getUserName()) && password.equals(user.getPassword())){
-                        Log.d(TAG, "User logged in successfully!");
-                        suErrView.setText("User logged in successfully!");
+                    if (userName.equals(user.getUserName())){
+                        Log.d(TAG, "User exists already");
+                        suErrView.setText("User exists already");
                         success = 1;
+
 
                     }
 
 
                 }
                 if (success == 0){
-                    Log.d(TAG, "User does not exist or Password is not correct");
-                    suErrView.setText("User does not exist or Password is not correct");
+                    Log.d(TAG, "New User is Valid");
+                    suErrView.setText("New User is Valid");
+
 
 
                 }
-                if (userName.length()>0 && password.length()>0 && password.equals(conPassword) && success == 1) {
+                if (userName.length()>0 && password.length()>0 && password.equals(conPassword) && success == 0) {
                     data.put("Password", password);
                     collectionReference
                             .document(userName)
@@ -97,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                                     suUserName.setText("");
                                     suPassword.setText("");
                                     suConPassword.setText("");
+                                    Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                                    startActivity(HabitsIntent);
+                                    finish();
 
 
                                 }
@@ -136,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
                 Intent myIntent = new Intent(getApplicationContext(), LogInActivity.class);
                 startActivity(myIntent);
+                finish();
 
 
             }

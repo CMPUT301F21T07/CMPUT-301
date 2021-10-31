@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrackHabit">
         <activity
-            android:name=".LogInActivity"
+            android:name=".HabitsActivity"
             android:exported="true" />
         <activity
-            android:name=".Log_In"
+            android:name=".LogInActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
