@@ -61,7 +61,7 @@ public class LogInActivity extends AppCompatActivity {
                     Log.d(TAG, String.valueOf(doc.getData().get("Password")));
                     String userName = doc.getId();
                     String password = (String) doc.getData().get("Password");
-                    uDataList.add(new User(userName, password)); // Adding the cities and provinces from FireStore
+                    uDataList.add(new User(userName, password)); // Adding the userName and password from FireStore
                 }
             }
         });
