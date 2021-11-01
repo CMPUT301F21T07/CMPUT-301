@@ -16,9 +16,9 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
     private ArrayList<Habits> habits;
     private Context context;
 
-    public habitListAdapter(Context context, ArrayList<Habits> medicineArrayList){
-        super(context, R.layout.habit_list_adapter, medicineArrayList);
-        this.habits = medicineArrayList;
+    public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
+        super(context, R.layout.habit_list_adapter, habitArrayList);
+        this.habits = habitArrayList;
         this.context = context;
     }
 

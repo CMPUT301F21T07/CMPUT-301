@@ -79,6 +79,7 @@ public class LogInActivity extends AppCompatActivity {
                             errView.setText("User logged in successfully!");
                             success = 1;
                             Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                            HabitsIntent.putExtra("name_key", userName);
                             startActivity(HabitsIntent);
                             finish();
 

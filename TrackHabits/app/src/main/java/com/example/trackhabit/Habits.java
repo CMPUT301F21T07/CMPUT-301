@@ -7,11 +7,11 @@ public class Habits {
     String habitUser;
     String habitTitle;
     String habitReason;
-    DateTime startDate;
+    String startDate;
     Boolean privacy;    // true for private, false for public
 
     Habits(String habitName,String habitUser,String habitTitle,
-           String habitReason,DateTime startDate, Boolean privacy) {
+           String habitReason,String startDate, Boolean privacy) {
         this.habitName = habitName;
         this.habitUser = habitUser;
         this.habitTitle = habitTitle;
@@ -52,11 +52,11 @@ public class Habits {
         this.habitReason = habitReason;
     }
 
-    public DateTime getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTime startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

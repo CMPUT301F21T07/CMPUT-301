@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                     suPassword.setText("");
                                     suConPassword.setText("");
                                     Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                                    HabitsIntent.putExtra("name_key", userName);
                                     startActivity(HabitsIntent);
                                     finish();
 
