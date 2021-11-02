@@ -1,22 +1,37 @@
 package com.example.trackhabit;
 
-import com.google.type.DateTime;
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
 
 public class Habits {
     String habitName;
     String habitUser;
     String habitTitle;
     String habitReason;
-    String startDate;
+    Timestamp timestamp;
     Boolean privacy;    // true for private, false for public
+    String[] days;
 
     Habits(String habitName,String habitUser,String habitTitle,
-           String habitReason,String startDate, Boolean privacy) {
+           String habitReason,Timestamp timestamp, Boolean privacy) {
         this.habitName = habitName;
         this.habitUser = habitUser;
         this.habitTitle = habitTitle;
         this.habitReason = habitReason;
-        this.startDate = startDate;
+        this.timestamp = timestamp;
+        this.privacy = privacy;
+    }
+
+    Habits(String habitName,String habitUser,String habitTitle,
+           String habitReason, Boolean privacy) {
+        this.habitName = habitName;
+        this.habitUser = habitUser;
+        this.habitTitle = habitTitle;
+        this.habitReason = habitReason;
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date);
+        this.timestamp = timestamp;
         this.privacy = privacy;
     }
 
@@ -52,12 +67,12 @@ public class Habits {
         this.habitReason = habitReason;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public Timestamp getStartDate() {
+        return timestamp;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStartDate(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Boolean getPrivacy() {

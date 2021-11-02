@@ -9,7 +9,6 @@
     android:visibility="visible"
     tools:context=".MainActivity">
 
-
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,10 +54,10 @@
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:backgroundTint="@color/cardview_dark_background"
-        android:checked="true"
+        android:checked="false"
         android:gravity="center_horizontal"
         android:switchMinWidth="75dp"
-        android:text="Your Habits Today"
+        android:text="All Habits"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@android:color/black"
@@ -84,23 +83,22 @@
         android:layout_marginRight="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/add_habit_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginStart="339dp"
-        android:layout_marginLeft="339dp"
-        android:layout_marginTop="645dp"
-        android:layout_marginEnd="19dp"
-        android:layout_marginRight="19dp"
-        android:layout_marginBottom="32dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+
 
 
 </RelativeLayout>
