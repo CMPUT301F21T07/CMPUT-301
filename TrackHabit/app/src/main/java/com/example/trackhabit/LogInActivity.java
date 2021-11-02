@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +78,9 @@ public class LogInActivity extends AppCompatActivity {
                             Log.d(TAG, "User logged in successfully!");
                             errView.setText("User logged in successfully!");
                             success = 1;
+                            Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                            startActivity(HabitsIntent);
+                            finish();
 
                         }
 
