@@ -5,10 +5,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -55,12 +59,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     ListView habitListView;
 
     ArrayList<Habits> todayHabitDataList;
-    ArrayList<Habits> allHabitDataList   = new ArrayList<>();
+    ArrayList<Habits> allHabitDataList;
+    ArrayList<Habits> currentList;
 
     ArrayAdapter<Habits> habitsArrayAdapter;
     private String userName;
     private String strDate, strDay, days;
     private List<String> daysList;
+    Integer temp_index;
 
 
     Boolean switchState;
@@ -95,23 +101,72 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 if(isChecked){
                     todayHabitDataList = new ArrayList<>();
                     yhSwitch.setText("Your Habits Today");
-                    Date date = new Date();
-                    DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-                    DateFormat day        = new SimpleDateFormat("E");
-                    strDay  = day.format(date);
-                    strDate = dateFormat.format(date);
                     updateTodayHabitList();
+                    currentList = todayHabitDataList;
                 }
                 else{
                     allHabitDataList = new ArrayList<>();
                     yhSwitch.setText("All Habits");
                     updateAllHabitList();
+                    currentList = allHabitDataList;
                 }
             }
         });
 
         habitListView.setClickable(true);
+        habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            registerForContextMenu(habitListView);
+            temp_index = i;
+            return false;
+        });
     }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        switch(item.getItemId()) {
+            case R.id.edit_option:
+                Habits tempEdit = currentList.get(temp_index);
+                editDialog(tempEdit);
+                return true;
+            case R.id.open_option:
+                Habits tempOpen = currentList.get(temp_index);
+                viewDialog(tempOpen);
+                return true;
+            case R.id.delete_option:
+                Toast.makeText(this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
+                Habits tempDelete = currentList.get(temp_index);
+                removeHabit(tempDelete);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void viewDialog(Habits tempOpen) {
+        // COMPLETE
+    }
+
+    private void editDialog(Habits tempEdit) {
+        // COMPLETE
+    }
+
+    private void removeHabit(Habits tempDelete) {
+        // COMPLETE
+    }
+
+
+
+
+
 
     private void addNew() {
         NewHabitDialog newHabit = new NewHabitDialog();
@@ -122,12 +177,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
     protected void updateAllHabitList(){
+        allHabitDataList.clear();
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 for(QueryDocumentSnapshot doc: value)
                 {
-
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String) doc.getData().get(KEY_USER);
                     if (userID.equals(userName)){
@@ -149,21 +204,23 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
     protected void updateTodayHabitList(){
+        todayHabitDataList.clear();
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        DateFormat day        = new SimpleDateFormat("EEEE");
+        strDay  = day.format(date);
+        strDate = dateFormat.format(date);
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
                 for(QueryDocumentSnapshot doc: value)
                 {
                     daysList.clear();
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
 
-                    Timestamp docTimeStamp = (Timestamp) doc.getData().get(KEY_DATE);
-
-
                     String userID = (String) doc.getData().get(KEY_USER);
                     days   = (String) doc.getData().get(KEY_DATE);
-                    getDaysList()
+                    getDaysList();
 
                     if (userID.equals(userName) && daysList.indexOf(strDay) != -1)    {
                         Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
@@ -228,7 +285,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     }
                 });
-        allHabitDataList = new ArrayList<>();
+
         updateAllHabitList();
     }
 }
