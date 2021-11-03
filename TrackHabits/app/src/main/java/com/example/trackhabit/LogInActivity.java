@@ -61,7 +61,7 @@ public class LogInActivity extends AppCompatActivity {
                     Log.d(TAG, String.valueOf(doc.getData().get("Password")));
                     String userName = doc.getId();
                     String password = (String) doc.getData().get("Password");
-                    uDataList.add(new User(userName, password)); // Adding the cities and provinces from FireStore
+                    uDataList.add(new User(userName, password)); // Adding the userName and password from FireStore
                 }
             }
         });
@@ -79,6 +79,7 @@ public class LogInActivity extends AppCompatActivity {
                             errView.setText("User logged in successfully!");
                             success = 1;
                             Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                            HabitsIntent.putExtra("name_key", userName);
                             startActivity(HabitsIntent);
                             finish();
 

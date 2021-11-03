@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/add_habit_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:hint="Enter Habit Name"/>
+
+    <EditText
+        android:id="@+id/add_habit_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:hint="Enter Habit Title"
+        android:layout_below="@+id/add_habit_name"/>
+
+
+    <EditText
+        android:id="@+id/add_habit_reason"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:hint="Enter Habit Reason"
+        android:layout_below="@+id/add_habit_title"/>
+
+    <EditText
+        android:id="@+id/add_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/add_habit_reason"
+        android:gravity="center_horizontal"
+        android:hint="Enter Start Date (dd MM yyyy)" />
+
+    <Spinner
+        android:id="@+id/select_privacy"
+        android:layout_below="@+id/add_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_alignParentLeft="true"
+        android:autofillHints="Select privacy"/>
+
+    <TextView
+        android:id="@+id/text_view_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/select_privacy"
+        android:text="Select days to repeat on: "
+        android:textSize="20sp"
+        android:layout_centerVertical="true"/>
+
+    <CheckBox
+        android:id="@+id/monday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Monday"
+        android:layout_below="@+id/text_view_header"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/tuesday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Tuesday"
+        android:layout_below="@+id/monday_check"
+        android:layout_centerHorizontal="true"/>
+
+
+    <CheckBox
+        android:id="@+id/wednesday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Wednesday"
+        android:layout_below="@+id/tuesday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/thursday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Thursday"
+        android:layout_below="@+id/wednesday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/friday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Friday"
+        android:layout_below="@+id/thursday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/saturday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Saturday"
+        android:layout_below="@+id/friday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/sunday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Sunday"
+        android:layout_below="@+id/saturday_check"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+
+
+</RelativeLayout>

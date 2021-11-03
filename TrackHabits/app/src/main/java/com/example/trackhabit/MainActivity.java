@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     TextView suErrView;
     int success;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                     suPassword.setText("");
                                     suConPassword.setText("");
                                     Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
+                                    HabitsIntent.putExtra("name_key", userName);
                                     startActivity(HabitsIntent);
                                     finish();
 
