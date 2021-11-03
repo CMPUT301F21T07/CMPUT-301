@@ -32,7 +32,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +50,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private static final String KEY_REASON  = "Reason";
     private static final String KEY_PRIVATE = "Private";
     private static final String KEY_USER    = "User";
-
-    CharSequence text;
+    private static final String KEY_DAYS    = "Days";
 
     ListView habitListView;
 
@@ -58,7 +59,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     ArrayAdapter<Habits> habitsArrayAdapter;
     private String userName;
-    private String strDate;
+    private String strDate, strDay, days;
+    private List<String> daysList;
+
 
     Boolean switchState;
     Switch yhSwitch;
@@ -77,12 +80,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         yhSwitch = findViewById(R.id.YHSwitch);
         switchState = yhSwitch.isChecked();
         addHabitButton = findViewById(R.id.add_habit_button);
-        habitListView = findViewById(R.id.habits_list_view);
+
+
         addHabitButton.setOnClickListener(view -> addNew());
 
         userName = getIntent().getExtras().getString("name_key");
 
         allHabitDataList = new ArrayList<>();
+        habitListView = findViewById(R.id.habits_list_view);
         updateAllHabitList();
 
         yhSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -92,6 +97,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     yhSwitch.setText("Your Habits Today");
                     Date date = new Date();
                     DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+                    DateFormat day        = new SimpleDateFormat("E");
+                    strDay  = day.format(date);
                     strDate = dateFormat.format(date);
                     updateTodayHabitList();
                 }
@@ -129,12 +136,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
                                 (Timestamp)doc.getData().get(KEY_DATE),
-                                (Boolean) doc.getData().get(KEY_PRIVATE));
+                                (Boolean) doc.getData().get(KEY_PRIVATE),
+                                (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
                         habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, allHabitDataList);
                         habitListView.setAdapter(habitsArrayAdapter);
                     }
                 }
+
             }
         });
     }
@@ -146,43 +155,64 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                 for(QueryDocumentSnapshot doc: value)
                 {
+                    daysList.clear();
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
 
                     Timestamp docTimeStamp = (Timestamp) doc.getData().get(KEY_DATE);
 
-                    Date currentDocDate = docTimeStamp.toDate();
-                    DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 
-                    String currentDocDateStr = dateFormat.format(currentDocDate);
                     String userID = (String) doc.getData().get(KEY_USER);
+                    days   = (String) doc.getData().get(KEY_DATE);
+                    getDaysList()
 
-                    if (userID.equals(userName) && strDate.equals(currentDocDateStr)){
+                    if (userID.equals(userName) && daysList.indexOf(strDay) != -1)    {
                         Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
                                 (Timestamp)doc.getData().get(KEY_DATE),
-                                (Boolean) doc.getData().get(KEY_PRIVATE));
+                                (Boolean) doc.getData().get(KEY_PRIVATE),
+                                (String) doc.getData().get(KEY_DAYS));
                         todayHabitDataList.add(tempHabit);
                         habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, todayHabitDataList);
                         habitListView.setAdapter(habitsArrayAdapter);
                     }
                 }
+
             }
         });
     }
 
+    private void getDaysList() {
+        if (days.indexOf("M") != -1)
+            daysList.add("Monday");
+        if (days.indexOf("T") != -1)
+            daysList.add("Tuesday");
+        if (days.indexOf("W") != -1)
+            daysList.add("Wednesday");
+        if (days.indexOf("R") != -1)
+            daysList.add("Thursday");
+        if (days.indexOf("F") != -1)
+            daysList.add("Friday");
+        if (days.indexOf("S") != -1)
+            daysList.add("Saturday");
+        if (days.indexOf("U") != -1)
+            daysList.add("Sunday");
+        return ;
+    }
+
 
     @Override
-    public void addedHabit(Habits h) {
+    public void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put(KEY_NAME, h.getHabitName());
-        data.put(KEY_TITLE, h.getHabitTitle());
-        data.put(KEY_DATE, h.getStartDate());
-        data.put(KEY_REASON, h.getHabitReason());
-        data.put(KEY_PRIVATE, h.getPrivacy());
-        data.put(KEY_USER, h.getHabitUser());
-        habitsRef.document(h.getHabitName())
+        data.put(KEY_NAME, name);
+        data.put(KEY_TITLE, title);
+        data.put(KEY_DATE, startTime);
+        data.put(KEY_REASON, reason);
+        data.put(KEY_PRIVATE, itemPrivacy);
+        data.put(KEY_USER, userName);
+        data.put(KEY_DAYS, days);
+        habitsRef.document(name)
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -198,9 +228,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     }
                 });
-        todayHabitDataList.add(h);
-        allHabitDataList.add(h);
-        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, todayHabitDataList);
-        habitListView.setAdapter(habitsArrayAdapter);
+        allHabitDataList = new ArrayList<>();
+        updateAllHabitList();
     }
 }

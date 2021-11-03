@@ -11,16 +11,17 @@ public class Habits {
     String habitReason;
     Timestamp timestamp;
     Boolean privacy;    // true for private, false for public
-    String[] days;
+    String days;
 
     Habits(String habitName,String habitUser,String habitTitle,
-           String habitReason,Timestamp timestamp, Boolean privacy) {
+           String habitReason,Timestamp timestamp, Boolean privacy, String days) {
         this.habitName = habitName;
         this.habitUser = habitUser;
         this.habitTitle = habitTitle;
         this.habitReason = habitReason;
         this.timestamp = timestamp;
         this.privacy = privacy;
+        this.days    = days;
     }
 
     Habits(String habitName,String habitUser,String habitTitle,
