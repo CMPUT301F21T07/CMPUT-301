@@ -67,12 +67,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private String strDate, strDay, days;
     private List<String> daysList;
     Integer temp_index;
+    Boolean flag_for_floating = true;
 
 
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton addHabitButton;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents;
 
     private FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habits");
@@ -85,10 +86,33 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         yhSwitch = findViewById(R.id.YHSwitch);
         switchState = yhSwitch.isChecked();
-        addHabitButton = findViewById(R.id.add_habit_button);
 
+        extraOptionsButton = findViewById(R.id.open_menu_button);
+        addNewHabit        = findViewById(R.id.add_habit);
+        viewHabitEvents    = findViewById(R.id.view_habit_events);
 
-        addHabitButton.setOnClickListener(view -> addNew());
+        extraOptionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag_for_floating) {
+                    addNewHabit.show();
+                    viewHabitEvents.show();
+
+                    extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
+                    flag_for_floating = false;
+
+                }else {
+                    addNewHabit.hide();
+                    viewHabitEvents.hide();
+
+                    extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
+                    flag_for_floating = true;
+                }
+            }
+        });
+
+        viewHabitEvents.setOnClickListener(view -> viewAllHabitEvents());
+        addNewHabit.setOnClickListener(view -> addNewHabit());
 
         userName = getIntent().getExtras().getString("name_key");
 
@@ -121,7 +145,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
     }
 
+    /**
+     *  Function that views all the habit events for the user so far
+     */
+    private void viewAllHabitEvents() {
+        // View All Habit Events
+    }
 
+
+    /**
+     * Function that creates a context menu when there is a long press on a ListView item
+     * @param menu
+     * @param view
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
@@ -129,6 +166,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
+    /**
+     * Function that determine what happens when a user clicks on an item in a context menu
+     * @param item  Item that is selected from the context menu
+     * @return  true -> item in context menu selected
+     *          super.onContextItemSelected(item)
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(MenuItem item){
@@ -164,11 +207,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
-
-
-
-
-    private void addNew() {
+    /**
+     * Function that opens a fragment that allows a user to input a new habit
+     */
+    private void addNewHabit() {
         NewHabitDialog newHabit = new NewHabitDialog();
         Bundle args = new Bundle();
         args.putString("user_name", userName);
@@ -176,6 +218,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         newHabit.show(getSupportFragmentManager(), "ADD NEW HABIT");
     }
 
+    /**
+     *  Function that updates the list of all habits that are to be displayed to the user
+     */
     protected void updateAllHabitList(){
         allHabitDataList.clear();
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -203,6 +248,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
     }
 
+
+    /**
+     *  Function that updates the list of today's habits that are to be displayed to the user
+     */
     protected void updateTodayHabitList(){
         todayHabitDataList.clear();
         Date date = new Date();
@@ -217,7 +266,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 {
                     daysList.clear();
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
-
                     String userID = (String) doc.getData().get(KEY_USER);
                     days   = (String) doc.getData().get(KEY_DATE);
                     getDaysList();
@@ -240,6 +288,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
     }
 
+
+    /**
+     *  Converts letter denoting the days into full day names and adds it to a list
+     */
     private void getDaysList() {
         if (days.indexOf("M") != -1)
             daysList.add("Monday");
@@ -259,6 +311,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
+    /**
+     * Function that gets data back from the addHabit dialog box using a listener
+     * @param name Habit name
+     * @param title Habit title
+     * @param reason Habit reason
+     * @param startTime Habit start date
+     * @param itemPrivacy Habit privacy
+     * @param days Habit days
+     */
     @Override
     public void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();

@@ -68,7 +68,7 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         satCheck    = view.findViewById(R.id.saturday_check);
         sunCheck    = view.findViewById(R.id.sunday_check);
 
-        @SuppressLint({"NewApi", "LocalSuppress"})
+        //@SuppressLint({"NewApi", "LocalSuppress"})
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacy);
         habitPrivate.setAdapter(spinnerArrayAdapter);
@@ -88,11 +88,20 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     *  Interface created to send data back to HabitsActivity after entering data into EditTexts
+     */
     public interface EditDialogListener{
         void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days);
     }
 
+
+    /**
+     *  Function that checks for correct user input in EditText fields and refocuses on text fields
+     *  if input is wrong
+     */
     private void checkInput(){
+        flag        = true;
         item        = habitPrivate.getSelectedItem().toString();
         habitName   = habitNameEditText.getText().toString();
         habitTitle  = habitTitleEditText.getText().toString();
@@ -103,27 +112,28 @@ public class NewHabitDialog extends AppCompatDialogFragment {
             tempDate=new SimpleDateFormat("dd MM yyyy").parse(habitStart);
         } catch (ParseException e) {
             Toast.makeText(getContext(), "Incorrect format for date", Toast.LENGTH_SHORT).show();
+            habitStartDate.setError("Incorrect format: DD MM YYYY");
+            habitStartDate.requestFocus();
             flag = false;
         }
         startTime = new Timestamp(tempDate);
         if (habitName.length() == 0) {
-            Toast.makeText(getContext(), "Enter name!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Enter name", Toast.LENGTH_SHORT).show();
+            habitNameEditText.setError("Enter Name!");
+            habitNameEditText.requestFocus();
             flag = false;
         }
-        if (habitTitle.length() > 20) {
-            Toast.makeText(getContext(), "Title is too long!", Toast.LENGTH_SHORT).show();
+
+        if (habitTitle.length() == 0) {
+            Toast.makeText(getContext(), "Enter title", Toast.LENGTH_SHORT).show();
+            habitTitleEditText.setError("Enter title");
+            habitTitleEditText.requestFocus();
             flag = false;
         }
-        else if (habitTitle.length() == 0) {
-            Toast.makeText(getContext(), "Enter title!", Toast.LENGTH_SHORT).show();
-            flag = false;
-        }
-        if (habitReason.length() > 30) {
-            Toast.makeText(getContext(), "Reason is too long", Toast.LENGTH_SHORT).show();
-            flag = false;
-        }
-        else if (habitReason.length() == 0) {
+        if (habitReason.length() == 0) {
             Toast.makeText(getContext(), "Enter reason", Toast.LENGTH_SHORT).show();
+            habitReasonEditText.setError("Enter reason");
+            habitReasonEditText.requestFocus();
             flag = false;
         }
 
@@ -151,11 +161,10 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         if (sunCheck.isChecked())
             days = days + "U";
 
-
-        if (flag == false){
+        if (!flag) {
             flag = true;
             checkInput();
         }
-        return;
+
     }
 }
