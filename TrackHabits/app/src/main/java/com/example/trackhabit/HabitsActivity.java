@@ -67,12 +67,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private String strDate, strDay, days;
     private List<String> daysList;
     Integer temp_index;
+    Boolean flag_for_floating = true;
 
 
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton addHabitButton;
+    FloatingActionButton addHabitButton, fab2, fab3;
 
     private FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habits");
@@ -85,10 +86,31 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         yhSwitch = findViewById(R.id.YHSwitch);
         switchState = yhSwitch.isChecked();
-        addHabitButton = findViewById(R.id.add_habit_button);
 
+        addHabitButton = findViewById(R.id.open_menu_button);
+        fab2 = findViewById(R.id.view_habit_events);
+        fab3 = findViewById(R.id.add_habit);
 
-        addHabitButton.setOnClickListener(view -> addNew());
+        addHabitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag_for_floating) {
+                    fab2.show();
+                    fab3.show();
+
+                    flag_for_floating = false;
+
+                }else {
+                    fab2.hide();
+                    fab3.hide();
+
+                    flag_for_floating = true;
+                }
+            }
+        });
+
+        fab3.setOnClickListener(view -> addNewHabit());
+        fab2.setOnClickListener(view -> viewAllHabitEvents());
 
         userName = getIntent().getExtras().getString("name_key");
 
@@ -119,6 +141,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             temp_index = i;
             return false;
         });
+    }
+
+    private void viewAllHabitEvents() {
+        // View All Habit Events
     }
 
 
@@ -164,11 +190,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
-
-
-
-
-    private void addNew() {
+    private void addNewHabit() {
         NewHabitDialog newHabit = new NewHabitDialog();
         Bundle args = new Bundle();
         args.putString("user_name", userName);

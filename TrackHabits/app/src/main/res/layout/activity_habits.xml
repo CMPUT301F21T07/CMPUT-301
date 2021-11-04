@@ -83,7 +83,7 @@
         android:layout_marginRight="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_habit_button"
+        android:id="@+id/open_menu_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -95,10 +95,42 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:focusable="true"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat ="@android:drawable/ic_input_add"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/view_habit_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="150dp"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_red_dark"
+        app:fabCustomSize="45dp"
+        app:srcCompat ="@android:drawable/ic_input_add"
+        app:fabSize="auto"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_habit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="95dp"
+        app:srcCompat ="@android:drawable/ic_input_add"
+        app:backgroundTint="@android:color/holo_green_light"
+        android:visibility="gone"
+        app:fabCustomSize="45dp"
+        app:fabSize="auto"/>
 
-</RelativeLayout>
+    </RelativeLayout>
