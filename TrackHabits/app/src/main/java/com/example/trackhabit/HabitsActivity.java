@@ -104,6 +104,62 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
 
         habitListView.setClickable(true);
+<<<<<<< Updated upstream
+=======
+        habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            registerForContextMenu(habitListView);
+            temp_index = i;
+            return false;
+        });
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        switch(item.getItemId()) {
+            case R.id.edit_option:
+                Habits tempEdit = currentList.get(temp_index);
+                editDialog(tempEdit);
+                return true;
+            case R.id.open_option:
+                Habits tempOpen = currentList.get(temp_index);
+                viewDialog(tempOpen);
+                return true;
+            case R.id.delete_option:
+                Toast.makeText(this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
+                Habits tempDelete = currentList.get(temp_index);
+                removeHabit(tempDelete);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void viewDialog(Habits tempOpen) {
+        // COMPLETE
+        ViewHabitDetails viewHabit = new ViewHabitDetails();
+        Bundle args = new Bundle();
+        args.putString("user_name", tempOpen.getHabitUser());
+        //viewHabit.setArguments(args);
+        //viewHabit.show(getSupportFragmentManager(), "ADD NEW HABIT");
+        return;
+    }
+
+    private void editDialog(Habits tempEdit) {
+        // COMPLETE
+    }
+
+    private void removeHabit(Habits tempDelete) {
+        // COMPLETE
+>>>>>>> Stashed changes
     }
 
     private void addNew() {
