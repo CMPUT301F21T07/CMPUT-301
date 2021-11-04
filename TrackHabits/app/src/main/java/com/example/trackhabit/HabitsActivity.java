@@ -69,7 +69,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private List<String> daysList;
     Integer temp_index;
     Boolean flag_for_floating = true;
-    Integer k;
 
 
     Boolean switchState;
@@ -88,7 +87,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         yhSwitch = findViewById(R.id.YHSwitch);
         switchState = yhSwitch.isChecked();
-        k=2;
 
         extraOptionsButton = findViewById(R.id.open_menu_button);
         addNewHabit        = findViewById(R.id.add_habit);
