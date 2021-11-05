@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/name_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Habit Name"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_habit_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/title_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Habit Title"
+        android:layout_below="@+id/name_layout"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_habit_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:maxLength="20"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/reason_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Habit Title"
+        android:layout_below="@+id/title_layout"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_habit_reason"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:maxLength="30"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/date_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reason_layout"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/day_layout"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:hint="DD">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_habit_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:maxLength="2"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/month_layout"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:hint="MM">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_habit_month"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:maxLength="2"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/year_layout"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:hint="YYYY">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_habit_year"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:maxLength="4"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/select_privacy"
+        android:layout_below="@+id/date_layout"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_alignParentLeft="true"
+        android:autofillHints="Select privacy"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/text_view_header"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/select_privacy"
+        android:text="Select days to repeat on: "
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/monday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Monday"
+        android:layout_below="@+id/text_view_header"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/tuesday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Tuesday"
+        android:layout_below="@+id/monday_check"
+        android:layout_centerHorizontal="true"/>
+
+
+    <CheckBox
+        android:id="@+id/wednesday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Wednesday"
+        android:layout_below="@+id/tuesday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/thursday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Thursday"
+        android:layout_below="@+id/wednesday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/friday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Friday"
+        android:layout_below="@+id/thursday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/saturday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Saturday"
+        android:layout_below="@+id/friday_check"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:id="@+id/sunday_check"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:text="Sunday"
+        android:layout_below="@+id/saturday_check"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+
+
+</RelativeLayout>

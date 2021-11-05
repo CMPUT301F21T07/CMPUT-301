@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Track Habit</string>
+    <string name="habit_title">Habit Title</string>
+    <string name="habit_name">Habit Name</string>
 </resources>

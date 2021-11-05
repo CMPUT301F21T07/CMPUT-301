@@ -10,15 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.Timestamp;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class habitListAdapter  extends ArrayAdapter<Habits> {
     private ArrayList<Habits> habits;
     private Context context;
 
-    public habitListAdapter(Context context, ArrayList<Habits> medicineArrayList){
-        super(context, R.layout.habit_list_adapter, medicineArrayList);
-        this.habits = medicineArrayList;
+    public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
+        super(context, R.layout.habit_list_adapter, habitArrayList);
+        this.habits = habitArrayList;
         this.context = context;
     }
 
@@ -39,7 +44,12 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
 
         habitName.setText(habit.getHabitName());
         habitTitle.setText(habit.getHabitTitle());
-        startDate.setText(habit.getStartDate().toString());
+
+        Timestamp timestamp = habit.getStartDate();
+        Date date = timestamp.toDate();
+        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        String strDate = dateFormat.format(date);
+        startDate.setText(strDate);
 
         return view;
     }

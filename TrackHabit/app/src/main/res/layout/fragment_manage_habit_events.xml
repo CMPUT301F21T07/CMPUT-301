@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/date_text">
+    </TextView>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_editText"
+        android:autofillHints="Enter your comment">
+    </EditText>
+    <ImageView
+        android:id="@+id/optionalPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true">
+    </ImageView>
+
+    <Button
+        android:id="@+id/select_image_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Image">
+    </Button>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location Permission"
+        android:textSize="30sp">
+    </TextView>
+    <ToggleButton
+        android:id="@+id/location_permission_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ToggleButton>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/finish_button"
+        android:text="Finish">
+    </Button>
+
+
+</LinearLayout>
