@@ -35,6 +35,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
 
@@ -45,6 +46,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
+
 
 
     public ManageHabitEventsFragment(String habitName, String userName) {
@@ -96,6 +98,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
                         checkInputCorrectness();
 
+
                         HashMap<String, Object> habitEventData = new HashMap<>();
                         habitEventData.put("HabitName", habitName);
                         habitEventData.put("UserName", userName);
@@ -108,6 +111,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                         if (habitEventsRef.document(dataName).get().toString().equals("")) {
                             return;
                         }
+
                         habitEventsRef.document(dataName)
                                 .set(habitEventData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {

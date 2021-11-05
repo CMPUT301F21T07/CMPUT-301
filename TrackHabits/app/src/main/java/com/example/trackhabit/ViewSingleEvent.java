@@ -50,12 +50,21 @@ public class ViewSingleEvent extends AppCompatActivity {
     private CollectionReference habitsRef = db.collection("Habits");
 
 
+
     String habitName;
     String userName;
     String date;
     String comment ;
     int index;
     boolean toDelete=false;
+
+    Intent mIntent=getIntent();
+
+    String habitName = mIntent.getExtras().getString("habitName");
+    String userName = mIntent.getExtras().getString("userName");
+    String date = mIntent.getExtras().getString("date");
+    String comment = mIntent.getExtras().getString("comment");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +80,9 @@ public class ViewSingleEvent extends AppCompatActivity {
 
         System.out.println("Date: "+date);
         Title=findViewById(R.id.showTitle);
+
         Title.setText("Habit: "+habitName);
+
 
 
         Reason=findViewById(R.id.showReason);
@@ -83,13 +94,16 @@ public class ViewSingleEvent extends AppCompatActivity {
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
 
-//        Editing.setOnClickListener(new View.OnClickListener() {
+
+//       Editing.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //
 //            }
 //        });
+
         Deleting.setOnClickListener(view -> removeEvent());
+
 
 //        Deleting.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -116,7 +130,9 @@ public class ViewSingleEvent extends AppCompatActivity {
 
 
     }
+
     private void removeEvent(){
+
         habitsRef.addSnapshotListener((value, error) -> {
             assert value != null;
             for(QueryDocumentSnapshot doc: value)
@@ -135,6 +151,21 @@ public class ViewSingleEvent extends AppCompatActivity {
                         finish();
                     }).addOnFailureListener(e -> Log.d(TAG, "Data could not be deleted!" + e.toString()));
                 }
+
+        String documentName = habitName + " " + userName + " " + date;
+        habitsRef.document(documentName).delete()
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("TAG", "Habit Event Successfully Deleted!");
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "Habit Event Successfully Deleted!");
+
+
             }
 
         });

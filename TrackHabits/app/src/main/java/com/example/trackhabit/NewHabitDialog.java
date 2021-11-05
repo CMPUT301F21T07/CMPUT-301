@@ -39,7 +39,7 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
     private Timestamp startTime;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
 
-    Button positiveButton;
+    public Button positiveButton;
 
     @Override
     public void onStart() {
