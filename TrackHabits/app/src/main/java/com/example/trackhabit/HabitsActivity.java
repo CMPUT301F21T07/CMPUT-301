@@ -250,6 +250,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     /**
      * Function that opens a fragment that allows a user to view a given habit
+     * @param tempOpen This is the habit object that is being viewed
      */
     private void viewDialog(Habits tempOpen) {
 
