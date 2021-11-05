@@ -388,7 +388,5 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     }
                 });
-
-        updateAllHabitList();
     }
 }
