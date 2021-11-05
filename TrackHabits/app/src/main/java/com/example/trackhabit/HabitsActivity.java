@@ -243,9 +243,23 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         }
     }
 
+    /**
+     * Function that opens a fragment that allows a user to view a given habit
+     */
     private void viewDialog(Habits tempOpen) {
-        // COMPLETE
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        ViewHabitDialog viewHabit = new ViewHabitDialog();
+        Bundle args = new Bundle();
+        args.putString("user_name", userName);
+        args.putString("habit_name", tempOpen.getHabitName());
+        args.putString("habit_title", tempOpen.getHabitTitle());
+        args.putString("habit_date", dateFormat.format(tempOpen.getStartDate().toDate()));
+        args.putString("habit_reason", tempOpen.getHabitReason());
+        viewHabit.setArguments(args);
+        viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
     }
+
 
     private void editDialog(Habits tempEdit) {
         // COMPLETE
