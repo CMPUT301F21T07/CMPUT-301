@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,11 +26,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class NewHabitDialog extends AppCompatDialogFragment {
-    private EditText habitNameEditText, habitTitleEditText, habitReasonEditText, habitStartDate;
+public class NewHabitDialog extends AppCompatDialogFragment implements TextWatcher {
+    private EditText habitNameEditText, habitTitleEditText, habitReasonEditText, habitStartDate, habitStartMonth, habitStartYear;
     private Spinner  habitPrivate;
     private final String[] privacy = new String[]{"SELECT PRIVACY","Private","Public"};
-    private String userName, item, habitName, habitTitle, habitStart, habitReason;
+    private String userName, item, habitName, habitTitle, habitStart, habitReason, day, month, year;
     private String days = "";
     private Boolean itemPrivacy;
     private Boolean flag = true;
@@ -35,6 +38,19 @@ public class NewHabitDialog extends AppCompatDialogFragment {
     private Date tempDate;
     private Timestamp startTime;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
+
+    Button positiveButton;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        AlertDialog d = (AlertDialog) getDialog();
+        if (d != null) {
+            positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setEnabled(false);
+        }
+
+    }
 
     @NonNull
     @Override
@@ -58,7 +74,9 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         habitNameEditText   = view.findViewById(R.id.add_habit_name);
         habitReasonEditText = view.findViewById(R.id.add_habit_reason);
         habitTitleEditText  = view.findViewById(R.id.add_habit_title);
-        habitStartDate      = view.findViewById(R.id.add_start_date);
+        habitStartDate      = view.findViewById(R.id.add_habit_date);
+        habitStartMonth     = view.findViewById(R.id.add_habit_month);
+        habitStartYear      = view.findViewById(R.id.add_habit_year);
         habitPrivate        = view.findViewById(R.id.select_privacy);
         monCheck    = view.findViewById(R.id.monday_check);
         tueCheck    = view.findViewById(R.id.tuesday_check);
@@ -68,7 +86,8 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         satCheck    = view.findViewById(R.id.saturday_check);
         sunCheck    = view.findViewById(R.id.sunday_check);
 
-        //@SuppressLint({"NewApi", "LocalSuppress"})
+        habitStartYear.addTextChangedListener(this);
+
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacy);
         habitPrivate.setAdapter(spinnerArrayAdapter);
@@ -88,6 +107,31 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         }
     }
 
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String tempHabitName   = habitNameEditText.getText().toString();
+        String tempHabitTitle  = habitTitleEditText.getText().toString();
+        String tempHabitReason = habitReasonEditText.getText().toString();
+        String tempDay         = habitStartDate.getText().toString();
+        String tempMonth       = habitStartMonth.getText().toString();
+        String tempYear        = habitStartYear.getText().toString();
+
+        if (tempHabitName.length() != 0 && tempHabitTitle.length() !=0 &&
+                tempHabitReason.length()!=0 && tempDay.length()!=0 && tempMonth.length()!=0 &&
+                tempYear.length()!=0) {
+            positiveButton.setEnabled(true);
+
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {    }
+
+
     /**
      *  Interface created to send data back to HabitsActivity after entering data into EditTexts
      */
@@ -106,7 +150,11 @@ public class NewHabitDialog extends AppCompatDialogFragment {
         habitName   = habitNameEditText.getText().toString();
         habitTitle  = habitTitleEditText.getText().toString();
         habitReason = habitReasonEditText.getText().toString();
-        habitStart  = habitStartDate.getText().toString();
+        day         = habitStartDate.getText().toString();
+        month       = habitStartMonth.getText().toString();
+        year        = habitStartYear.getText().toString();
+
+        habitStart = day + " " + month + " " + year;
 
         try {
             tempDate=new SimpleDateFormat("dd MM yyyy").parse(habitStart);
@@ -117,34 +165,13 @@ public class NewHabitDialog extends AppCompatDialogFragment {
             flag = false;
         }
         startTime = new Timestamp(tempDate);
-        if (habitName.length() == 0) {
-            Toast.makeText(getContext(), "Enter name", Toast.LENGTH_SHORT).show();
-            habitNameEditText.setError("Enter Name!");
-            habitNameEditText.requestFocus();
-            flag = false;
-        }
 
-        if (habitTitle.length() == 0) {
-            Toast.makeText(getContext(), "Enter title", Toast.LENGTH_SHORT).show();
-            habitTitleEditText.setError("Enter title");
-            habitTitleEditText.requestFocus();
-            flag = false;
-        }
-        if (habitReason.length() == 0) {
-            Toast.makeText(getContext(), "Enter reason", Toast.LENGTH_SHORT).show();
-            habitReasonEditText.setError("Enter reason");
-            habitReasonEditText.requestFocus();
-            flag = false;
-        }
 
         if (item.equals("Private"))
             itemPrivacy = true;
         else if (item.equals("Public"))
             itemPrivacy = false;
-        else {
-            Toast.makeText(getContext(), "Select privacy", Toast.LENGTH_SHORT).show();
-            flag = false;
-        }
+
 
         if (monCheck.isChecked())
             days = days + "M";
