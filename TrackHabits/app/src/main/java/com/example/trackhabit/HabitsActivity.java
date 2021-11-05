@@ -107,6 +107,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         viewHabitEvents.setOnClickListener(view -> viewAllHabitEvents());
         addNewHabit.setOnClickListener(view -> addNewHabit());
+
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);
 
@@ -201,6 +202,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      *  Function that views all the habit events for the user so far
      */
     private void viewAllHabitEvents() {
+        Intent newIntent= new Intent(HabitsActivity.this, CalendarActivity.class);
+        startActivity(newIntent);
         // View All Habit Events
     }
 

@@ -13,6 +13,7 @@ public class HabitEvent {
     private Bitmap optionalPhoto;
     private boolean locationPermission;
 
+
     /**
      * Creates a habit event with the habit name, user name, date, comment, optional photo, and
      * optional geolocation
@@ -26,6 +27,12 @@ public class HabitEvent {
     public HabitEvent(Habits habit, String date, String comment, Bitmap photo, boolean locationPermission) {
         this.habitName = habit.getHabitName();
         this.userName = habit.getHabitUser();
+
+    public HabitEvent(String habitName, String userName, String date, String comment, Bitmap photo,
+                      boolean locationPermission) {
+        this.habitName = habitName;
+        this.userName = userName;
+
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
@@ -112,4 +119,16 @@ public class HabitEvent {
     public void setOptionalPhoto(Bitmap photo) {
         this.optionalPhoto = photo;
     }
+
 }
+
+
+    public boolean getLocationPermission() {
+        return locationPermission;
+    }
+
+    public void setLocationPermission(boolean locationPermission) {
+        this.locationPermission = locationPermission;
+    }
+}
+
