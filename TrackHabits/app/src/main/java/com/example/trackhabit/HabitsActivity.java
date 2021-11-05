@@ -1,14 +1,8 @@
 package com.example.trackhabit;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -19,15 +13,12 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
-
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,14 +27,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+/**
+ * Represents the activity of creating, viewing, and deleting habits
+ */
 public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.EditDialogListener {
 
     private static final String TAG = "TAG" ;
@@ -65,7 +55,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     ArrayAdapter<Habits> habitsArrayAdapter;
     private String userName;
-    private String strDate, strDay, days;
+    private String strDay, days;
 
     Integer temp_index;
     Boolean flag_for_floating = true;
@@ -76,9 +66,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents;
 
-    private FirebaseFirestore   db = FirebaseFirestore.getInstance();
-    private CollectionReference habitsRef = db.collection("Habits");
+    private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
+    private final CollectionReference habitsRef = db.collection("Habits");
 
+    /**
+     * Creates an instance that shows an extra options button and a toggle switch. The extra options
+     * can be tapped to access the add new habits and view habit events buttons. The toggle switch
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -92,23 +88,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         addNewHabit        = findViewById(R.id.add_habit);
         viewHabitEvents    = findViewById(R.id.view_habit_events);
 
-        extraOptionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (flag_for_floating) {
-                    addNewHabit.show();
-                    viewHabitEvents.show();
+        extraOptionsButton.setOnClickListener(v -> {
+            if (flag_for_floating) {
+                addNewHabit.show();
+                viewHabitEvents.show();
 
-                    extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
-                    flag_for_floating = false;
+                extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
+                flag_for_floating = false;
 
-                }else {
-                    addNewHabit.hide();
-                    viewHabitEvents.hide();
+            }else {
+                addNewHabit.hide();
+                viewHabitEvents.hide();
 
-                    extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
-                    flag_for_floating = true;
-                }
+                extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
+                flag_for_floating = true;
             }
         });
 
@@ -118,8 +111,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);
 
-        allHabitDataList = new ArrayList<Habits>();
-        todayHabitDataList = new ArrayList<Habits>();
+        allHabitDataList = new ArrayList<>();
+        todayHabitDataList = new ArrayList<>();
 
 
         currentList = allHabitDataList;
@@ -127,16 +120,22 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         DateFormat day        = new SimpleDateFormat("EEEE");
         strDay  = day.format(date);
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * Function that updates the Firebase database on an event
+             * @param value This is the message that holds any supported value type
+             * @param error This is an error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
               currentList.clear();
 
+                assert value != null;
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String) doc.getData().get(KEY_USER);
 
-                    daysList = new ArrayList<String>();
+                    daysList = new ArrayList<>();
                     days     = (String) doc.getData().get(KEY_DAYS);
 
                     getDaysList();
@@ -169,13 +168,16 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
 
         yhSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Function that switches the habit list between today's habit list and all habit list
+             * @param buttonView Toggle switch
+             * @param isChecked Toggled on
+             */
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
 
                     currentList = todayHabitDataList;
-                    habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
-                    habitListView.setAdapter(habitsArrayAdapter);
 
                 }
 
@@ -183,10 +185,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     yhSwitch.setText("All Habits");
 
                     currentList = allHabitDataList;
-                    habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
-                    habitListView.setAdapter(habitsArrayAdapter);
 
                 }
+                habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
+                habitListView.setAdapter(habitsArrayAdapter);
             }
         });
 
@@ -208,9 +210,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     /**
      * Function that creates a context menu when there is a long press on a ListView item
-     * @param menu
-     * @param view
-     * @param menuInfo
+     * @param menu This is the menu object
+     * @param view This is the view object
+     * @param menuInfo This is the info on the menu
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
@@ -267,34 +269,28 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         // COMPLETE
     }
 
+    /**
+     * Function that deletes a habit object for a specific user and returns a message
+     * @param tempDelete This is the habit object that needs to be deleted
+     */
     private void removeHabit(Habits tempDelete) {
-        habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for(QueryDocumentSnapshot doc: value)
-                {
-                    Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
-                    String userID = (String) doc.getData().get(KEY_USER);
+        habitsRef.addSnapshotListener((value, error) -> {
+            assert value != null;
+            for(QueryDocumentSnapshot doc: value)
+            {
+                Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
+                String userID = (String) doc.getData().get(KEY_USER);
 
-                    if (userID.equals(userName) && doc.getData().get(KEY_NAME).equals(tempDelete.getHabitName())){
-                        doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "Data has been deleted successfully!");
-                                currentList.remove(tempDelete);
-                                Toast.makeText(HabitsActivity.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
-                                habitsArrayAdapter.notifyDataSetChanged();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "Data could not be deleted!" + e.toString());
-                            }
-                        });
-                    }
+                if (userID.equals(userName) && doc.getData().get(KEY_NAME).equals(tempDelete.getHabitName())){
+                    doc.getReference().delete().addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Data has been deleted successfully!");
+                        currentList.remove(tempDelete);
+                        Toast.makeText(HabitsActivity.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
+                        habitsArrayAdapter.notifyDataSetChanged();
+                    }).addOnFailureListener(e -> Log.d(TAG, "Data could not be deleted!" + e.toString()));
                 }
-
             }
+
         });
 
     }
@@ -319,21 +315,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         if (daysList.size() != 0) {
             daysList.clear();
         }
-        if (days.indexOf("M") != -1)
+        if (days.contains("M"))
             daysList.add("Monday");
-        if (days.indexOf("T") != -1)
+        if (days.contains("T"))
             daysList.add("Tuesday");
-        if (days.indexOf("W") != -1)
+        if (days.contains("W"))
             daysList.add("Wednesday");
-        if (days.indexOf("R") != -1)
+        if (days.contains("R"))
             daysList.add("Thursday");
-        if (days.indexOf("F") != -1)
+        if (days.contains("F"))
             daysList.add("Friday");
-        if (days.indexOf("S") != -1)
+        if (days.contains("S"))
             daysList.add("Saturday");
-        if (days.indexOf("U") != -1)
+        if (days.contains("U"))
             daysList.add("Sunday");
-        return ;
     }
 
 
@@ -358,19 +353,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         data.put(KEY_DAYS, days);
         habitsRef.document(name)
                 .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Habit has been added successfully!");
-                        Toast.makeText(HabitsActivity.this, "Habit has been added successfully!", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Habit has been added successfully!");
+                    Toast.makeText(HabitsActivity.this, "Habit has been added successfully!", Toast.LENGTH_SHORT).show();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Habit could not be added!" + e.toString());
-
-                    }
-                });
+                .addOnFailureListener(e -> Log.d(TAG, "Habit could not be added!" + e.toString()));
     }
 }
