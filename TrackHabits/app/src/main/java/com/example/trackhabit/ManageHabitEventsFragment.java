@@ -126,7 +126,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 }).create();
     }
 
-    public void checkInputCorrectness() {
+    private void checkInputCorrectness() {
         String comment = commentEditText.getText().toString();
         boolean isInputCorrect = (comment.length() <= 20);
 
