@@ -1,7 +1,6 @@
 package com.example.trackhabit;
 
 import android.graphics.Bitmap;
-import android.widget.Switch;
 
 public class HabitEvent {
     private String habitName;
@@ -11,15 +10,10 @@ public class HabitEvent {
     private Bitmap optionalPhoto;
     private boolean locationPermission;
 
-    public HabitEvent(Habits habit, String date) {
-        this.habitName = habit.getHabitName();
-        this.userName = habit.getHabitUser();
-        this.date = date;
-    }
-
-    public HabitEvent(Habits habit, String date, String comment, Bitmap photo, boolean locationPermission) {
-        this.habitName = habit.getHabitName();
-        this.userName = habit.getHabitUser();
+    public HabitEvent(String habitName, String userName, String date, String comment, Bitmap photo,
+                      boolean locationPermission) {
+        this.habitName = habitName;
+        this.userName = userName;
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
@@ -66,5 +60,13 @@ public class HabitEvent {
 
     public void setOptionalPhoto(Bitmap photo) {
         this.optionalPhoto = photo;
+    }
+
+    public boolean getLocationPermission() {
+        return locationPermission;
+    }
+
+    public void setLocationPermission(boolean locationPermission) {
+        this.locationPermission = locationPermission;
     }
 }
