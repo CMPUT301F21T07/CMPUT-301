@@ -43,7 +43,7 @@ public class ViewEvents extends AppCompatActivity {
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
-        events=new ArrayList<HabitEvent>();
+        events=new EventList(new ArrayList<HabitEvent>());
         eventAdapter= new EventListAdapter(ViewEvents.this, events);
         EventList.setAdapter(eventAdapter);
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -85,16 +85,20 @@ public class ViewEvents extends AppCompatActivity {
         EventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ViewEvents.this, ViewSingleEvent.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Adapter", events);
-                intent.putExtras(bundle);
-                startActivity(intent);
-//                Intent singleEvent=new Intent(ViewEvents.this,ViewSingleEvent.class);
-//                singleEvent.putExtra("index",i);
-//                singleEvent.putExtra("title",events.get(i).getHabitName());
-//                singleEvent.putExtra("list",events);
-//                startActivity(singleEvent);
+                HabitEvent habitEvent = events.get(i);
+                Intent singleEvent  = new Intent(ViewEvents.this,ViewSingleEvent.class);
+                singleEvent.putExtra("habitName", habitEvent.getHabitName());
+                singleEvent.putExtra("userName", habitEvent.getUserName());
+                singleEvent.putExtra("date",habitEvent.getDate());
+                singleEvent.putExtra("comment", habitEvent.getComment());
+                singleEvent.putExtra("index",i);
+                startActivityForResult(singleEvent,0);
+                Intent receive=getIntent();
+                boolean toDelete=receive.getExtras().getBoolean("toDelete");
+                if (toDelete) {
+                    events.remove(i);
+                    eventAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
