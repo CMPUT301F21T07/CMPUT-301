@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.widget.Switch;
 
 public class HabitEvent {
+  
     private Habits habit;
     private String date;
     private String comment;
@@ -16,6 +17,7 @@ public class HabitEvent {
     }
 
     public HabitEvent(Habits habit, String date, String comment, Bitmap photo, boolean locationPermission) {
+
         this.habit = habit;
         this.date = date;
         this.comment = comment;
@@ -28,6 +30,7 @@ public class HabitEvent {
     }
 
     public void setHabit(Habits habit) {
+
         this.habit = habit;
     }
 

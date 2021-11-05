@@ -9,7 +9,6 @@
     android:visibility="visible"
     tools:context=".MainActivity">
 
-
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,12 +53,11 @@
         android:layout_marginTop="49dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
-        android:background="#D8D4D4"
         android:backgroundTint="@color/cardview_dark_background"
-        android:checked="true"
+        android:checked="false"
         android:gravity="center_horizontal"
         android:switchMinWidth="75dp"
-        android:text="Your Habits Today"
+        android:text="All Habits"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@android:color/black"
@@ -69,7 +67,7 @@
         android:textStyle="bold" />
 
     <ListView
-        android:id="@+id/HabitsTList"
+        android:id="@+id/habits_list_view"
         android:layout_width="wrap_content"
         android:layout_height="511dp"
         android:layout_alignParentStart="true"
@@ -78,10 +76,64 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="-1dp"
-        android:layout_marginRight="-1dp" />
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp" />
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/open_menu_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat ="@drawable/ic_baseline_add_circle_outline_24"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat" />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/view_habit_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="150dp"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_orange_light"
+        app:fabCustomSize="45dp"
+        app:srcCompat ="@drawable/ic_baseline_calendar_today_24"
+        app:fabSize="auto"
+        tools:ignore="VectorDrawableCompat" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_habit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="95dp"
+        app:srcCompat ="@android:drawable/ic_input_add"
+        app:backgroundTint="@android:color/holo_green_light"
+        android:visibility="gone"
+        app:fabCustomSize="45dp"
+        app:fabSize="auto"/>
+
+    </RelativeLayout>
