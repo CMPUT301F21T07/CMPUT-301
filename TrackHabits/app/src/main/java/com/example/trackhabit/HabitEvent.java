@@ -29,19 +29,23 @@ public class HabitEvent {
         this.habitName = habitName;
         this.userName = userName;
 
+
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
         this.locationPermission = locationPermission;
     }
 
+
     /**
      * Get the habit name
      * @return Returns habit name
      */
+
     public String getHabitName() {
         return habitName;
     }
+
 
     /**
      * Set the habit name
@@ -59,6 +63,7 @@ public class HabitEvent {
     public String getUserName() {
         return userName;
     }
+
 
     /**
      * Sets the user name

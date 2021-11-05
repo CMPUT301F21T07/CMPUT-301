@@ -35,6 +35,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
 
@@ -45,6 +46,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
+
 
 
     public ManageHabitEventsFragment(String habitName, String userName) {
