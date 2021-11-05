@@ -28,7 +28,8 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
-    private Button finishButton;
+
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
     private OnFragmentInteractionListener listener;
@@ -46,10 +47,11 @@ public class ManageHabitEventsFragment extends DialogFragment {
         this.habit = habit;
     }
 
-    public ManageHabitEventsFragment(int pos, HabitEvent habitEvent) {
+
+    public ManageHabitEventsFragment(int pos, HabitEvent habitEvent, Habits habit) {
         habitEventPosition = pos;
         editableHabitEvent = habitEvent;
-        this.habit = habitEvent.getHabit();
+        this.habit = habit;
     }
 
 
@@ -71,7 +73,6 @@ public class ManageHabitEventsFragment extends DialogFragment {
         dateText = view.findViewById(R.id.date_text);
         commentEditText = view.findViewById(R.id.comment_editText);
         selectImageButton = view.findViewById(R.id.select_image_button);
-        finishButton = view.findViewById(R.id.finish_button);
         optionalPhoto = view.findViewById(R.id.optionalPhoto);
         locationPermissionButton = view.findViewById(R.id.location_permission_button);
 
