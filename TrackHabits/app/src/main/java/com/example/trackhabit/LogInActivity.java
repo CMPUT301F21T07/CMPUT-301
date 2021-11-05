@@ -24,6 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents the activity of logging in/signing up
+ */
 public class LogInActivity extends AppCompatActivity {
 
     Button logIn;
