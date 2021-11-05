@@ -119,6 +119,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         allHabitDataList = new ArrayList<Habits>();
         todayHabitDataList = new ArrayList<Habits>();
+        currentList = allHabitDataList;
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
         DateFormat day        = new SimpleDateFormat("EEEE");
@@ -127,6 +128,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                currentList.clear();
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
@@ -170,19 +172,19 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
-                    HabitDataList = todayHabitDataList;
+                    currentList = todayHabitDataList;
                 }
 
                 else{
                     yhSwitch.setText("All Habits");
-                    HabitDataList = allHabitDataList;
-
+                    currentList = allHabitDataList;
                 }
             }
         });
 
-        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, allHabitDataList);
+        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
+    
     }
 
     /**
