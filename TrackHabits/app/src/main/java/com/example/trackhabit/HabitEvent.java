@@ -1,30 +1,33 @@
 package com.example.trackhabit;
 
 import android.graphics.Bitmap;
+import android.widget.Switch;
 
 public class HabitEvent {
-    private Habit habit;
+    private Habits habit;
     private String date;
     private String comment;
     private Bitmap optionalPhoto;
+    private boolean locationPermission;
 
-    public HabitEvent(Habit habit, String date) {
+    public HabitEvent(Habits habit, String date) {
         this.habit = habit;
         this.date = date;
     }
 
-    public HabitEvent(Habit habit, String date, String comment, Bitmap photo) {
+    public HabitEvent(Habits habit, String date, String comment, Bitmap photo, boolean locationPermission) {
         this.habit = habit;
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
+        this.locationPermission = locationPermission;
     }
 
-    public Habit getHabit() {
+    public Habits getHabit() {
         return habit;
     }
 
-    public void setHabit(Habit habit) {
+    public void setHabit(Habits habit) {
         this.habit = habit;
     }
 
