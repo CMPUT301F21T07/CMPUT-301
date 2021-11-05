@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "449541929503",
+    "project_id": "cmput-301-firestore-6bdf6",
+    "storage_bucket": "cmput-301-firestore-6bdf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449541929503:android:b01fa3e796d0fa5331732a",
+        "android_client_info": {
+          "package_name": "com.example.simpleparadox.listycity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449541929503-gfgfc5lbpnnd1ko8q08ijc0d3mng4av8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEQyC63qWmSV2VW-_E3D3wONK109FHQtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449541929503-gfgfc5lbpnnd1ko8q08ijc0d3mng4av8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449541929503:android:93b6fcce542dc61531732a",
+        "android_client_info": {
+          "package_name": "com.example.trackhabit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449541929503-gfgfc5lbpnnd1ko8q08ijc0d3mng4av8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEQyC63qWmSV2VW-_E3D3wONK109FHQtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449541929503-gfgfc5lbpnnd1ko8q08ijc0d3mng4av8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

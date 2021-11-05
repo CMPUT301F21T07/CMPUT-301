@@ -39,6 +39,7 @@
         android:id="@+id/reason_layout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+
         android:hint="Enter Reason for Habit"
         android:layout_below="@+id/title_layout"
         android:layout_centerHorizontal="true">
