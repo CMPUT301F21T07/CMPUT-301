@@ -50,6 +50,7 @@ public class ViewSingleEvent extends AppCompatActivity {
     private CollectionReference habitsRef = db.collection("Habits");
 
     Intent mIntent=getIntent();
+
     String habitName = mIntent.getExtras().getString("habitName");
     String userName = mIntent.getExtras().getString("userName");
     String date = mIntent.getExtras().getString("date");
@@ -60,6 +61,7 @@ public class ViewSingleEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_event);
         Title=findViewById(R.id.showTitle);
+
         Title.setText(habitName);
 
         Reason=findViewById(R.id.showReason);
@@ -70,13 +72,16 @@ public class ViewSingleEvent extends AppCompatActivity {
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
 
+
 //        Editing.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //
 //            }
 //        });
+
         Deleting.setOnClickListener(view -> removeEvent());
+
 
 //        Deleting.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -103,6 +108,7 @@ public class ViewSingleEvent extends AppCompatActivity {
         habitTitle=habit.getHabitTitle();
         habitReason=habit.getHabitReason();
     }
+
     private void removeEvent(){
         String documentName = habitName + " " + userName + " " + date;
         habitsRef.document(documentName).delete()
@@ -116,6 +122,7 @@ public class ViewSingleEvent extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("TAG", "Habit Event Successfully Deleted!");
+
             }
         });
 

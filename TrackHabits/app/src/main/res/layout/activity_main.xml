@@ -16,9 +16,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="84dp"
-        android:layout_marginLeft="84dp"
-        android:layout_marginTop="324dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginLeft="101dp"
+        android:layout_marginTop="328dp"
         android:ems="10"
         android:hint=" Confirm Password"
         android:inputType="textPassword" />
@@ -31,9 +31,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="87dp"
-        android:layout_marginLeft="87dp"
-        android:layout_marginTop="173dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="174dp"
         android:ems="10"
         android:hint="User Name"
         android:inputType="textPersonName" />
@@ -56,7 +56,9 @@
         android:text="SIGN UP TODAY"
         android:textAlignment="center"
         android:textSize="40dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginLeft="1dp"
+        android:layout_alignParentLeft="true" />
 
     <EditText
         android:id="@+id/suPassword"
@@ -66,9 +68,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginLeft="85dp"
-        android:layout_marginTop="244dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginLeft="101dp"
+        android:layout_marginTop="245dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
@@ -95,8 +97,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
         android:layout_marginBottom="150dp"
         android:background="@android:color/darker_gray" />
 

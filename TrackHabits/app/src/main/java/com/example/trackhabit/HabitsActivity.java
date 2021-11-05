@@ -55,6 +55,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private ArrayList<String> daysList;
 
     ArrayAdapter<Habits> habitsArrayAdapter;
+
     private String userName;
     private String strDay, days;
 
@@ -204,6 +205,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      */
     private void viewAllHabitEvents() {
         Intent newIntent= new Intent(HabitsActivity.this, CalendarActivity.class);
+
         newIntent.putExtra("ID", userName);
         startActivity(newIntent);
         // View All Habit

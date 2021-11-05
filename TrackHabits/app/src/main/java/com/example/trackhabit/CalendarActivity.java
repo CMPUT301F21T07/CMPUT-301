@@ -14,7 +14,6 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarView mCalendarView;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -25,6 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+
                 String day;
                 String month;
                 i1=i1+1;
@@ -43,6 +43,7 @@ public class CalendarActivity extends AppCompatActivity {
                 Intent lastIntent=getIntent();
                 String userID=lastIntent.getExtras().getString("ID");
                 intent.putExtra("ID",userID);
+
                 intent.putExtra("date",date);
                 startActivity(intent);
             }
