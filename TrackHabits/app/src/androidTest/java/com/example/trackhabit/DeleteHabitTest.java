@@ -1,5 +1,6 @@
 package com.example.trackhabit;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
@@ -15,12 +16,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class HabitActivityTest {
+public class DeleteHabitTest {
     private Solo solo;
 
     @Rule
     public ActivityTestRule<LogInActivity> rule =
-           new ActivityTestRule<>(LogInActivity.class, true, true);
+            new ActivityTestRule<>(LogInActivity.class, true, true);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -38,7 +39,7 @@ public class HabitActivityTest {
         assertTrue(solo.waitForActivity(HabitsActivity.class,1000));
 
         HabitsActivity activity = (HabitsActivity) solo.getCurrentActivity();
-        final ListView listView = activity.habitListView;
+
     }
     /**
      * Gets the Activity
@@ -50,11 +51,9 @@ public class HabitActivityTest {
     }
 
     @Test
-    public void openAddHabitDialog(){
-        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
-        solo.clickOnView(solo.getView(R.id.open_menu_button));
-        solo.clickOnView(solo.getView(R.id.add_habit));
-        // assertTrue
-        assertTrue(solo.waitForDialogToOpen(1000));
+    public void deleteHabit(){
+        solo.clickLongInList(1);
+        solo.clickOnText("Delete");
+        assertFalse(solo.waitForLogMessage("Data has been deleted successfully!"));
     }
 }
