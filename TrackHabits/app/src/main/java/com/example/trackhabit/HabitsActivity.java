@@ -134,8 +134,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String) doc.getData().get(KEY_USER);
+
                     daysList = new ArrayList<String>();
                     days     = (String) doc.getData().get(KEY_DAYS);
+
                     getDaysList();
 
                     if (userID.equals(userName)){
@@ -150,6 +152,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
+
                     }
                 }
                 habitsArrayAdapter.notifyDataSetChanged();
@@ -172,6 +175,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     currentList = todayHabitDataList;
                     habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
                     habitListView.setAdapter(habitsArrayAdapter);
+
                 }
 
                 else{
@@ -180,6 +184,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     currentList = allHabitDataList;
                     habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
                     habitListView.setAdapter(habitsArrayAdapter);
+
                 }
             }
         });
