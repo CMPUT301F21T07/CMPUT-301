@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ManageHabitEventsFragment extends DialogFragment {
 
@@ -30,38 +37,20 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private Button selectImageButton;
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
-    private OnFragmentInteractionListener listener;
 
     private int habitEventPosition = -1;
     private HabitEvent editableHabitEvent;
-    private Habits habit;
+    private String habitName;
+    private String userName;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference habitEventsRef = db.collection("Habit Events");
 
 
-    public interface OnFragmentInteractionListener {
-        void onOkPressed(HabitEvent newHabitEvent, int pos);
+    public ManageHabitEventsFragment(String habitName, String userName) {
+        this.habitName = habitName;
+        this.userName = userName;
     }
-
-    public ManageHabitEventsFragment(Habits habit) {
-        this.habit = habit;
-    }
-
-    public ManageHabitEventsFragment(int pos, HabitEvent habitEvent, Habits habit) {
-        habitEventPosition = pos;
-        editableHabitEvent = habitEvent;
-        this.habit = habit;
-    }
-
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
-        }}
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -105,15 +94,43 @@ public class ManageHabitEventsFragment extends DialogFragment {
                         Bitmap photo = optionalPhoto.getDrawingCache();
                         boolean isLocationPermitted = locationPermissionButton.isChecked();
 
-                        if (comment.length() > 30) {
-                            Toast.makeText(getContext(), "Comment length is exceeded!",
-                                    Toast.LENGTH_SHORT).show();
-                            commentEditText.setError("Comment length is exceeded!");
-                        }
-                        HabitEvent newHabitEvent = new HabitEvent(habit, date, comment, photo,
+                        checkInputCorrectness();
+
+                        HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
                                 isLocationPermitted);
-                        listener.onOkPressed(newHabitEvent, habitEventPosition);
+                        HashMap<String, Object> habitEventData = new HashMap<>();
+                        habitEventData.put("HabitName", habitName);
+                        habitEventData.put("UserName", userName);
+                        habitEventData.put("Date", date);
+                        habitEventData.put("OptionalComment", comment);
+                        habitEventData.put("OptionalPhoto", photo);
+                        habitEventData.put("LocationPermission", isLocationPermitted);
+                        String dataName = habitName + " " + userName + " " + date;
+                        habitEventsRef.document(dataName)
+                                .set(habitEventData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d("TAG", "Habit Event Successfully Added!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("TAG", "Habit Successfully Added!");
+                                    }
+                                });
                     }
                 }).create();
+    }
+
+    public void checkInputCorrectness() {
+        String comment = commentEditText.getText().toString();
+        boolean isInputCorrect = (comment.length() <= 20);
+
+        if (!isInputCorrect) {
+            commentEditText.setError("Comment Length Is Exceeded!");
+            checkInputCorrectness();
+        }
     }
 }
