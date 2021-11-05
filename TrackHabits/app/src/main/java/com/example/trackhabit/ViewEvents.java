@@ -50,7 +50,7 @@ public class ViewEvents extends AppCompatActivity {
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
-        events=new ArrayList<HabitEvent>();
+        events=new EventList(new ArrayList<HabitEvent>());
         eventAdapter= new EventListAdapter(ViewEvents.this, events);
         EventList.setAdapter(eventAdapter);
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -98,8 +98,15 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("habitName", habitEvent.getHabitName());
                 singleEvent.putExtra("userName", habitEvent.getUserName());
                 singleEvent.putExtra("date",habitEvent.getDate());
-                singleEvent.putExtra("date", habitEvent.getComment());
-                startActivity(singleEvent);
+                singleEvent.putExtra("comment", habitEvent.getComment());
+                singleEvent.putExtra("index",i);
+                startActivityForResult(singleEvent,0);
+                Intent receive=getIntent();
+                boolean toDelete=receive.getExtras().getBoolean("toDelete");
+                if (toDelete) {
+                    events.remove(i);
+                    eventAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
