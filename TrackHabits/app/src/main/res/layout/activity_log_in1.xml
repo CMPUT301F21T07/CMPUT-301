@@ -16,8 +16,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="87dp"
-        android:layout_marginLeft="87dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginLeft="101dp"
         android:layout_marginTop="173dp"
         android:ems="10"
         android:hint="User Name"
@@ -41,7 +41,9 @@
         android:text="LOG IN"
         android:textAlignment="center"
         android:textSize="40dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="1dp" />
 
     <EditText
         android:id="@+id/logPassword"
@@ -51,8 +53,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginLeft="85dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginLeft="102dp"
         android:layout_marginTop="244dp"
         android:ems="10"
         android:hint="Password"
@@ -66,9 +68,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="51dp"
-        android:layout_marginLeft="51dp"
-        android:layout_marginBottom="181dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginBottom="182dp"
         android:text="Log In"
         android:textColor="@android:color/holo_blue_dark"
         app:backgroundTint="@android:color/darker_gray" />
@@ -80,9 +82,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="151dp"
         android:background="@android:color/darker_gray" />
 
     <TextView

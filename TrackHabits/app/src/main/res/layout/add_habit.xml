@@ -23,7 +23,7 @@
         android:id="@+id/title_layout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Enter Habit Title"
+        android:hint="Enter Title for Habit"
         android:layout_below="@+id/name_layout"
         android:layout_centerHorizontal="true">
         <com.google.android.material.textfield.TextInputEditText
@@ -39,7 +39,7 @@
         android:id="@+id/reason_layout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Enter Habit Title"
+        android:hint="Enter Reason for Habit"
         android:layout_below="@+id/title_layout"
         android:layout_centerHorizontal="true">
         <com.google.android.material.textfield.TextInputEditText
@@ -106,7 +106,6 @@
         android:layout_height="50dp"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
-        android:layout_alignParentLeft="true"
         android:autofillHints="Select privacy"
         android:layout_centerHorizontal="true"/>
 
