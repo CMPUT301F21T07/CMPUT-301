@@ -21,7 +21,7 @@ public class EventListAdapter extends ArrayAdapter<HabitEvent> {
     /**
      * The list of habits
      */
-    private final ArrayList<HabitEvent> eventList;
+    private ArrayList<HabitEvent> eventList;
     private Context context;
 
 
