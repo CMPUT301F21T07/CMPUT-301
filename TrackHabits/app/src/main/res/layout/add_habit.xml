@@ -39,7 +39,7 @@
         android:id="@+id/reason_layout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Enter Habit Title"
+        android:hint="Enter Habit Reason"
         android:layout_below="@+id/title_layout"
         android:layout_centerHorizontal="true">
         <com.google.android.material.textfield.TextInputEditText

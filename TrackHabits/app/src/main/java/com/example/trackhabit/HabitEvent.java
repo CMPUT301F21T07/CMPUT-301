@@ -116,7 +116,7 @@ public class HabitEvent {
         this.optionalPhoto = photo;
     }
 
-}
+
 
     /**
      *Gets the location permission
