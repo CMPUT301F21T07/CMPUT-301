@@ -119,16 +119,21 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         allHabitDataList = new ArrayList<Habits>();
         todayHabitDataList = new ArrayList<Habits>();
+
+        currentList = allHabitDataList;
         Date date = new Date();
         DateFormat day        = new SimpleDateFormat("EEEE");
         strDay  = day.format(date);
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+              currentList.clear();
+
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String) doc.getData().get(KEY_USER);
+
                     days   = (String) doc.getData().get(KEY_DATE);
                     getDaysList();
 
@@ -143,7 +148,11 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                         allHabitDataList.add(tempHabit);
                     }
 
-                    if (userID.equals(userName) && daysList.contains(days)){
+
+                  
+                    if (userID.equals(userName) && daysList.contains(strDay)){
+
+                      
                         Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
@@ -158,8 +167,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
-        HabitDataList = allHabitDataList;
-
 
         habitListView.setClickable(true);
         habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
@@ -172,19 +179,22 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
-                    HabitDataList = todayHabitDataList;
+
+                    currentList = todayHabitDataList;
                 }
 
                 else{
                     yhSwitch.setText("All Habits");
-                    HabitDataList = allHabitDataList;
 
+                    currentList = allHabitDataList;
                 }
             }
         });
 
-        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, HabitDataList);
+
+        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
+
     }
 
     /**
@@ -389,7 +399,5 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     }
                 });
-
-        updateAllHabitList();
     }
 }
