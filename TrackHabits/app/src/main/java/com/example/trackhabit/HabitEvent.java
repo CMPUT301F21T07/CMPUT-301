@@ -24,10 +24,6 @@ public class HabitEvent {
      * @param photo Optional bitmap photo
      * @param locationPermission Optional geolocation using Google data
      */
-    public HabitEvent(Habits habit, String date, String comment, Bitmap photo, boolean locationPermission) {
-        this.habitName = habit.getHabitName();
-        this.userName = habit.getHabitUser();
-
     public HabitEvent(String habitName, String userName, String date, String comment, Bitmap photo,
                       boolean locationPermission) {
         this.habitName = habitName;
@@ -122,11 +118,18 @@ public class HabitEvent {
 
 }
 
-
+    /**
+     *Gets the location permission
+     *@return Returns the boolean of location permission
+     */
     public boolean getLocationPermission() {
         return locationPermission;
     }
 
+    /**
+     * Sets the location permission
+     * @param locationPermission true if location is permitted to track
+     */
     public void setLocationPermission(boolean locationPermission) {
         this.locationPermission = locationPermission;
     }
