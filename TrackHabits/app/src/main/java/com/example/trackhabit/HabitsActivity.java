@@ -58,15 +58,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     ListView habitListView;
 
-    ArrayList<Habits> todayHabitDataList;
-    ArrayList<Habits> allHabitDataList;
-    ArrayList<Habits> currentList;
-    ArrayList<Habits> HabitDataList;
+    private ArrayList<Habits> todayHabitDataList;
+    private ArrayList<Habits> allHabitDataList;
+    private ArrayList<Habits> currentList;
+    private ArrayList<String> daysList;
 
     ArrayAdapter<Habits> habitsArrayAdapter;
     private String userName;
     private String strDate, strDay, days;
-    private List<String> daysList;
+
     Integer temp_index;
     Boolean flag_for_floating = true;
 
@@ -119,17 +119,23 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         allHabitDataList = new ArrayList<Habits>();
         todayHabitDataList = new ArrayList<Habits>();
+
+
+        currentList = allHabitDataList;
         Date date = new Date();
         DateFormat day        = new SimpleDateFormat("EEEE");
         strDay  = day.format(date);
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+              currentList.clear();
+
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String) doc.getData().get(KEY_USER);
-                    days   = (String) doc.getData().get(KEY_DATE);
+                    daysList = new ArrayList<String>();
+                    days     = (String) doc.getData().get(KEY_DAYS);
                     getDaysList();
 
                     if (userID.equals(userName)){
@@ -141,24 +147,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                                 (Boolean) doc.getData().get(KEY_PRIVATE),
                                 (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
-                    }
-
-                    if (userID.equals(userName) && daysList.contains(days)){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
-                                (String) doc.getData().get(KEY_USER),
-                                (String) doc.getData().get(KEY_TITLE),
-                                (String) doc.getData().get(KEY_REASON),
-                                (Timestamp)doc.getData().get(KEY_DATE),
-                                (Boolean) doc.getData().get(KEY_PRIVATE),
-                                (String) doc.getData().get(KEY_DAYS));
-                        todayHabitDataList.add(tempHabit);
+                        if (daysList.contains(strDay)){
+                            todayHabitDataList.add(tempHabit);
+                        }
                     }
                 }
                 habitsArrayAdapter.notifyDataSetChanged();
             }
         });
-
-        HabitDataList = allHabitDataList;
 
 
         habitListView.setClickable(true);
@@ -172,19 +168,26 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
-                    HabitDataList = todayHabitDataList;
+
+                    currentList = todayHabitDataList;
+                    habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
+                    habitListView.setAdapter(habitsArrayAdapter);
                 }
 
                 else{
                     yhSwitch.setText("All Habits");
-                    HabitDataList = allHabitDataList;
 
+                    currentList = allHabitDataList;
+                    habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
+                    habitListView.setAdapter(habitsArrayAdapter);
                 }
             }
         });
 
-        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, HabitDataList);
+
+        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
+
     }
 
     /**
@@ -206,7 +209,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         super.onCreateContextMenu(menu, view, menuInfo);
         getMenuInflater().inflate(R.menu.context_menu, menu);
     }
-
 
     /**
      * Function that determine what happens when a user clicks on an item in a context menu
@@ -260,82 +262,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         newHabit.show(getSupportFragmentManager(), "ADD NEW HABIT");
     }
 
-    /**
-     *  Function that updates the list of all habits that are to be displayed to the user
-     */
-    protected void updateAllHabitList(){
-        allHabitDataList.clear();
-        habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for(QueryDocumentSnapshot doc: value)
-                {
-                    Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
-                    String userID = (String) doc.getData().get(KEY_USER);
-                    if (userID.equals(userName)){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
-                                (String) doc.getData().get(KEY_USER),
-                                (String) doc.getData().get(KEY_TITLE),
-                                (String) doc.getData().get(KEY_REASON),
-                                (Timestamp)doc.getData().get(KEY_DATE),
-                                (Boolean) doc.getData().get(KEY_PRIVATE),
-                                (String) doc.getData().get(KEY_DAYS));
-                        allHabitDataList.add(tempHabit);
-                        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, allHabitDataList);
-                        habitListView.setAdapter(habitsArrayAdapter);
-                    }
-                }
-
-            }
-        });
-    }
-
-
-    /**
-     *  Function that updates the list of today's habits that are to be displayed to the user
-     */
-    protected void updateTodayHabitList(){
-        todayHabitDataList.clear();
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-        DateFormat day        = new SimpleDateFormat("EEEE");
-        strDay  = day.format(date);
-        strDate = dateFormat.format(date);
-        habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for(QueryDocumentSnapshot doc: value)
-                {
-                    daysList.clear();
-                    Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
-                    String userID = (String) doc.getData().get(KEY_USER);
-                    days   = (String) doc.getData().get(KEY_DATE);
-                    getDaysList();
-
-                    if (userID.equals(userName) && daysList.indexOf(strDay) != -1)    {
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
-                                (String) doc.getData().get(KEY_USER),
-                                (String) doc.getData().get(KEY_TITLE),
-                                (String) doc.getData().get(KEY_REASON),
-                                (Timestamp)doc.getData().get(KEY_DATE),
-                                (Boolean) doc.getData().get(KEY_PRIVATE),
-                                (String) doc.getData().get(KEY_DAYS));
-                        todayHabitDataList.add(tempHabit);
-                        habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, todayHabitDataList);
-                        habitListView.setAdapter(habitsArrayAdapter);
-                    }
-                }
-
-            }
-        });
-    }
-
 
     /**
      *  Converts letter denoting the days into full day names and adds it to a list
      */
     private void getDaysList() {
-        daysList.clear();
+        if (daysList.size() != 0) {
+            daysList.clear();
+        }
         if (days.indexOf("M") != -1)
             daysList.add("Monday");
         if (days.indexOf("T") != -1)
@@ -389,7 +323,5 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     }
                 });
-
-        updateAllHabitList();
     }
 }
