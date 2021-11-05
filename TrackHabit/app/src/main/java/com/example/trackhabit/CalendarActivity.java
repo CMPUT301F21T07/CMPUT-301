@@ -13,6 +13,8 @@ public class CalendarActivity extends AppCompatActivity {
     private static final String TAG="Calendar";
     private CalendarView mCalendarView;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -23,9 +25,24 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                String date=i+"/"+i1+"/"+i2;
+                String day;
+                String month;
+                i1=i1+1;
+                if (i2<10){
+                    day="0"+i2;
+                }else{
+                    day=""+i2;
+                }
+                if (i1<10){
+                    month="0"+i1;
+                }else
+                    {month=""+i1;}
+                String date=day+" "+month+" "+i;
                 Log.d(TAG,"onSelectedDayChange: date:"+date);
                 Intent intent=new Intent(CalendarActivity.this,ViewEvents.class);
+                Intent lastIntent=getIntent();
+                String userID=lastIntent.getExtras().getString("ID");
+                intent.putExtra("ID",userID);
                 intent.putExtra("date",date);
                 startActivity(intent);
             }

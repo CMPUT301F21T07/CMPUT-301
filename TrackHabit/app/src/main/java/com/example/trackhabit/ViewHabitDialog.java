@@ -19,7 +19,6 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
 
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,13 +34,15 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
 
+
         builder.setView(view)
                 .setTitle("Habit Details")
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-
-                    //Implement next steps for add Habit event here
-
+                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
+                            habitName,userName);
+                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
+                    dismiss();
                 }));
 
         //get text views
@@ -49,6 +50,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitReasonView= view.findViewById(R.id.view_habit_reason);
         habitTitleView  = view.findViewById(R.id.view_habit_title);
         habitStartDateView  = view.findViewById(R.id.view_start_date);
+
         //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);

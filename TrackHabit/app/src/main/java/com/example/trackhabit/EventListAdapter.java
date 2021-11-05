@@ -17,20 +17,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Represents an individual item in the habits listview
- */
-public class habitListAdapter  extends ArrayAdapter<Habits> {
+public class EventListAdapter extends ArrayAdapter<HabitEvent> {
     /**
      * The list of habits
      */
-    private final ArrayList<Habits> habits;
+    private final ArrayList<HabitEvent> eventList;
     private Context context;
 
-    public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
-        super(context, R.layout.habit_list_adapter, habitArrayList);
-        this.habits = habitArrayList;
-        this.context = context;
+
+
+    public EventListAdapter(Context context,ArrayList<HabitEvent> eventList) {
+        super(context,R.layout.event_list_adapter,eventList);
+        this.eventList = eventList;
+        this.context=context;
     }
 
     /**
@@ -46,23 +45,22 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
         View view = convertView;
 
         if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.habit_list_adapter, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.event_list_adapter, parent, false);
         }
 
-        Habits habit = habits.get(position);
+        HabitEvent event = eventList.get(position);
 
         TextView habitName  = view.findViewById(R.id.habit_name);
-        TextView habitTitle = view.findViewById(R.id.habit_title);
+        TextView username = view.findViewById(R.id.username);
         TextView startDate  = view.findViewById(R.id.date);
+        TextView comment=view.findViewById(R.id.comments);
 
-        habitName.setText(habit.getHabitName());
-        habitTitle.setText(habit.getHabitTitle());
+        habitName.setText(event.getHabitName());
+        username.setText(event.getUserName());
+        comment.setText(event.getComment());
 
-        Timestamp timestamp = habit.getStartDate();
-        Date date = timestamp.toDate();
-        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-        String strDate = dateFormat.format(date);
-        startDate.setText(strDate);
+
+        startDate.setText(event.getDate());
 
         return view;
     }

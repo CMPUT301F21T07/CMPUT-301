@@ -53,7 +53,7 @@ public class ViewSingleEvent extends AppCompatActivity {
     int index=mIntent.getIntExtra("index",0);
     String getTitle=mIntent.getStringExtra("title");
     ArrayList<HabitEvent> events= (ArrayList<HabitEvent>) mIntent.getSerializableExtra("list");
-    ArrayAdapter<HabitEvent> eventArrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +120,7 @@ public class ViewSingleEvent extends AppCompatActivity {
                                 Log.d(TAG, "Data has been deleted successfully!");
                                 events.remove(event);
                                 Toast.makeText(ViewSingleEvent.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
-                                eventArrayAdapter.notifyDataSetChanged();
+//                                eventArrayAdapter.notifyDataSetChanged();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
