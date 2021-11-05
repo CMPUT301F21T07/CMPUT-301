@@ -26,12 +26,14 @@ public class HabitEvent {
         this.locationPermission = locationPermission;
     }
 
+
     public String getHabitName() {
         return habitName;
     }
 
     public void setHabitName(String habitName) {
         this.habitName = habitName;
+
     }
 
     public String getUserName() {

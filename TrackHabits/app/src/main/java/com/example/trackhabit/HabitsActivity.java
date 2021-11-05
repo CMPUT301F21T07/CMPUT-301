@@ -234,7 +234,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 viewDialog(tempOpen);
                 return true;
             case R.id.delete_option:
-                Toast.makeText(this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
                 Habits tempDelete = currentList.get(temp_index);
                 removeHabit(tempDelete);
                 return true;
@@ -266,7 +265,35 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
     private void removeHabit(Habits tempDelete) {
-        // COMPLETE
+        habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for(QueryDocumentSnapshot doc: value)
+                {
+                    Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
+                    String userID = (String) doc.getData().get(KEY_USER);
+
+                    if (userID.equals(userName) && doc.getData().get(KEY_NAME).equals(tempDelete.getHabitName())){
+                        doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Data has been deleted successfully!");
+                                currentList.remove(tempDelete);
+                                Toast.makeText(HabitsActivity.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
+                                habitsArrayAdapter.notifyDataSetChanged();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Data could not be deleted!" + e.toString());
+                            }
+                        });
+                    }
+                }
+
+            }
+        });
+
     }
 
 

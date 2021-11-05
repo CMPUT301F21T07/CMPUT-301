@@ -28,6 +28,8 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
+
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
     private OnFragmentInteractionListener listener;
@@ -44,6 +46,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
     public ManageHabitEventsFragment(Habits habit) {
         this.habit = habit;
     }
+
 
     public ManageHabitEventsFragment(int pos, HabitEvent habitEvent, Habits habit) {
         habitEventPosition = pos;
