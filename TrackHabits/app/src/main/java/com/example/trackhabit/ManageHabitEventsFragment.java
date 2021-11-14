@@ -35,6 +35,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
 
@@ -45,6 +46,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
+
 
 
     public ManageHabitEventsFragment(String habitName, String userName) {
@@ -96,8 +98,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
                         checkInputCorrectness();
 
-                        HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
-                                isLocationPermitted);
+
                         HashMap<String, Object> habitEventData = new HashMap<>();
                         habitEventData.put("HabitName", habitName);
                         habitEventData.put("UserName", userName);
@@ -106,6 +107,11 @@ public class ManageHabitEventsFragment extends DialogFragment {
                         habitEventData.put("OptionalPhoto", photo);
                         habitEventData.put("LocationPermission", isLocationPermitted);
                         String dataName = habitName + " " + userName + " " + date;
+
+                        if (habitEventsRef.document(dataName).get().toString().equals("")) {
+                            return;
+                        }
+
                         habitEventsRef.document(dataName)
                                 .set(habitEventData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -124,7 +130,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 }).create();
     }
 
-    public void checkInputCorrectness() {
+    private void checkInputCorrectness() {
         String comment = commentEditText.getText().toString();
         boolean isInputCorrect = (comment.length() <= 20);
 

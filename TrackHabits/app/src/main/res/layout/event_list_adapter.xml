@@ -26,18 +26,25 @@
                     android:id="@+id/habit_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="habit_name"
+                    android:text="@string/habit_name"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/habit_title"
+                    android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textSize="15sp"
-                    android:text="habit_title"/>
+                    android:text="@string/habit_title"/>
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="15sp"
+                    android:text="@string/habit_title"/>
 
             </LinearLayout>
 

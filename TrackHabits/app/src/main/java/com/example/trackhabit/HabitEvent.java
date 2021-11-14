@@ -17,8 +17,7 @@ public class HabitEvent {
     /**
      * Creates a habit event with the habit name, user name, date, comment, optional photo, and
      * optional geolocation
-     *
-     * @param habit Name of the habit
+     * @param habitName Name of the habit
      * @param date The current date
      * @param comment Optional comment with max 30 characters
      * @param photo Optional bitmap photo
@@ -28,7 +27,6 @@ public class HabitEvent {
                       boolean locationPermission) {
         this.habitName = habitName;
         this.userName = userName;
-
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
@@ -42,6 +40,7 @@ public class HabitEvent {
     public String getHabitName() {
         return habitName;
     }
+
 
     /**
      * Set the habit name
@@ -115,7 +114,6 @@ public class HabitEvent {
     public void setOptionalPhoto(Bitmap photo) {
         this.optionalPhoto = photo;
     }
-
 
 
     /**
