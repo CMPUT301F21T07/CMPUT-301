@@ -18,7 +18,6 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     private Boolean itemPrivacy; //if privacy setting will be included in the details later
 
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

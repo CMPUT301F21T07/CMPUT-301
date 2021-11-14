@@ -55,6 +55,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private ArrayList<String> daysList;
 
     ArrayAdapter<Habits> habitsArrayAdapter;
+
     private String userName;
     private String strDay, days;
 
@@ -128,13 +129,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
              */
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-              currentList.clear();
+                currentList.clear();
 
                 assert value != null;
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
-                    String userID = (String) doc.getData().get(KEY_USER);
+                    String userID = (String)doc.getData().get(KEY_USER);
 
                     daysList = new ArrayList<>();
                     days     = (String) doc.getData().get(KEY_DAYS);
@@ -204,8 +205,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      */
     private void viewAllHabitEvents() {
         Intent newIntent= new Intent(HabitsActivity.this, CalendarActivity.class);
+
+        newIntent.putExtra("ID", userName);
         startActivity(newIntent);
-        // View All Habit Events
+        // View All Habit
     }
 
 

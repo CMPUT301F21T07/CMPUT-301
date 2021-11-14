@@ -49,35 +49,61 @@ public class ViewSingleEvent extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habits");
 
+
+
+    String habitName;
+    String userName;
+    String date;
+    String comment ;
+    int index;
+    boolean toDelete=false;
+
     Intent mIntent=getIntent();
-    int index=mIntent.getIntExtra("index",0);
-    String getTitle=mIntent.getStringExtra("title");
-    ArrayList<HabitEvent> events= (ArrayList<HabitEvent>) mIntent.getSerializableExtra("list");
-    ArrayAdapter<HabitEvent> eventArrayAdapter;
+
+    String habitName = mIntent.getExtras().getString("habitName");
+    String userName = mIntent.getExtras().getString("userName");
+    String date = mIntent.getExtras().getString("date");
+    String comment = mIntent.getExtras().getString("comment");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_event);
+
+        Intent mIntent=getIntent();
+        habitName = mIntent.getExtras().getString("habitName");
+        userName = mIntent.getExtras().getString("userName");
+        date = mIntent.getExtras().getString("date");
+        comment = mIntent.getExtras().getString("comment");
+        index=mIntent.getExtras().getInt("index");
+
+        System.out.println("Date: "+date);
         Title=findViewById(R.id.showTitle);
-        Title.setText(getTitle);
+
+        Title.setText("Habit: "+habitName);
+
+
 
         Reason=findViewById(R.id.showReason);
-        Reason.setText(events.get(index).getComment());
+        Reason.setText("Comment: " + comment);
 
         StartDate=findViewById(R.id.Start_date);
-        StartDate.setText(events.get(index).getDate());
-        consistency=findViewById(R.id.showConsistency);
+        StartDate.setText("Date: "+date);
+
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
-        Title.setText(getTitle);
 
-//        Editing.setOnClickListener(new View.OnClickListener() {
+
+//       Editing.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //
 //            }
 //        });
-          Deleting.setOnClickListener(view -> removeEvent(events.get(index)));
+
+        Deleting.setOnClickListener(view -> removeEvent());
+
 
 //        Deleting.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -101,38 +127,47 @@ public class ViewSingleEvent extends AppCompatActivity {
 //        }
 //        );
 
-        habitTitle=habit.getHabitTitle();
-        habitReason=habit.getHabitReason();
-    }
-    private void removeEvent(HabitEvent event){
-        habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for(QueryDocumentSnapshot doc: value)
-                {
-                    Log.d(TAG, String.valueOf(doc.getData().get(KEY_TITLE)));
-                    String userID = (String) doc.getData().get("User");
 
-                    if (userID.equals(events.get(index).getUserName()) && doc.getData().get(KEY_TITLE).equals(event.getHabitName())){
-                        doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "Data has been deleted successfully!");
-                                events.remove(event);
-                                Toast.makeText(ViewSingleEvent.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
-                                eventArrayAdapter.notifyDataSetChanged();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "Data could not be deleted!" + e.toString());
-                            }
-                        });
-                    }
+
+    }
+
+    private void removeEvent(){
+
+        habitsRef.addSnapshotListener((value, error) -> {
+            assert value != null;
+            for(QueryDocumentSnapshot doc: value)
+            {
+                Log.d(TAG, String.valueOf(doc.getData().get("HabitName")));
+                String userID = (String) doc.getData().get("UserName");
+
+                if (userID.equals(userName) && doc.getData().get("HabitName").equals(habitName)&& doc.getData().get("Date").equals(date)){
+                    doc.getReference().delete().addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Data has been deleted successfully!");
+
+                        Toast.makeText(ViewSingleEvent.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
+                        Intent intent=new Intent(ViewSingleEvent.this,ViewEvents.class);
+                        toDelete=true;
+                        intent.putExtra("toDelete",toDelete);
+                        finish();
+                    }).addOnFailureListener(e -> Log.d(TAG, "Data could not be deleted!" + e.toString()));
                 }
 
+        String documentName = habitName + " " + userName + " " + date;
+        habitsRef.document(documentName).delete()
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("TAG", "Habit Event Successfully Deleted!");
             }
-        });
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "Habit Event Successfully Deleted!");
 
+
+            }
+
+        });
     }
 }
