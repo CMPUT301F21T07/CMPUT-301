@@ -268,6 +268,16 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
 
     private void editDialog(Habits tempEdit) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        EditHabitDialog editHabit = new EditHabitDialog();
+        Bundle args = new Bundle();
+        args.putString("user_name", userName);
+        args.putString("habit_name", tempEdit.getHabitName());
+        args.putString("habit_title", tempEdit.getHabitTitle());
+        args.putString("habit_date", dateFormat.format(tempEdit.getStartDate().toDate()));
+        args.putString("habit_reason", tempEdit.getHabitReason());
+        editHabit.setArguments(args);
+        editHabit.show(getSupportFragmentManager(), "EDIT HABIT");
         // COMPLETE
     }
 
