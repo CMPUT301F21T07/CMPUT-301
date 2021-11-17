@@ -61,7 +61,7 @@ public class ViewEvents extends AppCompatActivity {
                     System.out.println(date);
                     System.out.println(selectedDate);
                     if (!selectedDate.equals(date)){
-                        break;
+                        continue;
                     }
                     String optionalComment = (String) doc.getData().get("OptionalComment");
                     Bitmap photo = (Bitmap) doc.getData().get("OptionalPhoto");
