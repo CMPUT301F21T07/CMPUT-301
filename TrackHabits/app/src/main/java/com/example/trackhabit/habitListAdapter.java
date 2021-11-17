@@ -17,8 +17,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Represents an individual item in the habits listview
+ */
 public class habitListAdapter  extends ArrayAdapter<Habits> {
-    private ArrayList<Habits> habits;
+    /**
+     * The list of habits
+     */
+    private final ArrayList<Habits> habits;
     private Context context;
 
     public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
@@ -27,6 +33,13 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
         this.context = context;
     }
 
+    /**
+     * This function returns the view of the habit object containing the name, title, and date
+     * @param position The position of the habit in the list
+     * @param convertView The converted view of the habit object
+     * @param parent The parent group
+     * @return The view of the habit object in the list
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

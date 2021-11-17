@@ -1,5 +1,6 @@
 package com.example.trackhabit;
 
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,11 +10,13 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.EventLog;
 import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -23,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
 import java.util.ArrayList;
 
 public class ViewEvents extends AppCompatActivity {
@@ -30,15 +34,18 @@ public class ViewEvents extends AppCompatActivity {
     private TextView dateText;
 
 
+
     ArrayAdapter<HabitEvent> eventAdapter;
     ArrayList<HabitEvent> events;
     private String userId;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_events);
+
         EventList=findViewById(R.id.habits_list_view);
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
@@ -79,6 +86,7 @@ public class ViewEvents extends AppCompatActivity {
                 eventAdapter.notifyDataSetChanged();
             }
         });
+
         dateText=findViewById(R.id.eventTitle);
         dateText.setText(intent.getStringExtra("date"));
         EventList=findViewById(R.id.habits_list_view);

@@ -15,8 +15,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView;
     private String userName, habitName, habitTitle, habitStart, habitReason;
-    private Boolean itemPrivacy; //if privacy setting will be included in the details
-
+    private Boolean itemPrivacy; //if privacy setting will be included in the details later
 
 
     @NonNull
