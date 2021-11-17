@@ -50,7 +50,7 @@ public class ViewEvents extends AppCompatActivity {
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
-        events=new EventList(new ArrayList<HabitEvent>());
+        events=new EventList(new ArrayList<>());
         eventAdapter= new EventListAdapter(ViewEvents.this, events);
         EventList.setAdapter(eventAdapter);
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
