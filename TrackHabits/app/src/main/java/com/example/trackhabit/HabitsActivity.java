@@ -35,7 +35,7 @@ import java.util.HashMap;
 /**
  * Represents the activity of creating, viewing, and deleting habits
  */
-public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.EditDialogListener {
+public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.EditDialogListener, EditHabitDialog.HabitDialogListener {
 
     private static final String TAG = "TAG" ;
 
@@ -271,6 +271,16 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
 
     private void editDialog(Habits tempEdit) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        EditHabitDialog editHabit = new EditHabitDialog();
+        Bundle args = new Bundle();
+        args.putString("user_name", userName);
+        args.putString("habit_name", tempEdit.getHabitName());
+        args.putString("habit_title", tempEdit.getHabitTitle());
+        args.putString("habit_date", dateFormat.format(tempEdit.getStartDate().toDate()));
+        args.putString("habit_reason", tempEdit.getHabitReason());
+        editHabit.setArguments(args);
+        editHabit.show(getSupportFragmentManager(), "EDIT HABIT");
         // COMPLETE
     }
 
@@ -363,5 +373,29 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     Toast.makeText(HabitsActivity.this, "Habit has been added successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Log.d(TAG, "Habit could not be added!" + e.toString()));
+    }
+    /**
+     * Function that gets data from the editHabit dialog box using a listener
+     * @param name Habit name
+     * @param title Habit title
+     * @param reason Habit reason
+     */
+    @Override
+    public void updateHabit(String name, String title, String reason) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put(KEY_NAME, name);
+        data.put(KEY_TITLE, title);
+        //data.put(KEY_DATE, startTime);
+        data.put(KEY_REASON, reason);
+        //data.put(KEY_PRIVATE, itemPrivacy);
+        data.put(KEY_USER, userName);
+        //data.put(KEY_DAYS, days);
+        habitsRef.document(name)
+                .update(data)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Habit has been updated successfully!");
+                    Toast.makeText(HabitsActivity.this, "Habit has been updated successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Log.d(TAG, "Habit could not be updated!" + e.toString()));
     }
 }
