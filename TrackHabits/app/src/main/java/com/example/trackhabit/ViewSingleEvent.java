@@ -140,6 +140,6 @@ public class ViewSingleEvent extends AppCompatActivity {
 
                         });
             }
-        });
-    }
+
+
 }
