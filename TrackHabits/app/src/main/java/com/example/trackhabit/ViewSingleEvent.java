@@ -51,10 +51,7 @@ public class ViewSingleEvent extends AppCompatActivity {
 
 
 
-    String habitName;
-    String userName;
-    String date;
-    String comment ;
+
     int index;
     boolean toDelete=false;
 
@@ -135,39 +132,40 @@ public class ViewSingleEvent extends AppCompatActivity {
 
         habitsRef.addSnapshotListener((value, error) -> {
             assert value != null;
-            for(QueryDocumentSnapshot doc: value)
-            {
+            for (QueryDocumentSnapshot doc : value) {
                 Log.d(TAG, String.valueOf(doc.getData().get("HabitName")));
                 String userID = (String) doc.getData().get("UserName");
 
-                if (userID.equals(userName) && doc.getData().get("HabitName").equals(habitName)&& doc.getData().get("Date").equals(date)){
+                if (userID.equals(userName) && doc.getData().get("HabitName").equals(habitName) && doc.getData().get("Date").equals(date)) {
                     doc.getReference().delete().addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "Data has been deleted successfully!");
 
                         Toast.makeText(ViewSingleEvent.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(ViewSingleEvent.this,ViewEvents.class);
-                        toDelete=true;
-                        intent.putExtra("toDelete",toDelete);
+                        Intent intent = new Intent(ViewSingleEvent.this, ViewEvents.class);
+                        toDelete = true;
+                        intent.putExtra("toDelete", toDelete);
                         finish();
                     }).addOnFailureListener(e -> Log.d(TAG, "Data could not be deleted!" + e.toString()));
                 }
 
-        String documentName = habitName + " " + userName + " " + date;
-        habitsRef.document(documentName).delete()
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "Habit Event Successfully Deleted!");
+                String documentName = habitName + " " + userName + " " + date;
+                habitsRef.document(documentName).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("TAG", "Habit Event Successfully Deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("TAG", "Habit Event Successfully Deleted!");
+
+
+                            }
+
+                        });
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "Habit Event Successfully Deleted!");
-
-
-            }
-
         });
     }
 }

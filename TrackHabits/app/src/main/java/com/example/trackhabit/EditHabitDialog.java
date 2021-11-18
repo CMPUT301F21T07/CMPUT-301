@@ -3,6 +3,7 @@ package com.example.trackhabit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.google.firebase.Timestamp;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class EditHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView;
     private String userName, habitName, habitTitle, habitStart, habitReason;
+    private HabitDialogListener returnListener;
+    private Timestamp startTime;
+    private String days = "";
     private Boolean itemPrivacy;
+    private Date tempDate;
 
 
 
@@ -34,13 +44,21 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitTitle = getArguments().getString("habit_title");
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
+        itemPrivacy = true;
+        try {
+            tempDate=new SimpleDateFormat("MM/dd/yyyy").parse(habitStart);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        startTime = new Timestamp(tempDate);
 
 
         builder.setView(view)
                 .setTitle("Edit Habit")
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Confirm", ((dialogInterface, i) -> {
-
+                    checkInput();
+                    returnListener.updateHabit(habitName, habitTitle, habitReason);
                 }));
 
         //get text views
@@ -56,6 +74,25 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitStartDateView.setText(habitStart);
 
         return builder.create();
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            returnListener = (EditHabitDialog.HabitDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "Must implement listener");
+        }
+    }
+
+    private void checkInput() {
+        habitTitle = habitTitleView.getText().toString();
+        habitReason = habitReasonView.getText().toString();
+    }
+
+    public interface HabitDialogListener{
+        void updateHabit(String name, String title, String reason);
     }
 
 }
