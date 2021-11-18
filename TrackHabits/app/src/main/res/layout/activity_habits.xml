@@ -96,7 +96,8 @@
         android:clickable="true"
         android:focusable="true"
         app:srcCompat ="@drawable/ic_baseline_add_circle_outline_24"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat" />
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat"
+        />
 
 
 
@@ -115,8 +116,9 @@
         app:backgroundTint="@android:color/holo_orange_light"
         app:fabCustomSize="45dp"
         app:srcCompat ="@drawable/ic_baseline_calendar_today_24"
-        app:fabSize="auto"
-        tools:ignore="VectorDrawableCompat" />
+        app:fabSize="mini"
+        tools:ignore="VectorDrawableCompat"
+        app:tint = "@color/white"/>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -134,6 +136,44 @@
         app:backgroundTint="@android:color/holo_green_light"
         android:visibility="gone"
         app:fabCustomSize="45dp"
-        app:fabSize="auto"/>
+        app:fabSize="mini"
+        app:tint = "@color/white"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/view_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="205dp"
+        app:srcCompat ="@drawable/ic_baseline_supervised_user_circle_24"
+        app:backgroundTint="@android:color/holo_purple"
+        app:fabCustomSize="45dp"
+        app:fabSize="mini"
+        tools:ignore="VectorDrawableCompat"
+        android:visibility="gone"
+        app:tint = "@color/white"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/log_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="260dp"
+        app:srcCompat = "@android:drawable/ic_lock_power_off"
+        app:backgroundTint="@android:color/holo_red_dark"
+        app:fabCustomSize="45dp"
+        app:fabSize="mini"
+        android:visibility="gone"
+        app:tint = "@color/white"        />
 
     </RelativeLayout>

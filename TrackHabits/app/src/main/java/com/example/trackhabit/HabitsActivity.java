@@ -66,7 +66,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton;
 
     private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
@@ -89,11 +89,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         extraOptionsButton = findViewById(R.id.open_menu_button);
         addNewHabit        = findViewById(R.id.add_habit);
         viewHabitEvents    = findViewById(R.id.view_habit_events);
+        viewFriendsButton  = findViewById(R.id.view_friends);
+        logOutButton       = findViewById(R.id.log_out_button);
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
                 addNewHabit.show();
                 viewHabitEvents.show();
+                viewFriendsButton.show();
+                logOutButton.show();
 
                 extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
                 flag_for_floating = false;
@@ -101,6 +105,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }else {
                 addNewHabit.hide();
                 viewHabitEvents.hide();
+                viewFriendsButton.hide();
+                logOutButton.hide();
 
                 extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
                 flag_for_floating = true;
@@ -109,6 +115,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         viewHabitEvents.setOnClickListener(view -> viewAllHabitEvents());
         addNewHabit.setOnClickListener(view -> addNewHabit());
+        viewFriendsButton.setOnClickListener(view -> viewFriends());
+        logOutButton.setOnClickListener(view -> logOut());
 
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);
@@ -197,6 +205,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
+
+    }
+
+    private void viewFriends() {
+        Intent newIntent= new Intent(HabitsActivity.this, ViewFriends.class);
+
+        newIntent.putExtra("ID", userName);
+        startActivity(newIntent);
+    }
+
+    private void logOut() {
+        Intent newIntent = new Intent(HabitsActivity.this, MainActivity.class);
+        startActivity(newIntent);
+        finish();
 
     }
 
