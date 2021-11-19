@@ -3,75 +3,126 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/name"
+    <LinearLayout
+        android:id="@+id/name_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:text="Habit Name:"
-        android:textSize="25sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/view_habit_name"
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/view_habit_name"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/title_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        android:layout_below="@+id/name"/>
+        android:orientation="horizontal"
+        android:layout_below="@+id/name_linear_layout">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Title: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/title"
+        <TextView
+            android:id="@+id/view_habit_title"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/reason_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:text="Habit Title:"
-        android:textSize="25sp"
-        android:layout_below="@+id/view_habit_name"/>
+        android:orientation="horizontal"
+        android:layout_below="@+id/title_linear_layout">
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Reason: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/view_habit_title"
+        <TextView
+            android:id="@+id/view_habit_reason"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/start_date_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:maxLength="20"
-        android:textSize="20sp"
-        android:gravity="center_horizontal"
-        android:layout_below="@+id/title"/>
+        android:orientation="horizontal"
+        android:layout_below="@+id/reason_linear_layout">
+        <TextView
+            android:id="@+id/started"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Start Date: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/reason"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:text="Reason:"
-        android:textSize="25sp"
-        android:layout_below="@+id/view_habit_title"/>
+        <TextView
+            android:id="@+id/view_start_date"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
 
-
-    <TextView
-        android:id="@+id/view_habit_reason"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        android:maxLength="30"
-        android:layout_below="@+id/reason"/>
-
-    <TextView
-        android:id="@+id/started"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:text="Start Date:"
-        android:textSize="25sp"
-        android:layout_below="@+id/view_habit_reason"/>
-
-    <TextView
-        android:id="@+id/view_start_date"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textSize="20sp"
-        android:layout_below="@id/started"
-        android:gravity="center_horizontal" />
+    </LinearLayout>
 
 
 </RelativeLayout>
