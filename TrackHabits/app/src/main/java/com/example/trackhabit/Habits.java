@@ -130,13 +130,13 @@ public class Habits {
      * @return Days of the Habit
      */
     public String getDays() {
-        return habitTitle;
+        return days;
     }
 
     /**
      * @param days Days of the Habit
      */
     public void setDays(String days) {
-        this.days = habitTitle;
+        this.days = days;
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import java.util.Date;
 public class EditHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
     private String userName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy;
+    private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private HabitDialogListener returnListener;
     private Timestamp startTime;
@@ -49,7 +51,10 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitTitle = getArguments().getString("habit_title");
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
+        days = getArguments().getString("habit_days");
+
         itemPrivacy = getArguments().getBoolean("habit_privacy");
+
         //itemPrivacy = true;
         try {
             tempDate=new SimpleDateFormat("MM/dd/yyyy").parse(habitStart);
@@ -64,7 +69,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Confirm", ((dialogInterface, i) -> {
                     checkInput();
-                    returnListener.updateHabit(habitName, habitTitle, habitReason, startTime, itemPrivacy);
+                    returnListener.updateHabit(habitName, habitTitle, habitReason, startTime, itemPrivacy, days);
                 }));
 
         //get text views
@@ -75,6 +80,13 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitStartMonth = view.findViewById(R.id.edit_habit_month);
         habitStartYear = view.findViewById(R.id.edit_habit_year);
         habitPrivacy = view.findViewById(R.id.edit_privacy);
+        monCheck    = view.findViewById(R.id.monday_edit);
+        tueCheck    = view.findViewById(R.id.tuesday_edit);
+        wedCheck    = view.findViewById(R.id.wednesday_edit);
+        thuCheck    = view.findViewById(R.id.thursday_edit);
+        friCheck    = view.findViewById(R.id.friday_edit);
+        satCheck    = view.findViewById(R.id.saturday_edit);
+        sunCheck    = view.findViewById(R.id.sunday_edit);
 
 
 
@@ -86,6 +98,8 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitStartDay.setText(getDay(tempDate));
         habitStartMonth.setText(getMonth(tempDate));
         habitStartYear.setText(getYear(tempDate));
+        setDays(days);
+
 
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacyOptions);
@@ -115,11 +129,27 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitDay = habitStartDay.getText().toString();
         habitMonth = habitStartMonth.getText().toString();
         habitYear = habitStartYear.getText().toString();
+        days = "";
 
         if (privacy.equals("Private"))
             itemPrivacy = true;
         else if (privacy.equals("Public"))
             itemPrivacy = false;
+
+        if (monCheck.isChecked())
+            days = days + "M";
+        if (tueCheck.isChecked())
+            days = days + "T";
+        if (wedCheck.isChecked())
+            days = days + "W";
+        if (thuCheck.isChecked())
+            days = days + "R";
+        if (friCheck.isChecked())
+            days = days + "F";
+        if (satCheck.isChecked())
+            days = days + "S";
+        if (sunCheck.isChecked())
+            days = days + "U";
 
         habitStart = habitDay + " " + habitMonth + " " + habitYear;
 
@@ -134,7 +164,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
     }
 
     public interface HabitDialogListener{
-        void updateHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy);
+        void updateHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy,String days);
     }
 
     private String getDay(Date date){
@@ -153,6 +183,23 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         String year = String.valueOf(yearFormat.format(date));
         return year;
+    }
+
+    private void setDays(String setDays){
+        if (setDays.contains("M"))
+            monCheck.setChecked(true);
+        if (setDays.contains("T"))
+            tueCheck.setChecked(true);
+        if (setDays.contains("W"))
+            wedCheck.setChecked(true);
+        if (setDays.contains("R"))
+            thuCheck.setChecked(true);
+        if (setDays.contains("F"))
+            friCheck.setChecked(true);
+        if (setDays.contains("S"))
+            satCheck.setChecked(true);
+        if (setDays.contains("U"))
+            sunCheck.setChecked(true);
     }
 
 }

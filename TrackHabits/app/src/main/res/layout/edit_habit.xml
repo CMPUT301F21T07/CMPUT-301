@@ -162,9 +162,9 @@
         android:id="@+id/wednesday_edit"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:text="Wednesday"
         android:layout_below="@+id/tuesday_edit"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="Wednesday" />
 
     <CheckBox
         android:id="@+id/thursday_edit"
