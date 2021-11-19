@@ -99,7 +99,6 @@ public class LogInActivity extends AppCompatActivity {
                 }
             }
         });
-
         uDataList = new ArrayList<>();
     }
 }

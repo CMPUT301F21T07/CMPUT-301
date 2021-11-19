@@ -67,9 +67,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton, searchButton;
 
-    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout;
+    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout, searchLayout;
 
     private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
@@ -94,11 +94,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewHabitEvents    = findViewById(R.id.view_habit_events);
         viewFriendsButton  = findViewById(R.id.view_friends);
         logOutButton       = findViewById(R.id.log_out_button);
+        searchButton       = findViewById(R.id.search_button);
+
 
         newHabitLayout    = findViewById(R.id.add_habit_layout);
         viewEventsLayout  = findViewById(R.id.view_events_layout);
         viewFriendsLayout = findViewById(R.id.view_friends_layout);
         logOutLayout      = findViewById(R.id.log_out_layout);
+        searchLayout      = findViewById(R.id.search_layout);
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
@@ -106,6 +109,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 viewEventsLayout.setVisibility(View.VISIBLE);
                 viewFriendsLayout.setVisibility(View.VISIBLE);
                 logOutLayout.setVisibility(View.VISIBLE);
+                searchLayout.setVisibility(View.VISIBLE);
 
                 extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
                 flag_for_floating = false;
@@ -209,6 +213,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
+    }
+
+    private void searchFriend(){
+        Intent newIntent= new Intent(HabitsActivity.this, SearchFriend.class);
+        closeMenu();
+        newIntent.putExtra("name_key", userName);
+        startActivity(newIntent);
+
+
     }
 
     private void closeMenu() {
