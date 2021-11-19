@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -68,6 +69,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton;
 
+    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout;
+
     private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
 
@@ -92,24 +95,24 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewFriendsButton  = findViewById(R.id.view_friends);
         logOutButton       = findViewById(R.id.log_out_button);
 
+        newHabitLayout    = findViewById(R.id.add_habit_layout);
+        viewEventsLayout  = findViewById(R.id.view_events_layout);
+        viewFriendsLayout = findViewById(R.id.view_friends_layout);
+        logOutLayout      = findViewById(R.id.log_out_layout);
+
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
-                addNewHabit.show();
-                viewHabitEvents.show();
-                viewFriendsButton.show();
-                logOutButton.show();
+                newHabitLayout.setVisibility(View.VISIBLE);
+                viewEventsLayout.setVisibility(View.VISIBLE);
+                viewFriendsLayout.setVisibility(View.VISIBLE);
+                logOutLayout.setVisibility(View.VISIBLE);
 
                 extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
                 flag_for_floating = false;
 
-            }else {
-                addNewHabit.hide();
-                viewHabitEvents.hide();
-                viewFriendsButton.hide();
-                logOutButton.hide();
-
-                extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
-                flag_for_floating = true;
+            }
+            else {
+                closeMenu();
             }
         });
 
@@ -147,9 +150,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
                     daysList = new ArrayList<>();
                     days     = (String) doc.getData().get(KEY_DAYS);
-
                     getDaysList();
-
                     if (userID.equals(userName)){
                         Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
@@ -169,7 +170,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
-
         habitListView.setClickable(true);
         habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
             registerForContextMenu(habitListView);
@@ -186,37 +186,47 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
-
                     currentList = todayHabitDataList;
-
                 }
 
                 else{
                     yhSwitch.setText("All Habits");
-
                     currentList = allHabitDataList;
-
                 }
                 habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
                 habitListView.setAdapter(habitsArrayAdapter);
             }
         });
-
-
         habitsArrayAdapter = new habitListAdapter(HabitsActivity.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
-
     }
 
+    /**
+     *  Function that views all the habit events for the user so far
+     */
     private void viewFriends() {
         Intent newIntent= new Intent(HabitsActivity.this, ViewFriends.class);
-
-        newIntent.putExtra("ID", userName);
+        closeMenu();
+        newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
     }
 
+    private void closeMenu() {
+        newHabitLayout.setVisibility(View.GONE);
+        viewEventsLayout.setVisibility(View.GONE);
+        viewFriendsLayout.setVisibility(View.GONE);
+        logOutLayout.setVisibility(View.GONE);
+
+        extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
+        flag_for_floating = true;
+    }
+
+    /**
+     *  Function that logs out the user from the application
+     */
     private void logOut() {
-        Intent newIntent = new Intent(HabitsActivity.this, MainActivity.class);
+        Intent newIntent = new Intent(HabitsActivity.this, LogInActivity.class);
+        Toast.makeText(HabitsActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
         startActivity(newIntent);
         finish();
 
@@ -227,7 +237,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      */
     private void viewAllHabitEvents() {
         Intent newIntent= new Intent(HabitsActivity.this, CalendarActivity.class);
-
+        closeMenu();
         newIntent.putExtra("ID", userName);
         startActivity(newIntent);
         // View All Habit
