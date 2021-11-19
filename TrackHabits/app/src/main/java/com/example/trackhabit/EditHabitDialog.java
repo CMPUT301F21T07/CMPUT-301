@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -20,8 +21,8 @@ import java.util.Date;
 
 
 public class EditHabitDialog extends AppCompatDialogFragment {
-    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView;
-    private String userName, habitName, habitTitle, habitStart, habitReason;
+    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
+    private String userName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear;
     private HabitDialogListener returnListener;
     private Timestamp startTime;
     private String days = "";
@@ -58,20 +59,26 @@ public class EditHabitDialog extends AppCompatDialogFragment {
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Confirm", ((dialogInterface, i) -> {
                     checkInput();
-                    returnListener.updateHabit(habitName, habitTitle, habitReason);
+                    returnListener.updateHabit(habitName, habitTitle, habitReason, startTime);
                 }));
 
         //get text views
         habitNameView   = view.findViewById(R.id.edit_habit_name);
         habitReasonView= view.findViewById(R.id.edit_habit_reason);
         habitTitleView  = view.findViewById(R.id.edit_habit_title);
-        habitStartDateView  = view.findViewById(R.id.edit_start_date);
+        habitStartDay      = view.findViewById(R.id.edit_habit_date);
+        habitStartMonth     = view.findViewById(R.id.edit_habit_month);
+        habitStartYear      = view.findViewById(R.id.edit_habit_year);
+
+
 
         //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
-        habitStartDateView.setText(habitStart);
+        habitStartDay.setText(getDay(tempDate));
+        habitStartMonth.setText(getMonth(tempDate));
+        habitStartYear.setText(getYear(tempDate));
 
         return builder.create();
     }
@@ -89,10 +96,42 @@ public class EditHabitDialog extends AppCompatDialogFragment {
     private void checkInput() {
         habitTitle = habitTitleView.getText().toString();
         habitReason = habitReasonView.getText().toString();
+        habitDay = habitStartDay.getText().toString();
+        habitMonth = habitStartMonth.getText().toString();
+        habitYear = habitStartYear.getText().toString();
+
+        habitStart = habitDay + " " + habitMonth + " " + habitYear;
+
+        try {
+            tempDate=new SimpleDateFormat("dd MM yyyy").parse(habitStart);
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Incorrect format for date", Toast.LENGTH_SHORT).show();
+            habitStartDay.setError("Incorrect format: DD MM YYYY");
+            habitStartDay.requestFocus();
+        }
+        startTime = new Timestamp(tempDate);
     }
 
     public interface HabitDialogListener{
-        void updateHabit(String name, String title, String reason);
+        void updateHabit(String name, String title, String reason, Timestamp startTime);
+    }
+
+    private String getDay(Date date){
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        String day = String.valueOf(dayFormat.format(date));
+        return day;
+    }
+
+    private String getMonth(Date date){
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String month = String.valueOf(monthFormat.format(date));
+        return month;
+    }
+
+    private String getYear(Date date){
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        String year = String.valueOf(yearFormat.format(date));
+        return year;
     }
 
 }

@@ -419,13 +419,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param name Habit name
      * @param title Habit title
      * @param reason Habit reason
+     * @param startTime Habit start date
      */
     @Override
-    public void updateHabit(String name, String title, String reason) {
+    public void updateHabit(String name, String title, String reason, Timestamp startTime) {
         HashMap<String, Object> data = new HashMap<>();
         data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
-        //data.put(KEY_DATE, startTime);
+        data.put(KEY_DATE, startTime);
         data.put(KEY_REASON, reason);
         //data.put(KEY_PRIVATE, itemPrivacy);
         data.put(KEY_USER, userName);
