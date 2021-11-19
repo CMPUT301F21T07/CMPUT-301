@@ -10,23 +10,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrackHabit">
         <activity
+            android:name=".ViewFriends"
+            android:exported="true"
+            android:label="Your Friends"/>
+        <activity
             android:name=".CalendarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Habit Events"/>
         <activity
             android:name=".ViewSingleEvent"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Current Event"/>
         <activity
             android:name=".ViewEvents"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Your Habit Events"/>
         <activity
             android:name=".HabitsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Your Habits"/>
         <activity
             android:name=".LogInActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Log In"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="Create New User">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
