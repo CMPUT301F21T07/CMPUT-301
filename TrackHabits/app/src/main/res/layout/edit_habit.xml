@@ -119,17 +119,16 @@
     </LinearLayout>
 
 
-
     <Spinner
         android:id="@+id/edit_privacy"
-        android:layout_below="@+id/edit_date_layout"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"
-        android:autofillHints="Select privacy"
+        android:layout_below="@+id/edit_date_layout"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"/>
+        android:autofillHints="Select privacy"
+        android:background="@android:drawable/btn_dropdown"
+        android:gravity="center_horizontal"
+        android:spinnerMode="dropdown" />
 
 
     <TextView
