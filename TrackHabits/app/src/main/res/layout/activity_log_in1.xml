@@ -65,11 +65,11 @@
         android:layout_height="62dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal|center_vertical"
         android:layout_marginTop="450dp"
+        android:gravity="center_horizontal|center_vertical"
         android:text="Log in"
         android:textColor="@android:color/holo_blue_dark"
-        app:backgroundTint="@android:color/darker_gray"/>
+        app:backgroundTint="@android:color/darker_gray" />
 
     <View
         android:layout_width="1000dp"

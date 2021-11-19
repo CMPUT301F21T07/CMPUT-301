@@ -1,50 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/date_text">
-    </TextView>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/comment_editText"
-        android:autofillHints="Enter your comment">
-    </EditText>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/current_linear_layout"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Today's date: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Comment (optional)"
+        android:id="@+id/comment_editText_border"
+        android:layout_below="@+id/current_linear_layout"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment_editText"
+            android:maxLength="20" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
         android:id="@+id/optionalPhoto"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true">
-    </ImageView>
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/comment_editText_border"/>
 
     <Button
         android:id="@+id/select_image_button"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Select Image">
-    </Button>
-    <TextView
-        android:layout_width="wrap_content"
+        android:text="Select Image"
+        android:layout_below="@+id/optionalPhoto"
+        android:textColor="@android:color/holo_blue_dark"
+        app:backgroundTint="@android:color/darker_gray"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:id="@+id/lin_layout"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Location Permission"
-        android:textSize="30sp">
-    </TextView>
-    <ToggleButton
-        android:id="@+id/location_permission_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </ToggleButton>
+        android:layout_below="@+id/select_image_button"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Location allowed?"
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textAlignment="center"
+            tools:ignore="RtlCompat"/>
+
+
+        <ToggleButton
+            android:id="@+id/location_permission_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/finish_button"
-        android:text="Finish">
-    </Button>
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lin_layout"
+        android:layout_centerHorizontal="true"
+        android:text="Finish"
+        android:textColor="@android:color/holo_blue_dark"
+        app:backgroundTint="@android:color/darker_gray" />
 
 
-</LinearLayout>
+</RelativeLayout>
