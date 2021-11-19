@@ -83,38 +83,36 @@ public class ViewSingleEvent extends AppCompatActivity {
 
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
+/*
+        Editing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-//        Editing.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+            }
+        });
+
+        Deleting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, String> data=new HashMap<>();
+                habitsRef
+                        .document(events.get(index).getHabit().getHabitTitle())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG,"Data has been deleted successfully!");
+                            }
+                       }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG,"Cannot delete data"+e.toString());
+                    }
+                });
+            }
+          });
+*/
         Deleting.setOnClickListener(view -> removeEvent());
-
-//        Deleting.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                HashMap<String, String> data=new HashMap<>();
-//                habitsRef
-//                        .document(events.get(index).getHabit().getHabitTitle())
-//                        .delete()
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void unused) {
-//                                Log.d(TAG,"Data has been deleted successfully!");
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d(TAG,"Cannot delete data"+e.toString());
-//                    }
-//                });
-//            }
-//        }
-//        );
-
-
 
     }
     private void removeEvent(){
@@ -138,8 +136,8 @@ public class ViewSingleEvent extends AppCompatActivity {
 
             }
 
-                        });
-            }
+        });
+    }
 
 
 }

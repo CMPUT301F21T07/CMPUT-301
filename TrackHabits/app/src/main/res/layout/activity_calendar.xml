@@ -21,12 +21,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="30dp" />
+        android:text="Select date to get events"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
     <CalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/calendarView">
+        android:layout_below="@+id/eventTitle">
 
     </CalendarView>
 </RelativeLayout>

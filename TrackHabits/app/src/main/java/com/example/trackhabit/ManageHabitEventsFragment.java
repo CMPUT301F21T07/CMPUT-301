@@ -98,7 +98,8 @@ public class ManageHabitEventsFragment extends DialogFragment {
 
                         checkInputCorrectness();
 
-
+                        HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
+                                isLocationPermitted);
                         HashMap<String, Object> habitEventData = new HashMap<>();
                         habitEventData.put("HabitName", habitName);
                         habitEventData.put("UserName", userName);
@@ -107,11 +108,6 @@ public class ManageHabitEventsFragment extends DialogFragment {
                         habitEventData.put("OptionalPhoto", photo);
                         habitEventData.put("LocationPermission", isLocationPermitted);
                         String dataName = habitName + " " + userName + " " + date;
-
-                        if (habitEventsRef.document(dataName).get().toString().equals("")) {
-                            return;
-                        }
-
                         habitEventsRef.document(dataName)
                                 .set(habitEventData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -130,7 +126,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 }).create();
     }
 
-    private void checkInputCorrectness() {
+    public void checkInputCorrectness() {
         String comment = commentEditText.getText().toString();
         boolean isInputCorrect = (comment.length() <= 20);
 
