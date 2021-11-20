@@ -4,6 +4,7 @@ import static java.lang.String.valueOf;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -20,6 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
@@ -31,6 +38,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
+    private Date startDate;
 
 
 
@@ -50,6 +58,12 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitReason = getArguments().getString("habit_reason");
         days = getArguments().getString("habit_days");
         itemPrivacy = getArguments().getBoolean("habit_privacy");
+
+        try {
+            startDate=new SimpleDateFormat("MM/dd/yyyy").parse(habitStart);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         builder.setView(view)
@@ -146,9 +160,23 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
     }
 
+
     private Integer countDays(){
-        Integer amountDays = days.length();
-        //multiply the days by amount of weeks since start date+days for partial weeks
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String sDate = dateFormat.format(startDate);
+        String nDate = dateFormat.format(today);
+        long milliseconds = today.getTime()-startDate.getTime();
+        float hours = milliseconds / 3600000;
+        float day = (hours / 24)+1;
+        float amountDay = (day / 7) * days.length();
+        int amountDays = (int) amountDay;
+
+
+        //still needs to be week day dependant
+        System.out.println("**!! startDate: "+sDate+", today: "+nDate+", Days total between: "+day+", amountDays: "+amountDays+", days length: "+days.length());
+
         return amountDays;
     }
 
