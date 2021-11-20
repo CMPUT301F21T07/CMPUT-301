@@ -58,6 +58,7 @@ public class SearchFriend extends AppCompatActivity {
 
         searchUsername = findViewById(R.id.search_friend_edit);
         addButton = findViewById(R.id.add_friend_button);
+        errView = findViewById(R.id.errSearch);
 
 
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -152,6 +153,7 @@ public class SearchFriend extends AppCompatActivity {
                     if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && !fDataList.contains(userNameF) && success ==0){
                         DocumentReference friendReq = db.collection("Friends In Waiting").document(userNameF);
                         friendReq.update("Friends Requests", FieldValue.arrayUnion(userName));
+                        errView.setText("Friend Request Sent Successfully!");
                     }
 
                     if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && fDataList.contains(userNameF) && success ==0){
@@ -166,12 +168,15 @@ public class SearchFriend extends AppCompatActivity {
                                         List<String> friendList = (List<String>) document.get("FriendList");
                                         if (friendList.contains(userName)){
                                             Log.d(TAG, "Already Friends");
+                                            errView.setText("Already Friends");
+
                                         }
                                         else{
                                             friendReq.update("Friends Requests", FieldValue.arrayUnion(userName));
+                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                            errView.setText("Friend Request Sent Successfully!");
                                         }
 
-                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     } else {
                                         Log.d(TAG, "No such document");
                                     }

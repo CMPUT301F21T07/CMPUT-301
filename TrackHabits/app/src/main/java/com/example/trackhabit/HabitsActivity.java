@@ -124,6 +124,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         addNewHabit.setOnClickListener(view -> addNewHabit());
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
+        searchButton.setOnClickListener(view -> searchFriend());
 
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);

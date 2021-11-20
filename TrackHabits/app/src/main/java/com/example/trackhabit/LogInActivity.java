@@ -85,10 +85,7 @@ public class LogInActivity extends AppCompatActivity {
                             HabitsIntent.putExtra("name_key", userName);
                             startActivity(HabitsIntent);
                             finish();
-
                         }
-
-
                     }
                     if (success == 0){
                         Log.d(TAG, "User does not exist or Password is not correct");
