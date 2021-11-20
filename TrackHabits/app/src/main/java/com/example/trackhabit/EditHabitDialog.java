@@ -25,7 +25,7 @@ import java.util.Date;
 
 public class EditHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
-    private String userName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy;
+    private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private HabitDialogListener returnListener;
@@ -47,7 +47,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
 
         //get strings from arguments
         userName = getArguments().getString("user_name");
-        habitName = getArguments().getString("habit_name");
+        oldName = getArguments().getString("habit_name");
         habitTitle = getArguments().getString("habit_title");
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
@@ -68,11 +68,11 @@ public class EditHabitDialog extends AppCompatDialogFragment {
                 .setTitle("Edit Habit")
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Confirm", ((dialogInterface, i) -> {
-                    checkInput();
-                    returnListener.updateHabit(habitName, habitTitle, habitReason, startTime, itemPrivacy, days);
+                    updateInput();
+                    returnListener.updateHabit(oldName, habitName, habitTitle, habitReason, startTime, itemPrivacy, days);
                 }));
 
-        //get text views
+        //set up views
         habitNameView   = view.findViewById(R.id.edit_habit_name);
         habitReasonView= view.findViewById(R.id.edit_habit_reason);
         habitTitleView = view.findViewById(R.id.edit_habit_title);
@@ -88,26 +88,12 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         satCheck    = view.findViewById(R.id.saturday_edit);
         sunCheck    = view.findViewById(R.id.sunday_edit);
 
-
-
-
-        //set text views
-        habitNameView.setText(habitName);
-        habitReasonView.setText(habitReason);
-        habitTitleView.setText(habitTitle);
-        habitStartDay.setText(getDay(tempDate));
-        habitStartMonth.setText(getMonth(tempDate));
-        habitStartYear.setText(getYear(tempDate));
-        setDays(days);
-
-
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacyOptions);
         habitPrivacy.setAdapter(spinnerArrayAdapter);
-        if (!itemPrivacy){
-            habitPrivacy.setSelection(1);}
 
-
+        //populate views
+        addInput();
 
         return builder.create();
     }
@@ -122,20 +108,69 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         }
     }
 
-    private void checkInput() {
+    /**
+     *  Interface created to send data back to HabitsActivity after entering data into Text views
+     */
+    public interface HabitDialogListener{
+        void updateHabit(String oldName, String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy,String days);
+    }
+
+    /**
+     *  Private function that adds data from habit in to text views
+     */
+    private void addInput(){
+        //populate text views
+        habitNameView.setText(oldName);
+        habitReasonView.setText(habitReason);
+        habitTitleView.setText(habitTitle);
+        habitStartDay.setText(getDay(tempDate));
+        habitStartMonth.setText(getMonth(tempDate));
+        habitStartYear.setText(getYear(tempDate));
+
+        //set spinner to correct privacy setting
+        if (!itemPrivacy){
+            habitPrivacy.setSelection(1);}
+
+        //mark checked days
+        if (days.contains("M"))
+            monCheck.setChecked(true);
+        if (days.contains("T"))
+            tueCheck.setChecked(true);
+        if (days.contains("W"))
+            wedCheck.setChecked(true);
+        if (days.contains("R"))
+            thuCheck.setChecked(true);
+        if (days.contains("F"))
+            friCheck.setChecked(true);
+        if (days.contains("S"))
+            satCheck.setChecked(true);
+        if (days.contains("U"))
+            sunCheck.setChecked(true);
+
+    }
+
+
+    /**
+     *  Private function that gets the input from the text views and updates strings
+     */
+    private void updateInput() {
+        //get text from text views
+        habitName = habitNameView.getText().toString();
         habitTitle = habitTitleView.getText().toString();
         habitReason = habitReasonView.getText().toString();
         privacy = habitPrivacy.getSelectedItem().toString();
         habitDay = habitStartDay.getText().toString();
         habitMonth = habitStartMonth.getText().toString();
         habitYear = habitStartYear.getText().toString();
-        days = "";
 
+        //get chosen privacy
         if (privacy.equals("Private"))
             itemPrivacy = true;
         else if (privacy.equals("Public"))
             itemPrivacy = false;
 
+        //get checked days
+        days = "";
         if (monCheck.isChecked())
             days = days + "M";
         if (tueCheck.isChecked())
@@ -151,6 +186,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         if (sunCheck.isChecked())
             days = days + "U";
 
+        //format date correctly
         habitStart = habitDay + " " + habitMonth + " " + habitYear;
 
         try {
@@ -163,43 +199,34 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         startTime = new Timestamp(tempDate);
     }
 
-    public interface HabitDialogListener{
-        void updateHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy,String days);
-    }
 
+
+    /**
+     *  Private function that converts Date to day as String
+     */
     private String getDay(Date date){
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
         String day = String.valueOf(dayFormat.format(date));
         return day;
     }
 
+    /**
+     *  Private function that converts Date to month as String
+     */
     private String getMonth(Date date){
         SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
         String month = String.valueOf(monthFormat.format(date));
         return month;
     }
 
+    /**
+     *  Private function that converts Date to year as String
+     */
     private String getYear(Date date){
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         String year = String.valueOf(yearFormat.format(date));
         return year;
     }
 
-    private void setDays(String setDays){
-        if (setDays.contains("M"))
-            monCheck.setChecked(true);
-        if (setDays.contains("T"))
-            tueCheck.setChecked(true);
-        if (setDays.contains("W"))
-            wedCheck.setChecked(true);
-        if (setDays.contains("R"))
-            thuCheck.setChecked(true);
-        if (setDays.contains("F"))
-            friCheck.setChecked(true);
-        if (setDays.contains("S"))
-            satCheck.setChecked(true);
-        if (setDays.contains("U"))
-            sunCheck.setChecked(true);
-    }
 
 }

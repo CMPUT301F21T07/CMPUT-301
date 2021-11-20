@@ -425,7 +425,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param itemPrivacy Habit privacy
      */
     @Override
-    public void updateHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
+    public void updateHabit(String oldName, String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
         data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
@@ -434,7 +434,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         data.put(KEY_PRIVATE, itemPrivacy);
         data.put(KEY_USER, userName);
         data.put(KEY_DAYS, days);
-        habitsRef.document(name)
+        habitsRef.document(oldName)
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Habit has been updated successfully!");
