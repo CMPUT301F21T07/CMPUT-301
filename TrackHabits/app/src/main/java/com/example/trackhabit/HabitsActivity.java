@@ -319,6 +319,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_title", tempOpen.getHabitTitle());
         args.putString("habit_date", dateFormat.format(tempOpen.getStartDate().toDate()));
         args.putString("habit_reason", tempOpen.getHabitReason());
+        args.putString("habit_days", tempOpen.getDays());
+        args.putBoolean("habit_privacy", tempOpen.getPrivacy());
         viewHabit.setArguments(args);
         viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
     }
@@ -333,9 +335,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_title", tempEdit.getHabitTitle());
         args.putString("habit_date", dateFormat.format(tempEdit.getStartDate().toDate()));
         args.putString("habit_reason", tempEdit.getHabitReason());
+        args.putString("habit_days", tempEdit.getDays());
+        args.putString("habit_day", tempEdit.getDay());
+        args.putString("habit_month", tempEdit.getMonth());
+        args.putString("habit_year", tempEdit.getYear());
+        args.putBoolean("habit_privacy", tempEdit.getPrivacy());
         editHabit.setArguments(args);
         editHabit.show(getSupportFragmentManager(), "EDIT HABIT");
-        // COMPLETE
     }
 
     /**
@@ -433,18 +439,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param name Habit name
      * @param title Habit title
      * @param reason Habit reason
+     * @param startTime Habit start date
+     * @param itemPrivacy Habit privacy
      */
     @Override
-    public void updateHabit(String name, String title, String reason) {
+    public void updateHabit(String oldName, String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put(KEY_NAME, name);
+        //data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
-        //data.put(KEY_DATE, startTime);
+        data.put(KEY_DATE, startTime);
         data.put(KEY_REASON, reason);
-        //data.put(KEY_PRIVATE, itemPrivacy);
+        data.put(KEY_PRIVATE, itemPrivacy);
         data.put(KEY_USER, userName);
-        //data.put(KEY_DAYS, days);
-        habitsRef.document(name)
+        data.put(KEY_DAYS, days);
+        habitsRef.document(oldName)
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Habit has been updated successfully!");
