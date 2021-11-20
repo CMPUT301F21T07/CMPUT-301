@@ -105,15 +105,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
-                newHabitLayout.setVisibility(View.VISIBLE);
-                viewEventsLayout.setVisibility(View.VISIBLE);
-                viewFriendsLayout.setVisibility(View.VISIBLE);
-                logOutLayout.setVisibility(View.VISIBLE);
-                searchLayout.setVisibility(View.VISIBLE);
-
-                extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
-                flag_for_floating = false;
-
+                openMenu();
             }
             else {
                 closeMenu();
@@ -207,13 +199,16 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
     /**
-     *  Function that views all the habit events for the user so far
+     *  Function that displays more options for the user to click on
      */
-    private void viewFriends() {
-        Intent newIntent= new Intent(HabitsActivity.this, ViewFriends.class);
-        closeMenu();
-        newIntent.putExtra("name_key", userName);
-        startActivity(newIntent);
+    private void openMenu() {
+        newHabitLayout.setVisibility(View.VISIBLE);
+        viewEventsLayout.setVisibility(View.VISIBLE);
+        viewFriendsLayout.setVisibility(View.VISIBLE);
+        logOutLayout.setVisibility(View.VISIBLE);
+
+        extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
+        flag_for_floating = false;
     }
 
     private void searchFriend(){
@@ -225,6 +220,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     }
 
+
+    /**
+     *  Function that removes more options for users
+     */
     private void closeMenu() {
         newHabitLayout.setVisibility(View.GONE);
         viewEventsLayout.setVisibility(View.GONE);
@@ -233,6 +232,16 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
         flag_for_floating = true;
+    }
+
+    /**
+     *  Function that views all the habit events for the user so far
+     */
+    private void viewFriends() {
+        Intent newIntent= new Intent(HabitsActivity.this, ViewFriends.class);
+        closeMenu();
+        newIntent.putExtra("name_key", userName);
+        startActivity(newIntent);
     }
 
     /**
@@ -302,7 +311,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param tempOpen This is the habit object that is being viewed
      */
     private void viewDialog(Habits tempOpen) {
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ViewHabitDialog viewHabit = new ViewHabitDialog();
         Bundle args = new Bundle();

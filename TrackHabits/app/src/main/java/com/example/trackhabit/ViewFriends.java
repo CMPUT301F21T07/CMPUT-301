@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -20,12 +23,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +48,8 @@ public class ViewFriends extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
     Boolean flag_for_floating = true;
+
+    Integer temp_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +120,84 @@ public class ViewFriends extends AppCompatActivity {
         });
 
         friendsListView.setClickable(true);
+
+        friendsListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            registerForContextMenu(friendsListView);
+            temp_index = i;
+            return false;
+        });
+
+
+
         friendsArrayAdapter = new ArrayAdapter<>(this,R.layout.friends_content_list_view,friendsList);
         friendsListView.setAdapter(friendsArrayAdapter);
     }
+
+
+    /**
+     * Function that creates a context menu when there is a long press on a ListView item
+     * @param menu This is the menu object
+     * @param view This is the view object
+     * @param menuInfo This is the info on the menu
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        getMenuInflater().inflate(R.menu.friends_context_menu, menu);
+    }
+
+    /**
+     * Function that determine what happens when a user clicks on an item in a context menu
+     * @param item  Item that is selected from the context menu
+     * @return  true -> item in context menu selected
+     *          super.onContextItemSelected(item)
+     */
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        switch(item.getItemId()) {
+            case R.id.show_habits:
+                String friendSelected = friendsList.get(temp_index);
+                openUserHabits(friendSelected);
+                return true;
+            case R.id.remove_friend:
+                String deleteFriend = friendsList.get(temp_index);
+                removeFriend(deleteFriend);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void openUserHabits(String friendSelected) {
+    }
+
+    private void removeFriend(String deleteFriend) {
+        DocumentReference userList = friendRef.document(userName);
+        DocumentReference friendList = friendRef.document(deleteFriend);
+
+        friendsList.remove(deleteFriend);
+        friendsArrayAdapter.notifyDataSetChanged();
+
+        Map<String,Object> updateUser = new HashMap<>();
+        updateUser.put(deleteFriend, FieldValue.delete());
+
+        userList.update(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(ViewFriends.this, "Friend removed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Map<String,Object> updateFriend = new HashMap<>();
+        updateUser.put(userName, FieldValue.delete());
+
+        friendList.update(updateFriend).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+            }
+        });
+    }
+
+
 }

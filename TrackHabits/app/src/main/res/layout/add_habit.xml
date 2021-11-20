@@ -101,13 +101,13 @@
 
     <Spinner
         android:id="@+id/select_privacy"
-        android:layout_below="@+id/date_layout"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"
+        android:layout_below="@+id/date_layout"
+        android:layout_centerHorizontal="true"
         android:autofillHints="Select privacy"
-        android:layout_centerHorizontal="true"/>
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/text_view_header"
