@@ -1,6 +1,6 @@
 # Track Habits App
 
-**Project Description as provided by the client**
+# Project Description as provided by the client
 * [Project Description (Information below Project Documentation as well)](https://eclass.srv.ualberta.ca/mod/page/view.php?id=5607055)
 
 
