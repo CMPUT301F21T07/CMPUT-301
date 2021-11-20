@@ -305,6 +305,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_title", tempOpen.getHabitTitle());
         args.putString("habit_date", dateFormat.format(tempOpen.getStartDate().toDate()));
         args.putString("habit_reason", tempOpen.getHabitReason());
+        args.putString("habit_days", tempOpen.getDays());
+        args.putBoolean("habit_privacy", tempOpen.getPrivacy());
         viewHabit.setArguments(args);
         viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
     }
@@ -427,7 +429,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     @Override
     public void updateHabit(String oldName, String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put(KEY_NAME, name);
+        //data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
         data.put(KEY_DATE, startTime);
         data.put(KEY_REASON, reason);

@@ -13,9 +13,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
-    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView;
-    private String userName, habitName, habitTitle, habitStart, habitReason;
+    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView;
+    private String userName, habitName, habitTitle, habitStart, habitReason, days;
+    private String habitDays = "";
     private Boolean itemPrivacy; //if privacy setting will be included in the details
+    private final String[] privacyOptions = new String[]{"Private","Public"};
 
 
 
@@ -33,6 +35,8 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitTitle = getArguments().getString("habit_title");
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
+        days = getArguments().getString("habit_days");
+        itemPrivacy = getArguments().getBoolean("habit_privacy");
 
 
         builder.setView(view)
@@ -50,14 +54,43 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitReasonView= view.findViewById(R.id.view_habit_reason);
         habitTitleView  = view.findViewById(R.id.view_habit_title);
         habitStartDateView  = view.findViewById(R.id.view_start_date);
+        habitPrivacyView  = view.findViewById(R.id.view_privacy);
+        habitDaysView  = view.findViewById(R.id.view_days);
 
         //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
         habitStartDateView.setText(habitStart);
+        setDays();
+        habitDaysView.setText(habitDays);
+        if (itemPrivacy){
+            habitPrivacyView.setText(privacyOptions[0]);
+        } else {
+            habitPrivacyView.setText(privacyOptions[1]);
+        }
 
         return builder.create();
+    }
+
+    private void setDays(){
+        if (days.contains("M"))
+            habitDays = habitDays + " Mon";
+        if (days.contains("T"))
+            habitDays = habitDays + " Tue";
+        if (days.contains("W"))
+            habitDays = habitDays + " Wed";
+        if (days.contains("R"))
+            habitDays = habitDays + " Thu";
+        if (days.contains("F"))
+            habitDays = habitDays + " Fri";
+        if (days.contains("S"))
+            habitDays = habitDays + " Sat";
+        if (days.contains("U"))
+            habitDays = habitDays + " Sun";
+        if (habitDays == ""){
+            habitDays = "None";
+        }
     }
 
 }

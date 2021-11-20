@@ -124,5 +124,64 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/privacy_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/start_date_linear_layout">
+        <TextView
+            android:id="@+id/privacy"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Privacy: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/view_privacy"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/days_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/privacy_linear_layout">
+        <TextView
+            android:id="@+id/days"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Days: "
+            android:textSize="20sp"
+            android:textColor = "#808080"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/view_days"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor = "@color/black"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
