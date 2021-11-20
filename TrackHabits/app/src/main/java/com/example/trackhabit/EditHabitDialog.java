@@ -52,6 +52,9 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitStart = getArguments().getString("habit_date");
         habitReason = getArguments().getString("habit_reason");
         days = getArguments().getString("habit_days");
+        habitDay = getArguments().getString("habit_day");
+        habitMonth = getArguments().getString("habit_month");
+        habitYear = getArguments().getString("habit_year");
 
         itemPrivacy = getArguments().getBoolean("habit_privacy");
 
@@ -123,9 +126,9 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitNameView.setText(oldName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
-        habitStartDay.setText(getDay(tempDate));
-        habitStartMonth.setText(getMonth(tempDate));
-        habitStartYear.setText(getYear(tempDate));
+        habitStartDay.setText(habitDay);
+        habitStartMonth.setText(habitMonth);
+        habitStartYear.setText(habitYear);
 
         //set spinner to correct privacy setting
         if (!itemPrivacy){
@@ -197,35 +200,6 @@ public class EditHabitDialog extends AppCompatDialogFragment {
             habitStartDay.requestFocus();
         }
         startTime = new Timestamp(tempDate);
-    }
-
-
-
-    /**
-     *  Private function that converts Date to day as String
-     */
-    private String getDay(Date date){
-        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-        String day = String.valueOf(dayFormat.format(date));
-        return day;
-    }
-
-    /**
-     *  Private function that converts Date to month as String
-     */
-    private String getMonth(Date date){
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-        String month = String.valueOf(monthFormat.format(date));
-        return month;
-    }
-
-    /**
-     *  Private function that converts Date to year as String
-     */
-    private String getYear(Date date){
-        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-        String year = String.valueOf(yearFormat.format(date));
-        return year;
     }
 
 

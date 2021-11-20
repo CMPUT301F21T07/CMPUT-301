@@ -90,7 +90,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
     private void setDays(){
         if (days.contains("M"))
-            habitDays = habitDays + " Mon";
+            habitDays = habitDays + "Mon";
         if (days.contains("T"))
             habitDays = habitDays + " Tue";
         if (days.contains("W"))

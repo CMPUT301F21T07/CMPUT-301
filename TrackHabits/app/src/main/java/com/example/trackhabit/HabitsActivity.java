@@ -322,10 +322,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_date", dateFormat.format(tempEdit.getStartDate().toDate()));
         args.putString("habit_reason", tempEdit.getHabitReason());
         args.putString("habit_days", tempEdit.getDays());
+        args.putString("habit_day", tempEdit.getDay());
+        args.putString("habit_month", tempEdit.getMonth());
+        args.putString("habit_year", tempEdit.getYear());
         args.putBoolean("habit_privacy", tempEdit.getPrivacy());
         editHabit.setArguments(args);
         editHabit.show(getSupportFragmentManager(), "EDIT HABIT");
-        // COMPLETE
     }
 
     /**
