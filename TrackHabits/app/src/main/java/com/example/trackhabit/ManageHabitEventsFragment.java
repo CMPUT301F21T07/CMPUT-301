@@ -39,10 +39,10 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
 
-    private int habitEventPosition = -1;
     private HabitEvent editableHabitEvent;
     private String habitName;
     private String userName;
+    private String manageType = "Add";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
@@ -64,18 +64,18 @@ public class ManageHabitEventsFragment extends DialogFragment {
         optionalPhoto = view.findViewById(R.id.optionalPhoto);
         locationPermissionButton = view.findViewById(R.id.location_permission_button);
 
-
         Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
         String currentDateStr = dateFormat.format(currentDate);
         dateText.setText(currentDateStr);
 
         String title = "Add HabitEvent Info";
 
-        if (habitEventPosition > -1) {
+        if (manageType.equals("Edit")) {
             dateText.setText(editableHabitEvent.getDate());
             commentEditText.setText(editableHabitEvent.getComment());
             optionalPhoto.setImageBitmap(editableHabitEvent.getOptionalPhoto());
+            locationPermissionButton.setChecked(editableHabitEvent.getLocationPermission());
             title = "Edit HabitEvent Info";
         }
 
