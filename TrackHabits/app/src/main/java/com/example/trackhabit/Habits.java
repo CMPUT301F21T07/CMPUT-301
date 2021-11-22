@@ -2,6 +2,8 @@ package com.example.trackhabit;
 
 import com.google.firebase.Timestamp;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -130,13 +132,33 @@ public class Habits {
      * @return Days of the Habit
      */
     public String getDays() {
-        return habitTitle;
+        return days;
     }
 
     /**
      * @param days Days of the Habit
      */
     public void setDays(String days) {
-        this.days = habitTitle;
+        this.days = days;
     }
+
+    public String getDay(){
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        String day = dayFormat.format(timestamp.toDate());
+        return day;
+    }
+
+    public String getMonth(){
+        SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
+        String month = dayFormat.format(timestamp.toDate());
+        return month;
+    }
+
+    public String getYear(){
+        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy");
+        String year = dayFormat.format(timestamp.toDate());
+        return year;
+    }
+
+
 }

@@ -100,6 +100,8 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("date",habitEvent.getDate());
                 singleEvent.putExtra("comment", habitEvent.getComment());
                 singleEvent.putExtra("index",i);
+                singleEvent.putExtra("image",habitEvent.getOptionalPhoto());
+                singleEvent.putExtra("Permission",habitEvent.getLocationPermission());
                 startActivityForResult(singleEvent,0);
                 Intent receive=getIntent();
                 boolean toDelete=receive.getExtras().getBoolean("toDelete");

@@ -67,9 +67,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton, searchButton;
 
-    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout;
+    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout, searchLayout;
 
     private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
@@ -94,11 +94,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewHabitEvents    = findViewById(R.id.view_habit_events);
         viewFriendsButton  = findViewById(R.id.view_friends);
         logOutButton       = findViewById(R.id.log_out_button);
+        searchButton       = findViewById(R.id.search_button);
+
 
         newHabitLayout    = findViewById(R.id.add_habit_layout);
         viewEventsLayout  = findViewById(R.id.view_events_layout);
         viewFriendsLayout = findViewById(R.id.view_friends_layout);
         logOutLayout      = findViewById(R.id.log_out_layout);
+        searchLayout      = findViewById(R.id.search_layout);
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
@@ -113,6 +116,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         addNewHabit.setOnClickListener(view -> addNewHabit());
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
+        searchButton.setOnClickListener(view -> searchFriend());
 
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);
@@ -214,7 +218,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
-
     }
 
 
@@ -317,6 +320,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_title", tempOpen.getHabitTitle());
         args.putString("habit_date", dateFormat.format(tempOpen.getStartDate().toDate()));
         args.putString("habit_reason", tempOpen.getHabitReason());
+        args.putString("habit_days", tempOpen.getDays());
+        args.putBoolean("habit_privacy", tempOpen.getPrivacy());
         viewHabit.setArguments(args);
         viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
     }
@@ -331,9 +336,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         args.putString("habit_title", tempEdit.getHabitTitle());
         args.putString("habit_date", dateFormat.format(tempEdit.getStartDate().toDate()));
         args.putString("habit_reason", tempEdit.getHabitReason());
+        args.putString("habit_days", tempEdit.getDays());
+        args.putString("habit_day", tempEdit.getDay());
+        args.putString("habit_month", tempEdit.getMonth());
+        args.putString("habit_year", tempEdit.getYear());
+        args.putBoolean("habit_privacy", tempEdit.getPrivacy());
         editHabit.setArguments(args);
         editHabit.show(getSupportFragmentManager(), "EDIT HABIT");
-        // COMPLETE
     }
 
     /**
@@ -431,18 +440,20 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param name Habit name
      * @param title Habit title
      * @param reason Habit reason
+     * @param startTime Habit start date
+     * @param itemPrivacy Habit privacy
      */
     @Override
-    public void updateHabit(String name, String title, String reason) {
+    public void updateHabit(String oldName, String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put(KEY_NAME, name);
+        //data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
-        //data.put(KEY_DATE, startTime);
+        data.put(KEY_DATE, startTime);
         data.put(KEY_REASON, reason);
-        //data.put(KEY_PRIVATE, itemPrivacy);
+        data.put(KEY_PRIVATE, itemPrivacy);
         data.put(KEY_USER, userName);
-        //data.put(KEY_DAYS, days);
-        habitsRef.document(name)
+        data.put(KEY_DAYS, days);
+        habitsRef.document(oldName)
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Habit has been updated successfully!");
