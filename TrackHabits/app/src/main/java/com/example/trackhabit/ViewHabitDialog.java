@@ -4,7 +4,6 @@ import static java.lang.String.valueOf;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -31,14 +29,16 @@ import java.util.Date;
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
-    private String userName, habitName, habitTitle, habitStart, habitReason, days;
-    private String habitDays = "";
-    private Integer habitConsist = 0, amountEvents = 0;
-    private Boolean itemPrivacy;
+    private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
+    private String[] weekdays = new String[]{"U", "M", "T", "W", "H", "F", "S"};
     private final String[] privacyOptions = new String[]{"Private","Public"};
+    private Integer habitConsist = 0, amountEvents = 0, todayDay, startDay;
+    private Boolean itemPrivacy;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
-    private Date startDate;
+    private Date startDate, today;
+    private Calendar startCal, todayCal;
 
 
 
@@ -65,16 +65,29 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
             e.printStackTrace();
         }
 
+        todayCal = Calendar.getInstance();
+        today = todayCal.getTime();
+        todayDay = todayCal.get(Calendar.DAY_OF_WEEK);
+        startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+        startDay = startCal.get(Calendar.DAY_OF_WEEK);
 
-        builder.setView(view)
-                .setTitle("Habit Details")
-                .setNegativeButton("Back", (dialogInterface, i) -> {})
-                .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
-                            userName, habitName);
-                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
-                    dismiss();
-                }));
+        if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){
+            builder.setView(view)
+                    .setTitle("Habit Details")
+                    .setNegativeButton("Back", (dialogInterface, i) -> {})
+                    .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
+                        ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
+                                userName, habitName);
+                        addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
+                        dismiss();
+                    }));
+        } else {
+            builder.setView(view)
+                    .setTitle("Habit Details")
+                    .setNegativeButton("Back", (dialogInterface, i) -> {
+                    });
+        }
 
         //get text views
         habitNameView   = view.findViewById(R.id.view_habit_name);
@@ -137,23 +150,19 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                 for(QueryDocumentSnapshot doc: value)
                 {
                     Log.d("TAG", String.valueOf(doc.getData().get(habitName)));
-                    System.out.println("Checkpoint get for habit Name: "+habitName+", and user Name: "+userName);
                     String habitNames = (String) doc.getData().get("HabitName");
                     String userNames = (String) doc.getData().get("UserName");
                     String date = (String) doc.getData().get("Date");
 
-                    if (userNames.equals(habitName) && habitNames.equals(userName)){ /**This will need to be updated once events is fixed*/
-
-                        amountEvents++;
-                        System.out.println("**!! SUCCESSFUL MATCH !! - habit Name: "+habitNames+",  username: "+userNames+", date: "+date+", # Events: "+amountEvents);
-                    }
+                    if (userNames.equals(habitName) && habitNames.equals(userName)) {amountEvents++;} /**This will need to be updated once events is fixed*/
                 }
-                Integer nDays = countDays();
-                System.out.println("**!! Calculating consistency with - # days: "+nDays+", # Events: "+amountEvents);
-                if(nDays > 0 && amountEvents > 0){
-                    habitConsist = 100/nDays*amountEvents;}
+                Integer amountDays = countDays();
+
+                if(amountDays > 0 && amountEvents > 0){
+                    habitConsist = 100/amountDays*amountEvents;}
                 else {habitConsist = 0+100*amountEvents;}
                 habitConsistView.setText(valueOf(habitConsist)+" %");
+                //System.out.println("**!! Calculating consistency with - # days: "+amountDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
             }
         });
@@ -162,21 +171,19 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
 
     private Integer countDays(){
-        Calendar cal = Calendar.getInstance();
-        Date today = cal.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sDate = dateFormat.format(startDate);
-        String nDate = dateFormat.format(today);
-        long milliseconds = today.getTime()-startDate.getTime();
+
+        long milliseconds = today.getTime()-startDate.getTime(); //difference between dated in milliseconds
         float hours = milliseconds / 3600000;
         float day = (hours / 24)+1;
         float amountDay = (day / 7) * days.length();
-        int amountDays = (int) amountDay;
+        int amountDays = (int) Math.ceil(amountDay); //round up days to include days that aren't finished
 
-
-        //still needs to be week day dependant
-        System.out.println("**!! startDate: "+sDate+", today: "+nDate+", Days total between: "+day+", amountDays: "+amountDays+", days length: "+days.length());
-
+        for (int i = 0; i < startDay-1; i++){ //if the event occurred in the same week as, but before the start date
+            if (days.contains(weekdays[i])) {--amountDays;}
+        }
+        for (int i = 0; i <= todayDay-1; i++){ //events in an incomplete current week
+            if (days.contains(weekdays[i])) {++amountDays;}
+        }
         return amountDays;
     }
 
