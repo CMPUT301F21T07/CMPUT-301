@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class ManageHabitEventsFragment extends DialogFragment {
+public class ManageHabitEventsFragment extends DialogFragment  {
 
     private TextView dateText;
     private EditText commentEditText;
@@ -43,15 +43,36 @@ public class ManageHabitEventsFragment extends DialogFragment {
     private String habitName;
     private String userName;
     private String manageType = "Add";
+    private String date;
+    private String comment;
+    private Bitmap photo;
+    private Boolean locationPermission;
+    private EditEventListener listener;
+
+    private Boolean isOkPressed = false;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
 
+    public interface EditEventListener {
+        void onOkPressed();
+    }
 
-
-    public ManageHabitEventsFragment(String habitName, String userName) {
+    public ManageHabitEventsFragment(String habitName, String userName, String manageType) {
         this.habitName = habitName;
         this.userName = userName;
+        this.manageType = manageType;
+    }
+    public ManageHabitEventsFragment(String habitName, String userName, String manageType,
+                                     String comment, Bitmap photo, Boolean locationPermission,
+                                     String date) {
+        this.habitName = habitName;
+        this.userName = userName;
+        this.manageType = manageType;
+        this.comment = comment;
+        this.photo = photo;
+        this.locationPermission = locationPermission;
+        this.date = date;
     }
     @NonNull
     @Override
@@ -72,10 +93,10 @@ public class ManageHabitEventsFragment extends DialogFragment {
         String title = "Add HabitEvent Info";
 
         if (manageType.equals("Edit")) {
-            dateText.setText(editableHabitEvent.getDate());
-            commentEditText.setText(editableHabitEvent.getComment());
-            optionalPhoto.setImageBitmap(editableHabitEvent.getOptionalPhoto());
-            locationPermissionButton.setChecked(editableHabitEvent.getLocationPermission());
+            dateText.setText(date);
+            commentEditText.setText(comment);
+            optionalPhoto.setImageBitmap(photo);
+            locationPermissionButton.setChecked(locationPermission);
             title = "Edit HabitEvent Info";
         }
 
@@ -86,27 +107,26 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 .setTitle(title)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                        String comment = commentEditText.getText().toString();
-                        String date = dateText.getText().toString();
+                        comment = commentEditText.getText().toString();
                         optionalPhoto.setDrawingCacheEnabled(true);
-                        Bitmap photo = optionalPhoto.getDrawingCache();
-                        boolean isLocationPermitted = locationPermissionButton.isChecked();
+                        if (manageType.equals("Add")) {
+                            photo = optionalPhoto.getDrawingCache();
+                        }
+                        locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
 
                         HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
-                                isLocationPermitted);
+                                locationPermission);
                         HashMap<String, Object> habitEventData = new HashMap<>();
                         habitEventData.put("HabitName", habitName);
                         habitEventData.put("UserName", userName);
                         habitEventData.put("Date", date);
                         habitEventData.put("OptionalComment", comment);
                         habitEventData.put("OptionalPhoto", photo);
-                        habitEventData.put("LocationPermission", isLocationPermitted);
+                        habitEventData.put("LocationPermission", locationPermission);
                         String dataName = habitName + " " + userName + " " + date;
                         habitEventsRef.document(dataName)
                                 .set(habitEventData)
@@ -122,8 +142,30 @@ public class ManageHabitEventsFragment extends DialogFragment {
                                         Log.d("TAG", "Habit Successfully Added!");
                                     }
                                 });
+                        if (manageType.equals("Edit")) {
+                            isOkPressed = true;
+                        }
                     }
                 }).create();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (isOkPressed) {
+            listener.onOkPressed();
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (EditEventListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "Must implement listener");
+        }
     }
 
     public void checkInputCorrectness() {

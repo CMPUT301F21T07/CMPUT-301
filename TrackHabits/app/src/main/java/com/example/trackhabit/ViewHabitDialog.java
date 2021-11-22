@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
-    private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
+    private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays="Add";
     private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private Integer habitConsist = 0, amountEvents = 0, todayDay, startDay;
@@ -78,7 +78,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                     .setNegativeButton("Back", (dialogInterface, i) -> {})
                     .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
                         ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
-                                habitName, userName);
+                                habitName, userName, habitDays );
                         addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
                         dismiss();
                     }));

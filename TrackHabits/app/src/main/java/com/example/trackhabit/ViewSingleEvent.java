@@ -5,11 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +29,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ViewSingleEvent extends AppCompatActivity {
+public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEventsFragment.EditEventListener{
     private static final String TAG = "TAG" ;
 
     private static final String KEY_TITLE   = "Title";
@@ -37,8 +39,13 @@ public class ViewSingleEvent extends AppCompatActivity {
 
     private Habits habit;
     private TextView Title;
+    private TextView habitNameText;
     private TextView Reason;
     private TextView StartDate;
+    private TextView locationPermissionText;
+    private TextView userNameText;
+    private ImageView imageView;
+    private Bitmap photo;
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
@@ -51,13 +58,18 @@ public class ViewSingleEvent extends AppCompatActivity {
 
 
 
-    String habitName;
-    String userName;
-    String date;
-    String comment ;
+    private String habitName;
+    private String userName;
+    private String date;
+    private String comment;
+    private Boolean locationPermission;
     int index;
     boolean toDelete=false;
 
+    @Override
+    public void onOkPressed() {
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,32 +77,46 @@ public class ViewSingleEvent extends AppCompatActivity {
 
         Intent mIntent=getIntent();
         habitName = mIntent.getExtras().getString("habitName");
+        System.out.println(habitName);
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
-        index=mIntent.getExtras().getInt("index");
+        locationPermission = mIntent.getExtras().getBoolean("locationPermission");
+        photo = (Bitmap) mIntent.getParcelableExtra("photo");
+        index = mIntent.getExtras().getInt("index");
 
         System.out.println("Date: "+date);
         Title=findViewById(R.id.showTitle);
-        Title.setText("Habit: "+habitName);
-
+        Title.setText("Habit: " + habitName);
 
         Reason=findViewById(R.id.showReason);
         Reason.setText("Comment: " + comment);
 
+        locationPermissionText = findViewById(R.id.location_permission);
+        locationPermissionText.setText("Location Permission: " + locationPermission.toString());
+
+        userNameText = findViewById(R.id.username);
+        userNameText.setText("User Name: " + userName);
+
+        imageView = findViewById(R.id.imageView);
+
         StartDate=findViewById(R.id.Start_date);
-        StartDate.setText("Date: "+date);
+        StartDate.setText("Date: " + date);
 
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
-/*
+
         Editing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
+                        habitName, userName, "Edit", comment, photo,
+                        locationPermission, date);
+                editHabitDialog.show(getSupportFragmentManager(), "EDIT NEW HABIT EVENT");
 
             }
         });
-
+/*
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,9 +137,9 @@ public class ViewSingleEvent extends AppCompatActivity {
                 });
             }
           });
-*/
-        Deleting.setOnClickListener(view -> removeEvent());
 
+        Deleting.setOnClickListener(view -> removeEvent());
+*/
     }
     private void removeEvent(){
         habitsRef.addSnapshotListener((value, error) -> {
