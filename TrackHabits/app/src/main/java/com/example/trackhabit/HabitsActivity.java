@@ -206,18 +206,18 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewEventsLayout.setVisibility(View.VISIBLE);
         viewFriendsLayout.setVisibility(View.VISIBLE);
         logOutLayout.setVisibility(View.VISIBLE);
+        searchLayout.setVisibility(View.VISIBLE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
     }
+
 
     private void searchFriend(){
         Intent newIntent= new Intent(HabitsActivity.this, SearchFriend.class);
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
-
-
     }
 
 
@@ -229,6 +229,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewEventsLayout.setVisibility(View.GONE);
         viewFriendsLayout.setVisibility(View.GONE);
         logOutLayout.setVisibility(View.GONE);
+        searchLayout.setVisibility(View.GONE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
         flag_for_floating = true;

@@ -13,6 +13,12 @@
             android:name=".SearchFriend"
             android:exported="true" />
         <activity
+            android:name=".ViewFriendHabit"
+            android:exported="true" />
+        <activity
+            android:name=".SearchFriend"
+            android:exported="true" />
+        <activity
             android:name=".ViewFriends"
             android:exported="true"
             android:label="Your Friends" />
