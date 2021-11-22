@@ -30,7 +30,7 @@ import java.util.Date;
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
-    private String[] weekdays = new String[]{"U", "M", "T", "W", "H", "F", "S"};
+    private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private Integer habitConsist = 0, amountEvents = 0, todayDay, startDay;
     private Boolean itemPrivacy;
