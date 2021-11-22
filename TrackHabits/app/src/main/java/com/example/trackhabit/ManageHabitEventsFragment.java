@@ -43,6 +43,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String habitName;
     private String userName;
     private String manageType = "Add";
+
     private String date;
     private String comment;
     private Bitmap photo;
