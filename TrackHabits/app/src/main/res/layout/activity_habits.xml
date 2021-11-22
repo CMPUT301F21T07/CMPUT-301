@@ -96,9 +96,8 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:focusable="true"
-        app:srcCompat ="@drawable/ic_baseline_add_circle_outline_24"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat"
-        />
+        app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat" />
 
     <LinearLayout
         android:id="@+id/add_habit_layout"
@@ -237,6 +236,43 @@
             android:layout_gravity="center_vertical"
             app:srcCompat = "@android:drawable/ic_lock_power_off"
             app:backgroundTint="@android:color/holo_red_dark"
+            app:fabCustomSize="45dp"
+            app:fabSize="mini"
+            app:tint = "@color/white"
+            android:outlineSpotShadowColor="@color/white"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="310dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search Friends:"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_corner"
+            android:padding="5dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:srcCompat = "@android:drawable/ic_menu_search"
+            app:backgroundTint="@android:color/holo_purple"
             app:fabCustomSize="45dp"
             app:fabSize="mini"
             app:tint = "@color/white"
