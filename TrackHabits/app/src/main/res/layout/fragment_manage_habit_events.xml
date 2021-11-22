@@ -96,16 +96,4 @@
 
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/finish_button"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lin_layout"
-        android:layout_centerHorizontal="true"
-        android:text="Finish"
-        android:textColor="@android:color/holo_blue_dark"
-        app:backgroundTint="@android:color/darker_gray" />
-
-
 </RelativeLayout>
