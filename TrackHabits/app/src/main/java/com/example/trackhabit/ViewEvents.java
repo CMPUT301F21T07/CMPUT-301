@@ -101,6 +101,7 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("comment", habitEvent.getComment());
                 singleEvent.putExtra("index",i);
                 singleEvent.putExtra("image",habitEvent.getOptionalPhoto());
+                System.out.println(habitEvent.getLocationPermission());
                 singleEvent.putExtra("Permission",habitEvent.getLocationPermission());
                 startActivityForResult(singleEvent,0);
                 Intent receive=getIntent();
