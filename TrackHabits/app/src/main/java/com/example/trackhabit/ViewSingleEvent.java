@@ -54,7 +54,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private String habitTitle;
     private String habitReason;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference habitsRef = db.collection("Habits");
+    private CollectionReference habitsRef = db.collection("Habit Events");
 
 
 
@@ -116,54 +116,35 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
             }
         });
-/*
+
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> data=new HashMap<>();
                 habitsRef
-                        .document(events.get(index).getHabit().getHabitTitle())
+                        .document(habitName + " " + userName + " " + date)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Log.d(TAG,"Data has been deleted successfully!");
+                                finish();
                             }
-                       }).addOnFailureListener(new OnFailureListener() {
+                        }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG,"Cannot delete data"+e.toString());
+                        finish();
                     }
+
                 });
             }
-          });
-
-        Deleting.setOnClickListener(view -> removeEvent());
-*/
-    }
-    private void removeEvent(){
-        habitsRef.addSnapshotListener((value, error) -> {
-            assert value != null;
-            for (QueryDocumentSnapshot doc : value) {
-                Log.d(TAG, String.valueOf(doc.getData().get("HabitName")));
-                String userID = (String) doc.getData().get("UserName");
-
-                if (userID.equals(userName) && doc.getData().get("HabitName").equals(habitName) && doc.getData().get("Date").equals(date)) {
-                    doc.getReference().delete().addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Data has been deleted successfully!");
-
-                        Toast.makeText(ViewSingleEvent.this, "Habit (and habit events) deleted", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ViewSingleEvent.this, ViewEvents.class);
-                        toDelete = true;
-                        intent.putExtra("toDelete", toDelete);
-                        finish();
-                    }).addOnFailureListener(e -> Log.d(TAG, "Data could not be deleted!" + e.toString()));
-                }
-
-            }
-
         });
+
+
+
     }
+
 
 
 }
