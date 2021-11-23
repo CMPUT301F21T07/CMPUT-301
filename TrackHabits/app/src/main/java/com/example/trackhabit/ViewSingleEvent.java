@@ -81,7 +81,8 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
-        locationPermission = mIntent.getExtras().getBoolean("locationPermission");
+        locationPermission = mIntent.getExtras().getBoolean("Permission");
+        System.out.println(locationPermission);
         photo = (Bitmap) mIntent.getParcelableExtra("photo");
         index = mIntent.getExtras().getInt("index");
 
