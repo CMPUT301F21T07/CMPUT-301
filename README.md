@@ -1,8 +1,8 @@
 # Track Habits App
 
-# Project Description as provided by the client
-* [Project Description (Information below Project Documentation as well)](https://eclass.srv.ualberta.ca/mod/page/view.php?id=5607055)
-
+# Project Description & Task Board
+* [Project Description](https://eclass.srv.ualberta.ca/mod/page/view.php?id=5607055)
+* [Project Task Board](https://github.com/CMPUT301F21T07/CMPUT-301/projects/2)
 
 # Team Members
 | Name          | CCID          | Username      |
@@ -11,8 +11,17 @@
 | Yerbol Smailov| smailov       | yerbold       |
 | Penelope Chen | yanzhu1       | pen-ualberta  |
 | Sagan Girod   | lgirod        | AMooseAteSagan|
-| Jackie Hu     | yhu2          | Jackie-Who    |
 | Shrey Mandol  | mandol        | Shrey2809     |
+
+Removed from group due to Jackie dropping the course
+| Name          | CCID          | Username      |
+| ------------- | ------------- | ------------- |
+| Jackie Hu     | yhu2          | Jackie-Who    | 
+
+# Bi-weekly sprints (After Project Halfway Point)
+* [November 16th](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/60)
+* [November 20th](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/72)
+* [November 23rd](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/82)
 
 # Project Documentation
 
