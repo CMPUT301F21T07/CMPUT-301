@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import java.util.Date;
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
+    private ProgressBar consistency;
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
     private final String[] privacyOptions = new String[]{"Private","Public"};
@@ -72,6 +74,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         startCal.setTime(startDate);
         startDay = startCal.get(Calendar.DAY_OF_WEEK);
 
+
         if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){
             builder.setView(view)
                     .setTitle("Habit Details")
@@ -97,8 +100,11 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitPrivacyView  = view.findViewById(R.id.view_privacy);
         habitDaysView  = view.findViewById(R.id.view_days);
         habitConsistView = view.findViewById(R.id.view_consist);
+        consistency = view.findViewById(R.id.progressBar);
 
-        //set text views
+        consistency.setMax(100);
+
+                //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
@@ -162,7 +168,8 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                     habitConsist = 100/amountDays*amountEvents;}
                 else {habitConsist = 0+100*amountEvents;}
                 habitConsistView.setText(valueOf(habitConsist)+" %");
-                //System.out.println("**!! Calculating consistency with - # days: "+amountDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
+                consistency.setProgress(habitConsist);
+                System.out.println("**!! Calculating consistency with - # days: "+amountDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
             }
         });

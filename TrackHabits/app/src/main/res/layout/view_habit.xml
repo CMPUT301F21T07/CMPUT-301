@@ -188,29 +188,40 @@
         android:id="@+id/consist_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/days_linear_layout">
+        android:layout_below="@+id/days_linear_layout"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/consist"
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             android:gravity="right"
-            android:layout_height="wrap_content"
             android:text="Consistency: "
+            android:textColor="#808080"
             android:textSize="20sp"
-            android:textColor = "#808080"
-            android:textStyle="bold"
-            android:layout_gravity="center_vertical"/>
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0.5" />
 
         <TextView
             android:id="@+id/view_consist"
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             android:gravity="left"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor = "@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
