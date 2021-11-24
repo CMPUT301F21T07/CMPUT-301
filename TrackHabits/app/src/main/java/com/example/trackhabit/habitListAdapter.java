@@ -16,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents an individual item in the habits listview
@@ -26,6 +28,9 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
      */
     private final ArrayList<Habits> habits;
     private Context context;
+
+    final int INVALID_ID = -1;
+    HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
     public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
         super(context, R.layout.habit_list_adapter, habitArrayList);
@@ -66,4 +71,6 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
 
         return view;
     }
+
+
 }

@@ -16,9 +16,6 @@
             android:name=".ViewFriendHabit"
             android:exported="true" />
         <activity
-            android:name=".SearchFriend"
-            android:exported="true" />
-        <activity
             android:name=".ViewFriends"
             android:exported="true"
             android:label="Your Friends" />
@@ -45,7 +42,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Create New User" >
+            android:label="Track Habits" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
