@@ -31,7 +31,7 @@
 * [UML](https://github.com/CMPUT301F21T07/CMPUT-301/blob/main/doc/Habit%20UML.jpeg)
 
 
-**Project Description:**
+**Project Description**
 You are to design and implement a simple, attractive, and easy-to-use Android application to satisfy the follow goals. Your design must be flexible enough to allow developers to extend or migrate it.
 
 To assist in forming good habits, we want a mobile application that allows one to track, encourage, and share their habits. Recurring habits could be, for example, "write a joke", "eat breakfast", "exercise dog", "call family", and "no car accident". The intent is to make such habits: regular (e.g., daily), unbroken (so missed habit events are noted), and shared (so there's public pressure not to miss).
