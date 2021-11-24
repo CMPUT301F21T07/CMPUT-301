@@ -43,6 +43,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String habitName;
     private String userName;
     private String manageType = "Add";
+    private String date;
+    private String comment;
+    private Bitmap photo;
+    private Boolean locationPermission;
+    private EditEventListener listener;
+
+    private Boolean isOkPressed = false;
 
     private String date;
     private String comment;
@@ -89,7 +96,12 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
         String currentDateStr = dateFormat.format(currentDate);
+        System.out.println(currentDateStr);
+        System.out.println(manageType);
+        if (manageType.equals("Add")){
+        date=currentDateStr;
         dateText.setText(currentDateStr);
+        }
 
         String title = "Add HabitEvent Info";
 
@@ -118,7 +130,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-
+                        System.out.println(date);
                         HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
                                 locationPermission);
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -162,11 +174,14 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
+        if (manageType.equals("Edit")){
+
         try {
             listener = (EditEventListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Must implement listener");
-        }
+
+        }}
     }
 
     public void checkInputCorrectness() {
