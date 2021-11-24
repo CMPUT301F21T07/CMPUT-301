@@ -1,4 +1,4 @@
-# Track Habits App
+# Track Habits Application
 
 **Project Description & Task Board**
 
