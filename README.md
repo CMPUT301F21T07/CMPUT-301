@@ -29,7 +29,7 @@
 
 **Project Documentation**
 
-* [CRC Cards](https://github.com/CMPUT301F21T07/CMPUT-301/wiki/Part-1-CRC-cards)
+* [CRC Cards](https://github.com/CMPUT301F21T07/CMPUT-301/blob/main/doc/Habit%20CRC%20Cards.jpeg)
 * [UI Storyboard and Interface](https://github.com/CMPUT301F21T07/CMPUT-301/wiki/Part-1-Full-UI-Storyboard)
 * [Project Task Board](https://github.com/CMPUT301F21T07/CMPUT-301/projects/2)
 * [User Stories](https://github.com/CMPUT301F21T07/CMPUT-301/projects/1)
