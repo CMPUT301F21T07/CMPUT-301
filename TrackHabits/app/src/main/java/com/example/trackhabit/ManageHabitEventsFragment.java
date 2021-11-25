@@ -51,14 +51,6 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     private Boolean isOkPressed = false;
 
-    private String date;
-    private String comment;
-    private Bitmap photo;
-    private Boolean locationPermission;
-    private EditEventListener listener;
-
-    private Boolean isOkPressed = false;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
 

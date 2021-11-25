@@ -71,9 +71,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton, searchButton, moveButton;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton, searchButton, moveButton, friendRButton;
 
-    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout, searchLayout, moveLayout;
+    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout, searchLayout, moveLayout, friendRLayout;
 
     ItemTouchHelper itemTouchHelper;
 
@@ -107,6 +107,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         logOutButton       = findViewById(R.id.log_out_button);
         searchButton       = findViewById(R.id.search_button);
         moveButton         = findViewById(R.id.movable_done);
+        friendRButton      = findViewById(R.id.friend_req_button);
 
 
         newHabitLayout    = findViewById(R.id.add_habit_layout);
@@ -115,6 +116,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         logOutLayout      = findViewById(R.id.log_out_layout);
         searchLayout      = findViewById(R.id.search_layout);
         moveLayout        = findViewById(R.id.movable_done_layout);
+        friendRLayout     = findViewById(R.id.friend_req_layout);
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
@@ -132,6 +134,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         logOutButton.setOnClickListener(view -> logOut());
         searchButton.setOnClickListener(view -> searchFriend());
         moveButton.setOnClickListener(view -> closeMovable());
+        friendRButton.setOnClickListener(view -> friendRequest());
 
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.habits_list_view);
@@ -235,10 +238,14 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewFriendsLayout.setVisibility(View.VISIBLE);
         logOutLayout.setVisibility(View.VISIBLE);
         searchLayout.setVisibility(View.VISIBLE);
+        friendRLayout.setVisibility(View.VISIBLE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
     }
+    /**
+     *  Function that searches for friends
+     */
 
 
     private void searchFriend(){
@@ -247,6 +254,17 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
     }
+
+    /**
+     *  Function that accepts friend requests
+     */
+    private void friendRequest(){
+        Intent newIntent= new Intent(HabitsActivity.this, FriendRequests.class);
+        closeMenu();
+        newIntent.putExtra("name_key", userName);
+        startActivity(newIntent);
+    }
+
 
 
     /**
@@ -258,6 +276,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewFriendsLayout.setVisibility(View.GONE);
         logOutLayout.setVisibility(View.GONE);
         searchLayout.setVisibility(View.GONE);
+        friendRLayout.setVisibility(View.GONE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
         flag_for_floating = true;
