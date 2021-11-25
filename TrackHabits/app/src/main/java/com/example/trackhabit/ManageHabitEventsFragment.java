@@ -51,6 +51,14 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     private Boolean isOkPressed = false;
 
+    private String date;
+    private String comment;
+    private Bitmap photo;
+    private Boolean locationPermission;
+    private EditEventListener listener;
+
+    private Boolean isOkPressed = false;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
 
@@ -165,11 +173,14 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         if (manageType.equals("Edit")){
+
         try {
             listener = (EditEventListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Must implement listener");
+
         }}
     }
 
