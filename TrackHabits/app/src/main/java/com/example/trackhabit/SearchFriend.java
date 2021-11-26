@@ -33,7 +33,7 @@ import java.util.List;
 public class SearchFriend extends AppCompatActivity {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference friendWRef = db.collection("Friends In Waiting");
+    //private final CollectionReference friendWRef = db.collection("Friends In Waiting");
     final CollectionReference userReference = db.collection("Users");
     private final CollectionReference friendRef = db.collection("Friends");
 
@@ -60,7 +60,6 @@ public class SearchFriend extends AppCompatActivity {
         addButton = findViewById(R.id.add_friend_button);
         errView = findViewById(R.id.errSearch);
 
-
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
@@ -76,7 +75,10 @@ public class SearchFriend extends AppCompatActivity {
                 }
             }
         });
-        friendRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        CollectionReference realFriendsRef = friendRef.document(userName).collection("Real Friends");
+
+
+        realFriendsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -92,27 +94,27 @@ public class SearchFriend extends AppCompatActivity {
             }
         });
 
-        friendWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                    FirebaseFirestoreException error) {
-                // Clear the old list
-                if (fwDataList != null){
-                    fwDataList.clear();
-                }
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    String userNameF = doc.getId();
-                    fwDataList.add(userNameF); // Adding the userName and password from FireStore
-                }
-            }
-        });
-
 
         addButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String userNameF = searchUsername.getText().toString();
+                CollectionReference FIWRef = friendRef.document(userNameF).collection("Friends In Waiting");
+                FIWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                            FirebaseFirestoreException error) {
+                        // Clear the old list
+                        if (fwDataList != null){
+                            fwDataList.clear();
+                        }
+                        for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
+                        {
+                            String userNameFIW = doc.getId();
+                            fwDataList.add(userNameFIW); // Adding the userName and password from FireStore
+                        }
+                    }
+                });
                 HashMap<String, Object> data = new HashMap<>();
                 if (userNameF.length()>0) {
                     if (!uDataList.contains(userNameF) || userNameF.equals(userName)){
@@ -121,12 +123,11 @@ public class SearchFriend extends AppCompatActivity {
                         success = 1;
                     }
 
-                    if (uDataList.contains(userNameF) && !fDataList.contains(userNameF) && !fDataList.contains(userNameF) && success ==0){
-                        ArrayList<String> FIW = new ArrayList<>();
-                        FIW.add(userName);
-                        data.put("Friends Requests",FIW);
-                        friendWRef
-                                .document(userNameF)
+                    if (uDataList.contains(userNameF) && !fwDataList.contains(userName) && !fDataList.contains(userNameF) && success ==0){
+
+                        data.put("UserName",userName);
+                        FIWRef
+                                .document(userName)
                                 .set(data)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -150,41 +151,15 @@ public class SearchFriend extends AppCompatActivity {
 
                     }
 
-                    if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && !fDataList.contains(userNameF) && success ==0){
-                        DocumentReference friendReq = db.collection("Friends In Waiting").document(userNameF);
-                        friendReq.update("Friends Requests", FieldValue.arrayUnion(userName));
-                        errView.setText("Friend Request Sent Successfully!");
+                    if (uDataList.contains(userNameF) && fwDataList.contains(userName) && !fDataList.contains(userNameF) && success ==0){
+                        errView.setText("Friend Request Already Sent Successfully!");
                     }
 
-                    if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && fDataList.contains(userNameF) && success ==0){
-                        DocumentReference friendReq = db.collection("Friends In Waiting").document(userNameF);
-                        DocumentReference friends = db.collection("Friends").document(userNameF);
-                        friends.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        List<String> friendList = (List<String>) document.get("FriendList");
-                                        if (friendList.contains(userName)){
-                                            Log.d(TAG, "Already Friends");
-                                            errView.setText("Already Friends");
-
-                                        }
-                                        else{
-                                            friendReq.update("Friends Requests", FieldValue.arrayUnion(userName));
-                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                            errView.setText("Friend Request Sent Successfully!");
-                                        }
-
-                                    } else {
-                                        Log.d(TAG, "No such document");
-                                    }
-                                } else {
-                                    Log.d(TAG, "get failed with ", task.getException());
-                                }
-                            }
-                        });
+                    if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && success ==0){
+                        //DocumentReference friendReq = db.collection("Friends In Waiting").document(userNameF);
+                        //DocumentReference friends = db.collection("Friends").document(userNameF);
+                        Log.d(TAG, "Already Friends");
+                        errView.setText("Already Friends");
                     }
                 }
             }

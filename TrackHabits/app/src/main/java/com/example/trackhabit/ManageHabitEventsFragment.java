@@ -1,5 +1,6 @@
 package com.example.trackhabit;
 
+
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
@@ -9,6 +10,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 
 import android.annotation.SuppressLint;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,8 +21,12 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+
 import android.os.Looper;
 import android.provider.Settings;
+
+import android.provider.MediaStore;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +39,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
@@ -73,6 +80,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
     double latitude;
 
     private Boolean isOkPressed = false;
+    private Boolean hasTakenPicture = false;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
@@ -120,12 +128,16 @@ public class ManageHabitEventsFragment extends DialogFragment {
         String currentDateStr = dateFormat.format(currentDate);
         System.out.println(currentDateStr);
         System.out.println(manageType);
+          
         if (manageType.equals("Add")) {
             date = currentDateStr;
+
             dateText.setText(currentDateStr);
         }
 
         String title = "Add HabitEvent Info";
+
+        selectImageButton.setOnClickListener(newView -> takePicture());
 
         if (manageType.equals("Edit")) {
             dateText.setText(date);
@@ -148,6 +160,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
 //                location="Location denied";
 //            }
         }
+
         locationPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +170,10 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 }
             }
         });
+
+
+        String dataName = habitName + " " + userName + " " + date;
+        System.out.println(habitEventsRef.document(dataName).get().toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -168,7 +185,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         comment = commentEditText.getText().toString();
                         optionalPhoto.setDrawingCacheEnabled(true);
-                        if (manageType.equals("Add")) {
+                        if (!hasTakenPicture) {
                             photo = optionalPhoto.getDrawingCache();
                         }
                         locationPermission = locationPermissionButton.isChecked();
@@ -219,6 +236,19 @@ public class ManageHabitEventsFragment extends DialogFragment {
                         }
                     }
                 }).create();
+    }
+
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
+        startActivityForResult(takePictureIntent, 100);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            photo = (Bitmap)data.getExtras().get("data");
+            optionalPhoto.setImageBitmap(photo);
+        }
     }
 
     @Override
@@ -289,11 +319,14 @@ public class ManageHabitEventsFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         if (manageType.equals("Edit")){
+
         try {
             listener = (EditEventListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Must implement listener");
+
         }}
     }
 

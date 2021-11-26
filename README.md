@@ -1,29 +1,43 @@
-# Track Habits App
+# Track Habits Application
 
-# Project Description as provided by the client
-* [Project Description (Information below Project Documentation as well)](https://eclass.srv.ualberta.ca/mod/page/view.php?id=5607055)
+**Project Description & Task Board**
 
+* [Project Description](https://eclass.srv.ualberta.ca/mod/page/view.php?id=5607055)
+* [Project Task Board](https://github.com/CMPUT301F21T07/CMPUT-301/projects/2)
 
-# Team Members
+**Team Members**
+
 | Name          | CCID          | Username      |
 | ------------- | ------------- | ------------- |
 | Ivan Seit     | seit          | ivanseit2001  |
 | Yerbol Smailov| smailov       | yerbold       |
 | Penelope Chen | yanzhu1       | pen-ualberta  |
 | Sagan Girod   | lgirod        | AMooseAteSagan|
-| Jackie Hu     | yhu2          | Jackie-Who    |
 | Shrey Mandol  | mandol        | Shrey2809     |
 
-# Project Documentation
+**Removed from group due to Jackie dropping the course**
 
-* [CRC Cards](https://github.com/CMPUT301F21T07/CMPUT-301/wiki/Part-1-CRC-cards)
+| Name          | CCID          | Username      |
+| ------------- | ------------- | ------------- |
+| Jackie Hu     | yhu2          | Jackie-Who    | 
+
+**Bi-weekly sprints (After Project Halfway Point)**
+
+* [November 16th](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/60)
+* [November 20th](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/72)
+* [November 23rd](https://github.com/CMPUT301F21T07/CMPUT-301/discussions/82)
+
+**Project Documentation**
+
+* [CRC Cards](https://github.com/CMPUT301F21T07/CMPUT-301/blob/main/doc/Habit%20CRC%20Cards.jpeg)
 * [UI Storyboard and Interface](https://github.com/CMPUT301F21T07/CMPUT-301/wiki/Part-1-Full-UI-Storyboard)
 * [Project Task Board](https://github.com/CMPUT301F21T07/CMPUT-301/projects/2)
 * [User Stories](https://github.com/CMPUT301F21T07/CMPUT-301/projects/1)
 * [UML](https://github.com/CMPUT301F21T07/CMPUT-301/blob/main/doc/Habit%20UML.jpeg)
 
 
-# Project Description:
+**Project Description**
+
 You are to design and implement a simple, attractive, and easy-to-use Android application to satisfy the follow goals. Your design must be flexible enough to allow developers to extend or migrate it.
 
 To assist in forming good habits, we want a mobile application that allows one to track, encourage, and share their habits. Recurring habits could be, for example, "write a joke", "eat breakfast", "exercise dog", "call family", and "no car accident". The intent is to make such habits: regular (e.g., daily), unbroken (so missed habit events are noted), and shared (so there's public pressure not to miss).

@@ -82,7 +82,9 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
+
         locationPermission = mIntent.getExtras().getBoolean("Permission");
+
         photo = (Bitmap) mIntent.getParcelableExtra("photo");
         index = mIntent.getExtras().getInt("index");
         location=mIntent.getExtras().getString("location");
@@ -122,7 +124,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
             }
         });
-
+      
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,10 +149,6 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             }
         });
 
-
-
     }
-
-
 
 }

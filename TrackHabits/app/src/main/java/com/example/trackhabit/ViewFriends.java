@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -77,15 +78,9 @@ public class ViewFriends extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        List<String> list = new ArrayList<>();
-                        Map<String, Object> map = document.getData();
-                        if (map != null) {
-                            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                                list.add(entry.getValue().toString());
-                                friendsList.add(entry.getValue().toString());
-                                Log.d("Massive tag", "ADDING Friend TO LIST");
-                            }
-                        }
+                        List<String> list = (List<String>) document.getData().get("FriendList");
+
+                        friendsList.addAll(list);
                         friendsArrayAdapter.notifyDataSetChanged();
                     }
                 }
@@ -126,7 +121,6 @@ public class ViewFriends extends AppCompatActivity {
             temp_index = i;
             return false;
         });
-
 
 
         friendsArrayAdapter = new ArrayAdapter<>(this,R.layout.friends_content_list_view,friendsList);
@@ -170,33 +164,21 @@ public class ViewFriends extends AppCompatActivity {
     }
 
     private void openUserHabits(String friendSelected) {
+        Intent friendHabitIntent = new Intent(ViewFriends.this, ViewFriendHabit.class);
+        friendHabitIntent.putExtra("name_key", friendSelected);
+        startActivity(friendHabitIntent);
     }
 
     private void removeFriend(String deleteFriend) {
         DocumentReference userList = friendRef.document(userName);
         DocumentReference friendList = friendRef.document(deleteFriend);
 
+        userList.update("FriendList", FieldValue.arrayRemove(deleteFriend));
+        friendList.update("FriendList", FieldValue.arrayRemove(userName));
+
         friendsList.remove(deleteFriend);
         friendsArrayAdapter.notifyDataSetChanged();
 
-        Map<String,Object> updateUser = new HashMap<>();
-        updateUser.put(deleteFriend, FieldValue.delete());
-
-        userList.update(updateUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(ViewFriends.this, "Friend removed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Map<String,Object> updateFriend = new HashMap<>();
-        updateUser.put(userName, FieldValue.delete());
-
-        friendList.update(updateFriend).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-            }
-        });
     }
 
 
