@@ -46,11 +46,12 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private TextView userNameText;
     private ImageView imageView;
     private Bitmap photo;
+    private TextView showLocation;
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
 
-
+    private String location;
     private String habitTitle;
     private String habitReason;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -81,10 +82,10 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
-        locationPermission = mIntent.getExtras().getBoolean("locationPermission");
+        locationPermission = mIntent.getExtras().getBoolean("Permission");
         photo = (Bitmap) mIntent.getParcelableExtra("photo");
         index = mIntent.getExtras().getInt("index");
-
+        location=mIntent.getExtras().getString("location");
         System.out.println("Date: "+date);
         Title=findViewById(R.id.showTitle);
         Title.setText("Habit: " + habitName);
@@ -103,6 +104,11 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         StartDate=findViewById(R.id.Start_date);
         StartDate.setText("Date: " + date);
 
+        showLocation=findViewById(R.id.show_location);
+        showLocation.setText(location);
+
+
+
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
 
@@ -111,7 +117,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
                         habitName, userName, "Edit", comment, photo,
-                        locationPermission, date);
+                        locationPermission, date,location);
                 editHabitDialog.show(getSupportFragmentManager(), "EDIT NEW HABIT EVENT");
 
             }

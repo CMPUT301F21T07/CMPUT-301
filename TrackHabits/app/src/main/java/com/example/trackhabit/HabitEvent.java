@@ -12,7 +12,7 @@ public class HabitEvent {
     private String comment;
     private Bitmap optionalPhoto;
     private boolean locationPermission;
-
+    private String location;
 
     /**
      * Creates a habit event with the habit name, user name, date, comment, optional photo, and
@@ -25,15 +25,14 @@ public class HabitEvent {
      * @param locationPermission Optional geolocation using Google data
      */
     public HabitEvent(String habitName, String userName, String date, String comment, Bitmap photo,
-                      boolean locationPermission) {
+                      boolean locationPermission,String location) {
         this.habitName = habitName;
         this.userName = userName;
-
-
         this.date = date;
         this.comment = comment;
         this.optionalPhoto = photo;
         this.locationPermission = locationPermission;
+        this.location=location;
     }
 
 
@@ -136,5 +135,7 @@ public class HabitEvent {
     public void setLocationPermission(boolean locationPermission) {
         this.locationPermission = locationPermission;
     }
+    public String getLocation(){return location; }
+    public void setLocation(String location){this.location=location;}
 }
 

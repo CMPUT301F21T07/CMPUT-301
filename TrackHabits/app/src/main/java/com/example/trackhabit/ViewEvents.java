@@ -72,12 +72,13 @@ public class ViewEvents extends AppCompatActivity {
                     }
                     String optionalComment = (String) doc.getData().get("OptionalComment");
                     Bitmap photo = (Bitmap) doc.getData().get("OptionalPhoto");
+                    String location=(String) doc.getData().get("Location");
                     boolean locationPermission = (boolean) doc.getData().get("LocationPermission");
 
                     if (userId.equals(userName)){
 
                         HabitEvent newHabitEvent= new HabitEvent(habitName, userName, date,
-                                optionalComment, photo, locationPermission);
+                                optionalComment, photo, locationPermission,location);
                         events.add(newHabitEvent);
 
 
@@ -102,6 +103,7 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("index",i);
                 singleEvent.putExtra("image",habitEvent.getOptionalPhoto());
                 singleEvent.putExtra("Permission",habitEvent.getLocationPermission());
+                singleEvent.putExtra("location",habitEvent.getLocation());
                 startActivityForResult(singleEvent,0);
                 Intent receive=getIntent();
                 boolean toDelete=receive.getExtras().getBoolean("toDelete");
