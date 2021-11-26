@@ -75,22 +75,17 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         startDay = startCal.get(Calendar.DAY_OF_WEEK);
 
 
-        if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){
-            builder.setView(view)
-                    .setTitle("Habit Details")
-                    .setNegativeButton("Back", (dialogInterface, i) -> {})
-                    .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                        ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
-                                userName, habitName);
-                        addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
-                        dismiss();
-                    }));
-        } else {
-            builder.setView(view)
-                    .setTitle("Habit Details")
-                    .setNegativeButton("Back", (dialogInterface, i) -> {
-                    });
-        }
+
+        builder.setView(view)
+                .setTitle("Habit Details")
+                .setNegativeButton("Back", (dialogInterface, i) -> {})
+                .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
+                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
+                            userName, habitName);
+                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
+                    dismiss();
+                }));
+
 
         //get text views
         habitNameView   = view.findViewById(R.id.view_habit_name);
