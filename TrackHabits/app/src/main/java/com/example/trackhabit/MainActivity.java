@@ -101,10 +101,9 @@ public class MainActivity extends AppCompatActivity {
                                     HabitsIntent.putExtra("name_key", userName);
                                     startActivity(HabitsIntent);
                                     finish();
-
-
                                 }
                             })
+
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {

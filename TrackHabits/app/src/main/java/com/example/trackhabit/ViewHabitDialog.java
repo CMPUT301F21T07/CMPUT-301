@@ -30,6 +30,7 @@ import java.util.Date;
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
+
     private ProgressBar consistency;
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
@@ -73,8 +74,6 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         startCal = Calendar.getInstance();
         startCal.setTime(startDate);
         startDay = startCal.get(Calendar.DAY_OF_WEEK);
-
-
 
         builder.setView(view)
                 .setTitle("Habit Details")
@@ -148,14 +147,16 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 assert value != null;
-                for(QueryDocumentSnapshot doc: value)
-                {
+                for(QueryDocumentSnapshot doc: value) {
                     Log.d("TAG", String.valueOf(doc.getData().get(habitName)));
                     String habitNames = (String) doc.getData().get("HabitName");
                     String userNames = (String) doc.getData().get("UserName");
                     String date = (String) doc.getData().get("Date");
 
-                    if (userNames.equals(habitName) && habitNames.equals(userName)) {amountEvents++;} /**This will need to be updated once events is fixed*/
+
+                    if (userNames.equals(userName) && habitNames.equals(habitName)) {
+                        amountEvents++;
+                    }
                 }
                 Integer amountDays = countDays();
 

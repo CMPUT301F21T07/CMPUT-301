@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trackhabit">
 
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,30 +15,43 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TrackHabit">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
+        <activity
+            android:name=".TakePictureActivity"
+            android:exported="false" />
+        <activity android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:exported="false"/>
+        <activity
+            android:name=".SearchFriend"
+            android:exported="true" />
+        <activity
+            android:name=".ViewFriendHabit"
+            android:exported="true" />
         <activity
             android:name=".ViewFriends"
             android:exported="true"
-            android:label="Your Friends"/>
+            android:label="Your Friends" />
         <activity
             android:name=".CalendarActivity"
             android:exported="false"
-            android:label="Habit Events"/>
+            android:label="Habit Events" />
         <activity
             android:name=".ViewSingleEvent"
             android:exported="false"
-            android:label="Current Event"/>
+            android:label="Current Event" />
         <activity
             android:name=".ViewEvents"
             android:exported="false"
-            android:label="Your Habit Events"/>
+            android:label="Your Habit Events" />
         <activity
             android:name=".HabitsActivity"
             android:exported="true"
-            android:label="Your Habits"/>
+            android:label="Your Habits" />
         <activity
             android:name=".LogInActivity"
             android:exported="true"
-            android:label="Log In"/>
+            android:label="Log In" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

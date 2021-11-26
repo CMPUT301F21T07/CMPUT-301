@@ -10,9 +10,9 @@ public class HabitEvent {
     private String userName;
     private String date;
     private String comment;
-    private Bitmap optionalPhoto;
     private boolean locationPermission;
-
+    private boolean photoUploaded;
+    private String location;
 
     /**
      * Creates a habit event with the habit name, user name, date, comment, optional photo, and
@@ -21,19 +21,18 @@ public class HabitEvent {
      * @param habitName Name of the habit
      * @param date The current date
      * @param comment Optional comment with max 30 characters
-     * @param photo Optional bitmap photo
+     * @param photoUploaded Optional bitmap photo
      * @param locationPermission Optional geolocation using Google data
      */
-    public HabitEvent(String habitName, String userName, String date, String comment, Bitmap photo,
-                      boolean locationPermission) {
+    public HabitEvent(String habitName, String userName, String date, String comment,
+                      boolean locationPermission,String location, boolean photoUploaded) {
         this.habitName = habitName;
         this.userName = userName;
-
-
         this.date = date;
         this.comment = comment;
-        this.optionalPhoto = photo;
         this.locationPermission = locationPermission;
+        this.location = location;
+        this.photoUploaded = photoUploaded;
     }
 
 
@@ -105,21 +104,6 @@ public class HabitEvent {
         this.comment = comment;
     }
 
-    /**
-     * Gets the optional photo
-     * @return Returns the bitmap of an optional photo
-     */
-    public Bitmap getOptionalPhoto() {
-        return optionalPhoto;
-    }
-
-    /**
-     * Sets the optional photo
-     * @param photo The bitmap photo
-     */
-    public void setOptionalPhoto(Bitmap photo) {
-        this.optionalPhoto = photo;
-    }
 
     /**
      *Gets the location permission
@@ -135,6 +119,16 @@ public class HabitEvent {
      */
     public void setLocationPermission(boolean locationPermission) {
         this.locationPermission = locationPermission;
+    }
+    public String getLocation(){return location; }
+    public void setLocation(String location){this.location=location;}
+
+    public boolean getPhotoUploaded() {
+        return photoUploaded;
+    }
+
+    public void setPhotoUploaded(boolean photoUploaded) {
+        this.photoUploaded = photoUploaded;
     }
 }
 
