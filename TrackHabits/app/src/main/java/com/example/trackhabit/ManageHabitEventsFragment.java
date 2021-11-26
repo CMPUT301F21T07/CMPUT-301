@@ -324,7 +324,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
             }
         }
 
-
+//
     }
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
