@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trackhabit">
 
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -19,9 +20,6 @@
             android:exported="true" />
         <activity
             android:name=".ViewFriendHabit"
-            android:exported="true" />
-        <activity
-            android:name=".SearchFriend"
             android:exported="true" />
         <activity
             android:name=".ViewFriends"
