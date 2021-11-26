@@ -1,11 +1,16 @@
 package com.example.trackhabit;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +24,8 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,6 +57,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private EditEventListener listener;
 
     private Boolean isOkPressed = false;
+    private Boolean hasTakenPicture = false;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
@@ -91,11 +99,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         System.out.println(currentDateStr);
         System.out.println(manageType);
         if (manageType.equals("Add")){
-        date=currentDateStr;
-        dateText.setText(currentDateStr);
+            date=currentDateStr;
+            dateText.setText(currentDateStr);
         }
 
         String title = "Add HabitEvent Info";
+
+        selectImageButton.setOnClickListener(newView -> takePicture());
 
         if (manageType.equals("Edit")) {
             dateText.setText(date);
@@ -105,7 +115,8 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             title = "Edit HabitEvent Info";
         }
 
-
+        String dataName = habitName + " " + userName + " " + date;
+        System.out.println(habitEventsRef.document(dataName).get().toString());
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -116,7 +127,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         comment = commentEditText.getText().toString();
                         optionalPhoto.setDrawingCacheEnabled(true);
-                        if (manageType.equals("Add")) {
+                        if (!hasTakenPicture) {
                             photo = optionalPhoto.getDrawingCache();
                         }
                         locationPermission = locationPermissionButton.isChecked();
@@ -152,6 +163,19 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         }
                     }
                 }).create();
+    }
+
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
+        startActivityForResult(takePictureIntent, 100);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            photo = (Bitmap)data.getExtras().get("data");
+            optionalPhoto.setImageBitmap(photo);
+        }
     }
 
     @Override
