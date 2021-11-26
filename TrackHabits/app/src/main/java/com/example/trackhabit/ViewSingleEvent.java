@@ -46,6 +46,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private TextView StartDate;
     private TextView locationPermissionText;
     private TextView userNameText;
+    private TextView showLocation;
     private ImageView imageView;
     private Bitmap photo;
     //    private TextView consistency;
@@ -65,6 +66,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private String userName;
     private String date;
     private String comment;
+    private String location;
     private Boolean locationPermission;
     private Boolean photoUploaded;
     int index;
@@ -85,6 +87,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
+        location = mIntent.getExtras().getString("location");
         locationPermission = mIntent.getExtras().getBoolean("Permission");
         photoUploaded = mIntent.getExtras().getBoolean("photoUploaded");
 
@@ -118,6 +121,9 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
         StartDate=findViewById(R.id.Start_date);
         StartDate.setText("Date: " + date);
+
+        showLocation = findViewById(R.id.show_location);
+        showLocation.setText("Location: " + location);
 
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);

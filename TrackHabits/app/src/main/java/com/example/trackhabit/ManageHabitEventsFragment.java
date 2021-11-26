@@ -60,6 +60,8 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String location = "";
     private Bitmap photo;
     private Boolean photoUploaded = false;
+    private double longtitude;
+    private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
 
@@ -116,6 +118,16 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         String title = "Add HabitEvent Info";
 
         selectImageButton.setOnClickListener(newView -> takePicture());
+
+        locationPermissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(locationPermissionButton.isChecked()) {
+                    startMaps();
+                    System.out.println("Location: "+location);
+                }
+            }
+        });
 
         if (manageType.equals("Edit")) {
             dateText.setText(date);
@@ -207,6 +219,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
         startActivityForResult(takePictureIntent, 100);
     }
+
+    private void startMaps(){
+        Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
+        startActivityForResult(startMapsActivity,200);
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -217,6 +236,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             photo = (Bitmap)data.getExtras().get("data");
             optionalPhoto.setImageBitmap(photo);
             photoUploaded = true;
+        }
+        if(requestCode==200){
+            if(resultCode==201){
+                longtitude=data.getExtras().getDouble("Longitude",0);
+                latitude=data.getExtras().getDouble("Latitude",0);
+                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+            }
         }
     }
 
