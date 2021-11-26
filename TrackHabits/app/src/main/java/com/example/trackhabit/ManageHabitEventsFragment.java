@@ -189,11 +189,14 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         if (manageType.equals("Edit")){
+
         try {
             listener = (EditEventListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Must implement listener");
+
         }}
     }
 
