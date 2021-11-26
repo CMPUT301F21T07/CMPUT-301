@@ -45,6 +45,8 @@ public class ViewFriends extends AppCompatActivity {
     LinearLayout addFriendLayout, viewRequestsLayout, goBackLayout;
 
     private String userName;
+    private final String friend_list = "Real Friends";
+    private final String friend_requests = "Friends in Waiting";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
@@ -72,47 +74,33 @@ public class ViewFriends extends AppCompatActivity {
         viewRequestsLayout = findViewById(R.id.view_requests_layout);
         goBackLayout       = findViewById(R.id.go_back_layout);
 
-        friendsListRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
+        friendsListCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        List<String> list = (List<String>) document.getData().get("FriendList");
-
-                        friendsList.addAll(list);
-                        friendsArrayAdapter.notifyDataSetChanged();
-                    }
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                friendsList.clear();
+                assert value != null;
+                for (QueryDocumentSnapshot doc : value) {
+                    friendsList.add(doc.getId());
                 }
-                else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
+                friendsArrayAdapter.notifyDataSetChanged();
             }
         });
 
         friendsOptionButton.setOnClickListener(v -> {
             if (flag_for_floating) {
-                addFriendLayout.setVisibility(View.VISIBLE);
-                viewRequestsLayout.setVisibility(View.VISIBLE);
-                goBackLayout.setVisibility(View.VISIBLE);
-
-                friendsOptionButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
-                flag_for_floating = false;
-
+                openMenu();
             }
             else {
-                addFriendLayout.setVisibility(View.GONE);
-                viewRequestsLayout.setVisibility(View.GONE);
-                goBackLayout.setVisibility(View.GONE);
-
-                friendsOptionButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
-                flag_for_floating = true;
+                closeMenu();
             }
         });
 
         goBackButton.setOnClickListener(v -> {
             finish();
         });
+        viewRequestsButton.setOnClickListener(v -> friendRequest());
+        addFriendButton.setOnClickListener(v -> addFriend());
 
         friendsListView.setClickable(true);
 
@@ -170,15 +158,59 @@ public class ViewFriends extends AppCompatActivity {
     }
 
     private void removeFriend(String deleteFriend) {
-        DocumentReference userList = friendRef.document(userName);
+        DocumentReference userList   = friendRef.document(userName);
         DocumentReference friendList = friendRef.document(deleteFriend);
 
-        userList.update("FriendList", FieldValue.arrayRemove(deleteFriend));
-        friendList.update("FriendList", FieldValue.arrayRemove(userName));
+        CollectionReference subUserFriendsList = userList.collection(friend_list);
+        subUserFriendsList.document(deleteFriend).delete();
+
+        CollectionReference subFriendFriendsList = friendList.collection(friend_list);
+        subFriendFriendsList.document(userName).delete();
 
         friendsList.remove(deleteFriend);
         friendsArrayAdapter.notifyDataSetChanged();
 
+    }
+
+    /**
+     *  Function that accepts friend requests
+     */
+    private void friendRequest(){
+        Intent newIntent= new Intent(ViewFriends.this, FriendRequests.class);
+        closeMenu();;
+        newIntent.putExtra("name_key", userName);
+        startActivity(newIntent);
+    }
+
+    /**
+     *  Function that searches for friends
+     */
+    private void addFriend(){
+        Intent newIntent= new Intent(ViewFriends.this, SearchFriend.class);
+        closeMenu();
+        newIntent.putExtra("name_key", userName);
+        startActivity(newIntent);
+    }
+
+    /**
+     *  Function that displays more options for the user to click on
+     */
+    private void openMenu() {
+        addFriendLayout.setVisibility(View.VISIBLE);
+        viewRequestsLayout.setVisibility(View.VISIBLE);
+        goBackLayout.setVisibility(View.VISIBLE);
+
+        friendsOptionButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
+        flag_for_floating = false;
+    }
+
+    private void closeMenu() {
+        addFriendLayout.setVisibility(View.GONE);
+        viewRequestsLayout.setVisibility(View.GONE);
+        goBackLayout.setVisibility(View.GONE);
+
+        friendsOptionButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
+        flag_for_floating = true;
     }
 
 

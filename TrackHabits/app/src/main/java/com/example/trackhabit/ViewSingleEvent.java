@@ -62,6 +62,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     final private StorageReference storageRef = storage.getReference();
     private StorageReference photoRef;
 
+
     private String habitName;
     private String userName;
     private String date;
@@ -105,6 +106,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
             });
         }
+
         index = mIntent.getExtras().getInt("index");
 
         Title=findViewById(R.id.showTitle);
@@ -174,7 +176,6 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                         Log.d(TAG,"Cannot delete data"+e.toString());
                         finish();
                     }
-
                 });
             }
         });
@@ -183,6 +184,5 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
     }
 
-
-
 }
+

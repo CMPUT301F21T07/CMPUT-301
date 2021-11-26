@@ -71,9 +71,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     Boolean switchState;
     Switch yhSwitch;
 
-    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton, searchButton, moveButton, friendRButton;
+    FloatingActionButton extraOptionsButton, addNewHabit, viewHabitEvents, viewFriendsButton, logOutButton;
 
-    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout, searchLayout, moveLayout, friendRLayout;
+    LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout;
+
 
     ItemTouchHelper itemTouchHelper;
 
@@ -105,18 +106,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewHabitEvents    = findViewById(R.id.view_habit_events);
         viewFriendsButton  = findViewById(R.id.view_friends);
         logOutButton       = findViewById(R.id.log_out_button);
-        searchButton       = findViewById(R.id.search_button);
-        moveButton         = findViewById(R.id.movable_done);
-        friendRButton      = findViewById(R.id.friend_req_button);
 
 
         newHabitLayout    = findViewById(R.id.add_habit_layout);
         viewEventsLayout  = findViewById(R.id.view_events_layout);
         viewFriendsLayout = findViewById(R.id.view_friends_layout);
         logOutLayout      = findViewById(R.id.log_out_layout);
-        searchLayout      = findViewById(R.id.search_layout);
-        moveLayout        = findViewById(R.id.movable_done_layout);
-        friendRLayout     = findViewById(R.id.friend_req_layout);
 
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
@@ -127,22 +122,17 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
-
         viewHabitEvents.setOnClickListener(view -> viewAllHabitEvents());
         addNewHabit.setOnClickListener(view -> addNewHabit());
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
-        searchButton.setOnClickListener(view -> searchFriend());
-        moveButton.setOnClickListener(view -> closeMovable());
-        friendRButton.setOnClickListener(view -> friendRequest());
+
 
         userName = getIntent().getExtras().getString("name_key");
-        habitListView = findViewById(R.id.habits_list_view);
         dynamicHabitListView = findViewById(R.id.dynamic_list_view);
 
-        allHabitDataList = new ArrayList<>();
+        allHabitDataList   = new ArrayList<>();
         todayHabitDataList = new ArrayList<>();
-
 
         currentList = allHabitDataList;
         Date date = new Date();
@@ -163,10 +153,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 {
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String)doc.getData().get(KEY_USER);
-
-                    daysList = new ArrayList<>();
                     days     = (String) doc.getData().get(KEY_DAYS);
-                    getDaysList();
+                    daysList = getDaysList(days);
                     if (userID.equals(userName)){
                         Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
@@ -207,11 +195,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 if(isChecked){
                     yhSwitch.setText("Your Habits Today");
                     currentList = todayHabitDataList;
+                    listViewAdapter.notifyDataSetChanged();
                 }
 
                 else{
                     yhSwitch.setText("All Habits");
                     currentList = allHabitDataList;
+                    listViewAdapter.notifyDataSetChanged();
                 }
                 listViewAdapter = new RecyclerAdapter(HabitsActivity.this, currentList);
                 dynamicHabitListView.setAdapter(listViewAdapter);
@@ -220,13 +210,13 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         });
 
         listViewAdapter = new RecyclerAdapter(HabitsActivity.this, currentList);
+
         dynamicHabitListView.setAdapter(listViewAdapter);
         dynamicHabitListView.setLayoutManager(new LinearLayoutManager(HabitsActivity.this));
 
-
+        itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(dynamicHabitListView);
     }
-
-
 
 
     /**
@@ -237,8 +227,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewEventsLayout.setVisibility(View.VISIBLE);
         viewFriendsLayout.setVisibility(View.VISIBLE);
         logOutLayout.setVisibility(View.VISIBLE);
-        searchLayout.setVisibility(View.VISIBLE);
-        friendRLayout.setVisibility(View.VISIBLE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
@@ -246,24 +234,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     /**
      *  Function that searches for friends
      */
-
-
-    private void searchFriend(){
-        Intent newIntent= new Intent(HabitsActivity.this, SearchFriend.class);
-        closeMenu();
-        newIntent.putExtra("name_key", userName);
-        startActivity(newIntent);
-    }
-
-    /**
-     *  Function that accepts friend requests
-     */
-    private void friendRequest(){
-        Intent newIntent= new Intent(HabitsActivity.this, FriendRequests.class);
-        closeMenu();
-        newIntent.putExtra("name_key", userName);
-        startActivity(newIntent);
-    }
 
 
 
@@ -275,8 +245,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewEventsLayout.setVisibility(View.GONE);
         viewFriendsLayout.setVisibility(View.GONE);
         logOutLayout.setVisibility(View.GONE);
-        searchLayout.setVisibility(View.GONE);
-        friendRLayout.setVisibility(View.GONE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
         flag_for_floating = true;
@@ -300,7 +268,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         Toast.makeText(HabitsActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
         startActivity(newIntent);
         finish();
-
     }
 
     /**
@@ -335,9 +302,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 editDialog(tempEdit);
                 return true;
             case 123:
-                makeItemsMovable();
-                return true;
-            case 124:
                 Habits tempDelete = currentList.get(temp_index);
                 removeHabit(tempDelete);
                 return true;
@@ -346,23 +310,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         }
     }
 
-    private void makeItemsMovable() {
-        dynamicHabitListView.setHasFixedSize(true);
-        listViewAdapter.setCMenu(false);
-        itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(dynamicHabitListView);
-        moveLayout.setVisibility(View.VISIBLE);
-        this.setTitle("Move habits");
-        extraOptionsButton.setClickable(false);
-    }
-
-    private void closeMovable() {
-        dynamicHabitListView.setHasFixedSize(false);
-        listViewAdapter.setCMenu(true);
-        moveLayout.setVisibility(View.GONE);
-        this.setTitle("Your Habits");
-        extraOptionsButton.setClickable(true);
-    }
 
     /**
      * Function that opens a fragment that allows a user to view a given habit
@@ -444,24 +391,23 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     /**
      *  Converts letter denoting the days into full day names and adds it to a list
      */
-    private void getDaysList() {
-        if (daysList.size() != 0) {
-            daysList.clear();
-        }
-        if (days.contains("M"))
-            daysList.add("Monday");
-        if (days.contains("T"))
-            daysList.add("Tuesday");
-        if (days.contains("W"))
-            daysList.add("Wednesday");
-        if (days.contains("R"))
-            daysList.add("Thursday");
-        if (days.contains("F"))
-            daysList.add("Friday");
-        if (days.contains("S"))
-            daysList.add("Saturday");
-        if (days.contains("U"))
-            daysList.add("Sunday");
+    private ArrayList<String> getDaysList(String daysOfWeek) {
+        ArrayList<String> dList = new ArrayList<>();
+        if (daysOfWeek.contains("M"))
+            dList.add("Monday");
+        if (daysOfWeek.contains("T"))
+            dList.add("Tuesday");
+        if (daysOfWeek.contains("W"))
+            dList.add("Wednesday");
+        if (daysOfWeek.contains("R"))
+            dList.add("Thursday");
+        if (daysOfWeek.contains("F"))
+            dList.add("Friday");
+        if (daysOfWeek.contains("S"))
+            dList.add("Saturday");
+        if (daysOfWeek.contains("U"))
+            dList.add("Sunday");
+        return dList;
     }
 
 
@@ -537,14 +483,5 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         }
     };
 
-    ItemTouchHelper.SimpleCallback stopMoving = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.START, 0) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        }
-    };
 }

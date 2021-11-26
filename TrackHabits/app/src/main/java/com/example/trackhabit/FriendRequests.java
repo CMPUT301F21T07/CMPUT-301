@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,18 +42,18 @@ public class FriendRequests extends AppCompatActivity {
     ArrayList<String> wFriendsList;
     ArrayAdapter<String> friendsArrayAdapter;
 
-    FloatingActionButton friendsOptionButton, addFriendButton, viewRequestsButton, goBackButton;
-    LinearLayout addFriendLayout, viewRequestsLayout, goBackLayout;
+
+    FloatingActionButton goBackButton;
 
     private String userName;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
-    Boolean flag_for_floating = true;
 
     Integer temp_index;
     final String TAG = "Sample";
-    TextView errView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +66,9 @@ public class FriendRequests extends AppCompatActivity {
         friendsListView = findViewById(R.id.friends_list_view_req);
         wFriendsList = new ArrayList<>();
 
-        friendsOptionButton = findViewById(R.id.open_friend_menu_button_req);
-        addFriendButton     = findViewById(R.id.add_friend_req);
-        viewRequestsButton  = findViewById(R.id.view_requests_req);
         goBackButton        = findViewById(R.id.go_back_req);
 
-        addFriendLayout = findViewById(R.id.add_new_friend_layout_req);
-        viewRequestsLayout = findViewById(R.id.view_requests_layout_req);
-        goBackLayout       = findViewById(R.id.go_back_layout_req);
-        errView = findViewById(R.id.errRequest);
+
 
         FIWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -149,14 +145,15 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
-                                errView.setText("Friend Accepted!");
+                                Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "Friend Not Accepted Successfully" + e.toString());
-                                errView.setText("Friend Not Accepted Successfully");
+                                Log.d(TAG, "Friend Denied Successfully" + e.toString());
+                                Toast.makeText(FriendRequests.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -170,21 +167,22 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
-                                errView.setText("Friend Accepted!");
+                                Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d(TAG, "Friend Not Accepted Successfully" + e.toString());
-                                errView.setText("Friend Not Accepted Successfully");
+                                Toast.makeText(FriendRequests.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
                 wFriendsList.remove(a_friend);
                 friendsArrayAdapter.notifyDataSetChanged();
-
-
                 return true;
+
+
             case R.id.deny_friend:
                 String d_friend = wFriendsList.get(temp_index);
                 DocumentReference FIWRef_deny = friendRef.document(userName).collection("Friends In Waiting").document(d_friend);
@@ -194,6 +192,7 @@ public class FriendRequests extends AppCompatActivity {
                 friendsArrayAdapter.notifyDataSetChanged();
 
                 return true;
+
             default:
                 return super.onContextItemSelected(item);
         }

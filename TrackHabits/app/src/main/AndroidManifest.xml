@@ -52,6 +52,8 @@
             android:name=".LogInActivity"
             android:exported="true"
             android:label="Log In" />
+        <activity android:name=".FriendRequests"
+            android:label="Friend Requests"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

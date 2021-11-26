@@ -38,7 +38,7 @@ public class SearchFriend extends AppCompatActivity {
     private final CollectionReference friendRef = db.collection("Friends");
 
     EditText searchUsername;
-    Button addButton;
+    Button addButton, cancelButton;
     ArrayList<String> uDataList;
     ArrayList<String> fDataList;
     ArrayList<String> fwDataList;
@@ -57,8 +57,9 @@ public class SearchFriend extends AppCompatActivity {
         userName = getIntent().getExtras().getString("name_key");
 
         searchUsername = findViewById(R.id.search_friend_edit);
+
         addButton = findViewById(R.id.add_friend_button);
-        errView = findViewById(R.id.errSearch);
+        cancelButton = findViewById(R.id.cancel_button);
 
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -94,6 +95,7 @@ public class SearchFriend extends AppCompatActivity {
             }
         });
 
+        cancelButton.setOnClickListener(v -> finish());
 
         addButton.setOnClickListener( new View.OnClickListener() {
             @Override
