@@ -79,8 +79,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                 .setTitle("Habit Details")
                 .setNegativeButton("Back", (dialogInterface, i) -> {})
                 .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
-                            userName, habitName);
+                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(userName, habitName, "Add" );
                     addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
                     dismiss();
                 }));
