@@ -41,6 +41,12 @@
             android:text="location_permission" />
 
         <TextView
+            android:id="@+id/show_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="location" />
+
+        <TextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
