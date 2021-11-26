@@ -1,14 +1,7 @@
 package com.example.trackhabit;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.Manifest;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,14 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.location.LocationManager;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,51 +25,52 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class ManageHabitEventsFragment extends DialogFragment {
-    private LocationRequest locationRequest;
+public class ManageHabitEventsFragment extends DialogFragment  {
 
     private TextView dateText;
     private EditText commentEditText;
     private Button selectImageButton;
-    private TextView locationText;
+
     private ImageView optionalPhoto;
     private ToggleButton locationPermissionButton;
 
-    private HabitEvent editableHabitEvent;
     private String habitName;
     private String userName;
+    private String dataName;
     private String manageType = "Add";
     private String date;
     private String comment;
+    private String location = "";
     private Bitmap photo;
+    private Boolean photoUploaded = false;
     private Boolean locationPermission;
-    String location;
     private EditEventListener listener;
-    double longtitude;
-    double latitude;
 
     private Boolean isOkPressed = false;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference habitEventsRef = db.collection("Habit Events");
+    final private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    final private CollectionReference habitEventsRef = db.collection("Habit Events");
+    final private FirebaseStorage storage = FirebaseStorage.getInstance();
+    final private StorageReference storageRef = storage.getReference();
 
-    FusedLocationProviderClient client;
+    StorageReference optionalPhotoRef;
 
     public interface EditEventListener {
         void onOkPressed();
@@ -88,20 +81,17 @@ public class ManageHabitEventsFragment extends DialogFragment {
         this.userName = userName;
         this.manageType = manageType;
     }
-
     public ManageHabitEventsFragment(String habitName, String userName, String manageType,
-                                     String comment, Bitmap photo, Boolean locationPermission,
-                                     String date, String location) {
+                                     String comment, Boolean photoUploaded, Boolean locationPermission,
+                                     String date) {
         this.habitName = habitName;
         this.userName = userName;
         this.manageType = manageType;
         this.comment = comment;
-        this.photo = photo;
+        this.photoUploaded = photoUploaded;
         this.locationPermission = locationPermission;
         this.date = date;
-        this.location = location;
     }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -112,52 +102,43 @@ public class ManageHabitEventsFragment extends DialogFragment {
         selectImageButton = view.findViewById(R.id.select_image_button);
         optionalPhoto = view.findViewById(R.id.optionalPhoto);
         locationPermissionButton = view.findViewById(R.id.location_permission_button);
-        locationText=view.findViewById(R.id.show_location);
-        client = LocationServices.getFusedLocationProviderClient(getActivity());
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
         String currentDateStr = dateFormat.format(currentDate);
         System.out.println(currentDateStr);
         System.out.println(manageType);
-        if (manageType.equals("Add")) {
-            date = currentDateStr;
+        if (manageType.equals("Add")){
+            date=currentDateStr;
             dateText.setText(currentDateStr);
         }
 
         String title = "Add HabitEvent Info";
+
+        selectImageButton.setOnClickListener(newView -> takePicture());
 
         if (manageType.equals("Edit")) {
             dateText.setText(date);
             commentEditText.setText(comment);
             optionalPhoto.setImageBitmap(photo);
             locationPermissionButton.setChecked(locationPermission);
-            title = "Edit HabitEvent Info";
-//            if (locationPermission.equals(true)) {
-//                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//                        && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                    getCurrentLocation();
-//
-//                }else{
-//                    //request permission
-//                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-//                            Manifest.permission.ACCESS_COARSE_LOCATION},100);
-//                }
-//
-//            }else{
-//                location="Location denied";
-//            }
-        }
-        locationPermissionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(locationPermissionButton.isChecked()) {
-                    startMaps();
-                    System.out.println("Location: "+location);
-                }
+            if (photoUploaded) {
+                dataName = habitName + " " + userName + " " + date;
+                optionalPhotoRef = storageRef.child(dataName + ".jpg");
+                final long mb = 1024 * 1024;
+                optionalPhotoRef.getBytes(mb).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap photo = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        optionalPhoto.setImageBitmap(photo);
+                    }
+                });
             }
-        });
+            title = "Edit HabitEvent Info";
+        }
 
+        dataName = habitName + " " + userName + " " + date;
+        System.out.println(habitEventsRef.document(dataName).get().toString());
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -168,36 +149,37 @@ public class ManageHabitEventsFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         comment = commentEditText.getText().toString();
                         optionalPhoto.setDrawingCacheEnabled(true);
-                        if (manageType.equals("Add")) {
-                            photo = optionalPhoto.getDrawingCache();
-                        }
                         locationPermission = locationPermissionButton.isChecked();
-//                        if (locationPermission.equals(true)) {
-//                            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//                                    && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                                getCurrentLocation();
-//
-//                            }else{
-//                                //request permission
-//                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-//                                Manifest.permission.ACCESS_COARSE_LOCATION},100);
-//                            }
-//
-//                        }else{
-//                            location="Location denied";
-//                        }
-                        System.out.println("Location "+location);
+
                         checkInputCorrectness();
                         System.out.println(date);
-                        HabitEvent newHabitEvent = new HabitEvent(habitName, userName, date, comment, photo,
-                                locationPermission, location);
+
+                        // Storing image to Storage
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] data = baos.toByteArray();
+                        optionalPhotoRef = storageRef.child(dataName + ".jpg");
+                        UploadTask uploadTask = optionalPhotoRef.putBytes(data);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Log.d("TAG", "Photo Was Not Stored!");
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d("TAG", "Photo Successfully Stored!");
+                            }
+                        });
+
+                        // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
                         habitEventData.put("HabitName", habitName);
                         habitEventData.put("UserName", userName);
                         habitEventData.put("Date", date);
                         habitEventData.put("OptionalComment", comment);
-                        habitEventData.put("OptionalPhoto", photo);
                         habitEventData.put("LocationPermission", locationPermission);
+                        habitEventData.put("PhotoUploaded", photoUploaded);
                         habitEventData.put("Location", location);
                         String dataName = habitName + " " + userName + " " + date;
                         habitEventsRef.document(dataName)
@@ -211,7 +193,7 @@ public class ManageHabitEventsFragment extends DialogFragment {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.d("TAG", "Habit Successfully Added!");
+                                        Log.d("TAG", "Habit Event Was Not Added!");
                                     }
                                 });
                         if (manageType.equals("Edit")) {
@@ -221,61 +203,28 @@ public class ManageHabitEventsFragment extends DialogFragment {
                 }).create();
     }
 
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
+        startActivityForResult(takePictureIntent, 100);
+    }
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //condition
-        if(requestCode==100&&(grantResults.length>0)&&
-                (grantResults[0]+grantResults[1]==PackageManager.PERMISSION_GRANTED))
-        {
-            getCurrentLocation();
-
-        }else{
-            Toast.makeText(getActivity(),"Permission denied",Toast.LENGTH_SHORT).show();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            Toast.makeText(getContext(), "Permission for Camera is denied!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getCurrentLocation() {
-//        final String[] returnLocation = {null};
-        //intialize Location manager
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            client.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location coordinates = task.getResult();
-                    if(coordinates != null){
-                        location="Latitude: "+String.valueOf(longtitude)+" Longitude: "+String.valueOf(latitude);
-                        System.out.println("Statement "+location);
-
-
-//
-                    }else{
-                        LocationRequest locationRequest=new LocationRequest()
-                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10000)
-                                .setFastestInterval(1000)
-                                .setNumUpdates(1);
-                        LocationCallback locationCallback=new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                Location location1 = locationResult.getLastLocation();
-                                System.out.println("location1"+String.valueOf(location1.getLongitude()));
-                                location="Latitude: "+String.valueOf(latitude)+" Longitude: "+String.valueOf(longtitude);
-
-                            }
-                        };
-                        client.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
-                    }
-                }
-            });
-        } else{
-        startActivity(new Intent(Settings.ACTION_LOCALE_SETTINGS).
-                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
+        if (requestCode == 100) {
+            photo = (Bitmap)data.getExtras().get("data");
+            optionalPhoto.setImageBitmap(photo);
+            photoUploaded = true;
+        }
+        if(requestCode==200){
+            if(resultCode==201){
+                longtitude=data.getExtras().getDouble("Longitude",0);
+                latitude=data.getExtras().getDouble("Latitude",0);
+                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+            }
+        }
     }
 
     @Override
@@ -306,29 +255,11 @@ public class ManageHabitEventsFragment extends DialogFragment {
             checkInputCorrectness();
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        System.out.println("Activity Result Test");
-        if(requestCode==200){
-            System.out.println("Request Code pass");
-            if(resultCode==201){
-                System.out.println("Result Code Pass");
-                longtitude=data.getExtras().getDouble("Longitude",0);
-                latitude=data.getExtras().getDouble("Latitude",0);
-                System.out.println(longtitude);
-                System.out.println(latitude);
-                location = "Longitude: " + longtitude + " Latitude: " + latitude;
-
-
-            }
-        }
-
-//
-    }
+  
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
         startActivityForResult(startMapsActivity,200);
 
     }
+
 }
