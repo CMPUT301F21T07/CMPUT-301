@@ -164,7 +164,6 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-                        System.out.println(date);
 
                         // Storing image to Storage
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -262,7 +261,8 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 listener = (EditEventListener) context;
             } catch (ClassCastException e) {
                 throw new ClassCastException(context.toString() + "Must implement listener");
-            }}
+            }
+        }
     }
 
     public void checkInputCorrectness() {
