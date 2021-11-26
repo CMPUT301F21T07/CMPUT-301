@@ -23,13 +23,11 @@ import java.util.Date;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
     private ArrayList<Habits> habitsArrayList;
     private Context context;
-    boolean cMenu = true;
     int indexToReturn;
 
     public RecyclerAdapter(Context context, ArrayList<Habits> habitsArrayList){
         this.habitsArrayList = habitsArrayList;
         this.context = context;
-
     }
 
 
@@ -54,14 +52,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         */
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            contextMenu.add(this.getAdapterPosition(), 121, 0, "View habit");
+            contextMenu.add(this.getAdapterPosition(), 122, 1, "Edit habit");
+            contextMenu.add(this.getAdapterPosition(), 123, 2, "Delete habit");
+            indexToReturn = getAdapterPosition();
 
-            if (cMenu) {
-                contextMenu.add(this.getAdapterPosition(), 121, 0, "View habit");
-                contextMenu.add(this.getAdapterPosition(), 122, 1, "Edit habit");
-                contextMenu.add(this.getAdapterPosition(), 123, 2, "Move habit");
-                contextMenu.add(this.getAdapterPosition(), 124, 2, "Delete habit");
-                indexToReturn = getAdapterPosition();
-            }
         }
 
     }
@@ -89,10 +84,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.startDate.setText(strDate);
     }
 
-
-    public void setCMenu(boolean cMenu){
-        this.cMenu = cMenu;
-    }
     public int getItem() {
         return indexToReturn;
     }

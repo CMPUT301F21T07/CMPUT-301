@@ -18,7 +18,7 @@
             android:layout_weight="0.5"
             android:gravity="right"
             android:layout_height="wrap_content"
-            android:text="Today's date: "
+            android:text="Today's Date: "
             android:textSize="20sp"
             android:textColor = "#808080"
             android:textStyle="bold"

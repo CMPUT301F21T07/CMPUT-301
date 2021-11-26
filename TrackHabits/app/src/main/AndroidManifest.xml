@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trackhabit" >
+    package="com.example.trackhabit">
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -8,7 +14,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TrackHabit" >
+        android:theme="@style/Theme.TrackHabit">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
+        <activity
+            android:name=".TakePictureActivity"
+            android:exported="false" />
+        <activity android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:exported="false"/>
         <activity
             android:name=".SearchFriend"
             android:exported="true" />
@@ -39,10 +52,12 @@
             android:name=".LogInActivity"
             android:exported="true"
             android:label="Log In" />
+        <activity android:name=".FriendRequests"
+            android:label="Friend Requests"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Track Habits" >
+            android:label="Create New User">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

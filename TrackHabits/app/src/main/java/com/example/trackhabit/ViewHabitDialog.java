@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,8 @@ import java.util.Date;
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
-    private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays="Add";
+    private ProgressBar consistency;
+    private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private Integer habitConsist = 0, amountEvents = 0, todayDay, startDay;
@@ -73,23 +75,15 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         startCal.setTime(startDate);
         startDay = startCal.get(Calendar.DAY_OF_WEEK);
 
-        if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){
-            builder.setView(view)
-                    .setTitle("Habit Details")
-                    .setNegativeButton("Back", (dialogInterface, i) -> {})
-                    .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                        ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(
-                                habitName, userName, habitDays );
+        builder.setView(view)
+                .setTitle("Habit Details")
+                .setNegativeButton("Back", (dialogInterface, i) -> {})
+                .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
+                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(userName, habitName, "Add" );
+                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
+                    dismiss();
+                }));
 
-                        addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
-                        dismiss();
-                    }));
-        } else {
-            builder.setView(view)
-                    .setTitle("Habit Details")
-                    .setNegativeButton("Back", (dialogInterface, i) -> {
-                    });
-        }
 
         //get text views
         habitNameView   = view.findViewById(R.id.view_habit_name);
@@ -99,8 +93,11 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         habitPrivacyView  = view.findViewById(R.id.view_privacy);
         habitDaysView  = view.findViewById(R.id.view_days);
         habitConsistView = view.findViewById(R.id.view_consist);
+        consistency = view.findViewById(R.id.progressBar);
 
-        //set text views
+        consistency.setMax(100);
+
+                //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
@@ -149,14 +146,16 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 assert value != null;
-                for(QueryDocumentSnapshot doc: value)
-                {
+                for(QueryDocumentSnapshot doc: value) {
                     Log.d("TAG", String.valueOf(doc.getData().get(habitName)));
                     String habitNames = (String) doc.getData().get("HabitName");
                     String userNames = (String) doc.getData().get("UserName");
                     String date = (String) doc.getData().get("Date");
 
-                    if (userNames.equals(habitName) && habitNames.equals(userName)) {amountEvents++;} /**This will need to be updated once events is fixed*/
+
+                    if (userNames.equals(userName) && habitNames.equals(habitName)) {
+                        amountEvents++;
+                    }
                 }
                 Integer amountDays = countDays();
 
@@ -164,7 +163,8 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                     habitConsist = 100/amountDays*amountEvents;}
                 else {habitConsist = 0+100*amountEvents;}
                 habitConsistView.setText(valueOf(habitConsist)+" %");
-                //System.out.println("**!! Calculating consistency with - # days: "+amountDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
+                consistency.setProgress(habitConsist);
+                System.out.println("**!! Calculating consistency with - # days: "+amountDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
             }
         });

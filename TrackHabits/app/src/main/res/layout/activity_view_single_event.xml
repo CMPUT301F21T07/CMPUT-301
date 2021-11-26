@@ -41,11 +41,18 @@
             android:text="location_permission" />
 
         <TextView
+            android:id="@+id/show_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="location" />
+
+        <TextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="username" />
     </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <Button
         android:id="@+id/Delete"
@@ -54,18 +61,15 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="78dp"
-        android:layout_marginLeft="78dp"
-        android:layout_marginTop="386dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginRight="39dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="473dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginRight="42dp"
         android:layout_toStartOf="@+id/Edit"
         android:layout_toLeftOf="@+id/Edit"
         android:layout_weight="1"
-        android:text="Delete">
-    </Button>
-
-
+        android:text="Delete"></Button>
 
     <Button
         android:id="@+id/Edit"
@@ -74,22 +78,22 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="387dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginRight="76dp"
+        android:layout_marginTop="471dp"
+        android:layout_marginEnd="71dp"
+        android:layout_marginRight="71dp"
         android:text="Edit" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="172dp"
-        android:layout_height="151dp"
+        android:layout_width="375dp"
+        android:layout_height="332dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="153dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="145dp"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal_background" />
 
 

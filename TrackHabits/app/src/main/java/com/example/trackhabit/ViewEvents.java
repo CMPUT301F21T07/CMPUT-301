@@ -67,19 +67,18 @@ public class ViewEvents extends AppCompatActivity {
                     String date = (String) doc.getData().get("Date");
                     System.out.println(date);
                     System.out.println(selectedDate);
-                    if (!selectedDate.equals(date)){
+                    if (!selectedDate.equals(date) && !userName.equals(userId)){
                         continue;
                     }
                     String optionalComment = (String) doc.getData().get("OptionalComment");
-                    Bitmap photo = (Bitmap) doc.getData().get("OptionalPhoto");
+                    String location=(String) doc.getData().get("Location");
                     boolean locationPermission = (boolean) doc.getData().get("LocationPermission");
+                    boolean photoUploaded = (boolean) doc.getData().get("PhotoUploaded");
 
                     if (userId.equals(userName)){
-
                         HabitEvent newHabitEvent= new HabitEvent(habitName, userName, date,
-                                optionalComment, photo, locationPermission);
+                                optionalComment, locationPermission,location, photoUploaded);
                         events.add(newHabitEvent);
-
 
                     }
                 }
@@ -100,8 +99,9 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("date",habitEvent.getDate());
                 singleEvent.putExtra("comment", habitEvent.getComment());
                 singleEvent.putExtra("index",i);
-                singleEvent.putExtra("image",habitEvent.getOptionalPhoto());
                 singleEvent.putExtra("Permission",habitEvent.getLocationPermission());
+                singleEvent.putExtra("photoUploaded", habitEvent.getPhotoUploaded());
+                singleEvent.putExtra("location",habitEvent.getLocation());
                 startActivityForResult(singleEvent,0);
                 Intent receive=getIntent();
                 boolean toDelete=receive.getExtras().getBoolean("toDelete");

@@ -90,11 +90,11 @@
             android:id="@+id/view_requests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@android:color/holo_orange_light"
+            android:layout_gravity="center_vertical"
+            app:srcCompat = "@android:drawable/sym_action_email"
+            app:backgroundTint="@android:color/holo_purple"
             app:fabCustomSize="45dp"
-            app:srcCompat ="@drawable/ic_baseline_person_outline_24"
             app:fabSize="mini"
-            tools:ignore="VectorDrawableCompat"
             app:tint = "@color/white"
             android:outlineSpotShadowColor="@color/white"/>
 
