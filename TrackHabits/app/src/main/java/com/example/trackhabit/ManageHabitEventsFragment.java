@@ -261,8 +261,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 listener = (EditEventListener) context;
             } catch (ClassCastException e) {
                 throw new ClassCastException(context.toString() + "Must implement listener");
+
             }
         }
+
     }
 
     public void checkInputCorrectness() {

@@ -82,7 +82,8 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                     ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(userName, habitName, "Add" );
                     addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
                     dismiss();
-                });
+                }));
+
 
         //get text views
         habitNameView   = view.findViewById(R.id.view_habit_name);

@@ -61,8 +61,6 @@ public class SearchFriend extends AppCompatActivity {
         addButton = findViewById(R.id.add_friend_button);
         cancelButton = findViewById(R.id.cancel_button);
 
-        errView = findViewById(R.id.errSearch);
-
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
@@ -98,6 +96,7 @@ public class SearchFriend extends AppCompatActivity {
         });
 
         cancelButton.setOnClickListener(v -> finish());
+
         addButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {

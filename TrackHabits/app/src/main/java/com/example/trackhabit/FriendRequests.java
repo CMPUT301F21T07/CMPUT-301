@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +42,7 @@ public class FriendRequests extends AppCompatActivity {
     ArrayList<String> wFriendsList;
     ArrayAdapter<String> friendsArrayAdapter;
 
+
     FloatingActionButton goBackButton;
 
     private String userName;
@@ -50,6 +52,7 @@ public class FriendRequests extends AppCompatActivity {
 
     Integer temp_index;
     final String TAG = "Sample";
+
 
 
     @Override
@@ -64,6 +67,7 @@ public class FriendRequests extends AppCompatActivity {
         wFriendsList = new ArrayList<>();
 
         goBackButton        = findViewById(R.id.go_back_req);
+
 
 
         FIWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -142,6 +146,7 @@ public class FriendRequests extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
                                 Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -163,6 +168,7 @@ public class FriendRequests extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
                                 Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -176,6 +182,7 @@ public class FriendRequests extends AppCompatActivity {
                 friendsArrayAdapter.notifyDataSetChanged();
                 return true;
 
+
             case R.id.deny_friend:
                 String d_friend = wFriendsList.get(temp_index);
                 DocumentReference FIWRef_deny = friendRef.document(userName).collection("Friends In Waiting").document(d_friend);
@@ -183,6 +190,7 @@ public class FriendRequests extends AppCompatActivity {
                 FIWRef_deny.delete();
                 wFriendsList.remove(d_friend);
                 friendsArrayAdapter.notifyDataSetChanged();
+
                 return true;
 
             default:

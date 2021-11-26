@@ -75,6 +75,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     LinearLayout newHabitLayout, viewEventsLayout, viewFriendsLayout, logOutLayout;
 
+
     ItemTouchHelper itemTouchHelper;
 
     TextView tV1, tV2;
@@ -125,6 +126,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         addNewHabit.setOnClickListener(view -> addNewHabit());
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
+
 
         userName = getIntent().getExtras().getString("name_key");
         dynamicHabitListView = findViewById(R.id.dynamic_list_view);
@@ -229,6 +231,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
     }
+    /**
+     *  Function that searches for friends
+     */
+
 
 
     /**
