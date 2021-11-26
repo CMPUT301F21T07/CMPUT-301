@@ -218,6 +218,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             optionalPhoto.setImageBitmap(photo);
             photoUploaded = true;
         }
+        if(requestCode==200){
+            if(resultCode==201){
+                longtitude=data.getExtras().getDouble("Longitude",0);
+                latitude=data.getExtras().getDouble("Latitude",0);
+                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+            }
+        }
     }
 
     @Override
@@ -248,4 +255,11 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             checkInputCorrectness();
         }
     }
+  
+    private void startMaps(){
+        Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
+        startActivityForResult(startMapsActivity,200);
+
+    }
+
 }
