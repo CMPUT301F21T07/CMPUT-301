@@ -71,16 +71,14 @@ public class ViewEvents extends AppCompatActivity {
                         continue;
                     }
                     String optionalComment = (String) doc.getData().get("OptionalComment");
-                    Bitmap photo = (Bitmap) doc.getData().get("OptionalPhoto");
                     String location=(String) doc.getData().get("Location");
                     boolean locationPermission = (boolean) doc.getData().get("LocationPermission");
+                    boolean photoUploaded = (boolean) doc.getData().get("PhotoUploaded");
 
                     if (userId.equals(userName)){
-
                         HabitEvent newHabitEvent= new HabitEvent(habitName, userName, date,
-                                optionalComment, photo, locationPermission,location);
+                                optionalComment, locationPermission,location, photoUploaded);
                         events.add(newHabitEvent);
-
 
                     }
                 }
@@ -101,11 +99,8 @@ public class ViewEvents extends AppCompatActivity {
                 singleEvent.putExtra("date",habitEvent.getDate());
                 singleEvent.putExtra("comment", habitEvent.getComment());
                 singleEvent.putExtra("index",i);
-                singleEvent.putExtra("image",habitEvent.getOptionalPhoto());
-
-                System.out.println(habitEvent.getLocationPermission());
-
                 singleEvent.putExtra("Permission",habitEvent.getLocationPermission());
+                singleEvent.putExtra("photoUploaded", habitEvent.getPhotoUploaded());
                 singleEvent.putExtra("location",habitEvent.getLocation());
                 startActivityForResult(singleEvent,0);
                 Intent receive=getIntent();

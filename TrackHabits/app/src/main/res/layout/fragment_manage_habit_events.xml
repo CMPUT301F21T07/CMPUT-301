@@ -18,13 +18,13 @@
             android:layout_weight="0.5"
             android:gravity="right"
             android:layout_height="wrap_content"
-            android:text="Date: "
+            android:text="Today's Date: "
             android:textSize="20sp"
             android:textColor = "#808080"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"/>
 
-        <EditText
+        <TextView
             android:id="@+id/date_text"
             android:layout_width="fill_parent"
             android:layout_weight="0.5"

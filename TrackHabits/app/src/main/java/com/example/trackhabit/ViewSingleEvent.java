@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -46,24 +48,25 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private TextView userNameText;
     private ImageView imageView;
     private Bitmap photo;
-    private TextView showLocation;
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
 
-    private String location;
+
     private String habitTitle;
     private String habitReason;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habit Events");
-
-
+    final private FirebaseStorage storage = FirebaseStorage.getInstance();
+    final private StorageReference storageRef = storage.getReference();
+    private StorageReference photoRef;
 
     private String habitName;
     private String userName;
     private String date;
     private String comment;
     private Boolean locationPermission;
+    private Boolean photoUploaded;
     int index;
     boolean toDelete=false;
 
@@ -82,13 +85,25 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userName = mIntent.getExtras().getString("userName");
         date = mIntent.getExtras().getString("date");
         comment = mIntent.getExtras().getString("comment");
-
         locationPermission = mIntent.getExtras().getBoolean("Permission");
+        photoUploaded = mIntent.getExtras().getBoolean("photoUploaded");
 
-        photo = (Bitmap) mIntent.getParcelableExtra("photo");
+        String dataName = habitName + " " + userName + " " + date;
+
+        if (photoUploaded) {
+            photoRef = storageRef.child(dataName + ".jpg");
+            imageView = findViewById(R.id.imageView);
+            final long mb = 1024 * 1024;
+            photoRef.getBytes(mb).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap photo = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imageView.setImageBitmap(photo);
+                }
+            });
+        }
         index = mIntent.getExtras().getInt("index");
-        location=mIntent.getExtras().getString("location");
-        System.out.println("Date: "+date);
+
         Title=findViewById(R.id.showTitle);
         Title.setText("Habit: " + habitName);
 
@@ -101,15 +116,8 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         userNameText = findViewById(R.id.username);
         userNameText.setText("User Name: " + userName);
 
-        imageView = findViewById(R.id.imageView);
-
         StartDate=findViewById(R.id.Start_date);
         StartDate.setText("Date: " + date);
-
-        showLocation=findViewById(R.id.show_location);
-        showLocation.setText(location);
-
-
 
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
@@ -118,19 +126,35 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             @Override
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
-                        habitName, userName, "Edit", comment, photo,
-                        locationPermission, date,location);
+                        habitName, userName, "Edit", comment, photoUploaded,
+                        locationPermission, date);
                 editHabitDialog.show(getSupportFragmentManager(), "EDIT NEW HABIT EVENT");
 
             }
         });
-      
+
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String dataName = habitName + " " + userName + " " + date;
+                if (photoUploaded) {
+                    storageRef.child(dataName + ".jpg").delete()
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("TAG", "Photo was not deleted!");
+                                }
+                            })
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("TAG", "Photo was successfully deleted!");
+                                }
+                            });
+                }
                 HashMap<String, String> data=new HashMap<>();
                 habitsRef
-                        .document(habitName + " " + userName + " " + date)
+                        .document(dataName)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -149,6 +173,10 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             }
         });
 
+
+
     }
+
+
 
 }
