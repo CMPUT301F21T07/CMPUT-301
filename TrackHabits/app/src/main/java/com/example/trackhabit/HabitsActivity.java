@@ -58,9 +58,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     RecyclerView dynamicHabitListView;
     RecyclerAdapter listViewAdapter;
 
-    private ArrayList<Habits> todayHabitDataList;
-    private ArrayList<Habits> allHabitDataList;
-    private ArrayList<Habits> currentList;
+    private ArrayList<Habit> todayHabitDataList;
+    private ArrayList<Habit> allHabitDataList;
+    private ArrayList<Habit> currentList;
     private ArrayList<String> daysList;
 
     private String userName;
@@ -158,7 +158,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                     days     = (String) doc.getData().get(KEY_DAYS);
                     daysList = getDaysList(days);
                     if (userID.equals(userName)){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
+                        Habit tempHabit = new Habit((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
@@ -296,15 +296,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         temp_index = listViewAdapter.getItem();
         switch(item.getItemId()) {
             case 121:
-                Habits tempOpen = currentList.get(temp_index);
+                Habit tempOpen = currentList.get(temp_index);
                 viewDialog(tempOpen);
                 return true;
             case 122:
-                Habits tempEdit = currentList.get(temp_index);
+                Habit tempEdit = currentList.get(temp_index);
                 editDialog(tempEdit);
                 return true;
             case 123:
-                Habits tempDelete = currentList.get(temp_index);
+                Habit tempDelete = currentList.get(temp_index);
                 removeHabit(tempDelete);
                 return true;
             default:
@@ -317,7 +317,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * Function that opens a fragment that allows a user to view a given habit
      * @param tempOpen This is the habit object that is being viewed
      */
-    private void viewDialog(Habits tempOpen) {
+    private void viewDialog(Habit tempOpen) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ViewHabitDialog viewHabit = new ViewHabitDialog();
         Bundle args = new Bundle();
@@ -333,7 +333,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
-    private void editDialog(Habits tempEdit) {
+    private void editDialog(Habit tempEdit) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         EditHabitDialog editHabit = new EditHabitDialog();
         Bundle args = new Bundle();
@@ -355,7 +355,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * Function that deletes a habit object for a specific user and returns a message
      * @param tempDelete This is the habit object that needs to be deleted
      */
-    private void removeHabit(Habits tempDelete) {
+    private void removeHabit(Habit tempDelete) {
         habitsRef.addSnapshotListener((value, error) -> {
             assert value != null;
             for(QueryDocumentSnapshot doc: value)

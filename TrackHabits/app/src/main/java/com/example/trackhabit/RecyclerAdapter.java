@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
-    private ArrayList<Habits> habitsArrayList;
+    private ArrayList<Habit> habitsArrayList;
     private Context context;
     int indexToReturn;
 
-    public RecyclerAdapter(Context context, ArrayList<Habits> habitsArrayList){
+    public RecyclerAdapter(Context context, ArrayList<Habit> habitsArrayList){
         this.habitsArrayList = habitsArrayList;
         this.context = context;
     }
@@ -72,7 +72,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
-        Habits habit = habitsArrayList.get(position);
+        Habit habit = habitsArrayList.get(position);
 
         holder.habitName.setText(habit.getHabitName());
         holder.habitTitle.setText(habit.getHabitTitle());
