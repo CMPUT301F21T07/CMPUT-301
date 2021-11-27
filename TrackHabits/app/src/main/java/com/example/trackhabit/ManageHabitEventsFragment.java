@@ -223,6 +223,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
+        startMapsActivity.putExtra("isViewSingleEvent",false);
         startActivityForResult(startMapsActivity,200);
 
     }
@@ -242,7 +243,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             if(resultCode==201){
                 longtitude=data.getExtras().getDouble("Longitude",0);
                 latitude=data.getExtras().getDouble("Latitude",0);
-                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+                location = longtitude + "," + latitude;
             }
         }
     }

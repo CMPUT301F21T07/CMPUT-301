@@ -46,7 +46,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private TextView StartDate;
     private TextView locationPermissionText;
     private TextView userNameText;
-    private TextView showLocation;
+    private Button showLocation;
     private ImageView imageView;
     private Bitmap photo;
     //    private TextView consistency;
@@ -125,7 +125,11 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         StartDate.setText("Date: " + date);
 
         showLocation = findViewById(R.id.show_location);
-        showLocation.setText("Location: " + location);
+        if(locationPermission){
+        showLocation.setOnClickListener(newView -> showCurrentLocation());}
+        else{
+            Toast.makeText(this,"Location permission not granted",Toast.LENGTH_SHORT);
+        }
 
         Editing=findViewById(R.id.Edit);
         Deleting=findViewById(R.id.Delete);
@@ -182,6 +186,17 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
 
 
+    }
+    private void showCurrentLocation(){
+        Intent startMapsActivity=new Intent(ViewSingleEvent.this,MapsActivity.class);
+
+        String[] coordinates = location.split(",");
+        double longitude=Double.parseDouble(coordinates[0]);
+        double latitude=Double.parseDouble(coordinates[1]);
+        startMapsActivity.putExtra("longitude",longitude);
+        startMapsActivity.putExtra("latitude",latitude);
+        startMapsActivity.putExtra("isViewSingleEvent",true);
+        startActivityForResult(startMapsActivity,300);
     }
 
 }
