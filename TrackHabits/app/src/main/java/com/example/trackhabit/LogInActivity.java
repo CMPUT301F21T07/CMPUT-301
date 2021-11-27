@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -79,7 +80,7 @@ public class LogInActivity extends AppCompatActivity {
                     for (User user: uDataList){
                         if (userName.equals(user.getUserName()) && password.equals(user.getPassword())){
                             Log.d(TAG, "User logged in successfully!");
-                            errView.setText("User logged in successfully!");
+                            Toast.makeText(LogInActivity.this, "User logged in successfully!", Toast.LENGTH_SHORT ).show();
                             success = 1;
                             Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
                             HabitsIntent.putExtra("name_key", userName);
@@ -89,7 +90,7 @@ public class LogInActivity extends AppCompatActivity {
                     }
                     if (success == 0){
                         Log.d(TAG, "User does not exist or Password is not correct");
-                        errView.setText("User does not exist or Password is not correct");
+                        Toast.makeText(LogInActivity.this, "User does not exist or Password is not correct", Toast.LENGTH_SHORT ).show();
 
                     }
 
