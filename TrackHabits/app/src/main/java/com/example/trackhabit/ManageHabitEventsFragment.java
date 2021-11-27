@@ -29,9 +29,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -149,8 +153,25 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             title = "Edit HabitEvent Info";
         }
 
+        // checking if event already exists
         dataName = habitName + " " + userName + " " + date;
-        System.out.println(habitEventsRef.document(dataName).get().toString());
+        DocumentReference eventRef = habitEventsRef.document(dataName);
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Toast.makeText(getContext(), "Event already exists for this day",
+                                        Toast.LENGTH_LONG).show();
+                        dismiss();
+                    }
+                } else {
+                    Log.d("TAG", "Failed with: ", task.getException());
+                }
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
