@@ -25,7 +25,7 @@ import java.util.Date;
 
 public class EditHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
-    private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy,location;
+    private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private HabitDialogListener returnListener;
