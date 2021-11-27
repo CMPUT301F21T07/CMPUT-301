@@ -29,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -372,7 +374,38 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
 
         });
+        CollectionReference habitEventsRef = db.collection("Habit Events");
+        habitEventsRef.addSnapshotListener((value, error) -> {
+           assert value != null;
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            final StorageReference storageRef = storage.getReference();
+            StorageReference photoRef;
+           for(QueryDocumentSnapshot doc: value) {
+              String userID = (String) doc.getData().get("UserName");
+              String habitName = (String) doc.getData().get("HabitName");
+              String currentHabitName = tempDelete.getHabitName();
+              String date = (String)doc.getData().get("Date");
+              boolean photoUploaded = (Boolean)doc.getData().get("PhotoUploaded");
 
+              if (userID.equals(userName) && currentHabitName.equals(habitName)) {
+                  doc.getReference().delete().addOnSuccessListener(success -> {
+                      Log.d(TAG, "Event " + habitName + " " + date + " deleted");
+                  }).addOnFailureListener(failure -> {
+                      Log.d(TAG, "Event " + habitName + " " + date + " was not deleted!");
+                  });
+                  if (photoUploaded) {
+                      String dataName = habitName + " " + userName + " " + date + ".jpg";
+                      photoRef = storageRef.child(dataName);
+                      photoRef.delete().addOnSuccessListener(success -> {
+                          Log.d(TAG, "Image deleted");
+                      }).addOnFailureListener(failure -> {
+                          Log.d(TAG, "Image was not deleted!");
+                      });
+                  }
+
+              }
+           }
+        });
     }
 
 
