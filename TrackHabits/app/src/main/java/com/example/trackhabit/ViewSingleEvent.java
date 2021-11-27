@@ -39,7 +39,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private static final String KEY_REASON  = "Reason";
     private static final String KEY_DAYS    = "Days";
 
-    private Habits habit;
+    private Habit habit;
     private TextView Title;
     private TextView habitNameText;
     private TextView Reason;

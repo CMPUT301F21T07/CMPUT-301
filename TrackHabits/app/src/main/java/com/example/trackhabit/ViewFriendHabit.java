@@ -39,12 +39,12 @@ public class ViewFriendHabit extends AppCompatActivity {
 
     ListView habitListView;
 
-    private ArrayList<Habits> todayHabitDataList;
-    private ArrayList<Habits> allHabitDataList;
-    private ArrayList<Habits> currentList;
+    private ArrayList<Habit> todayHabitDataList;
+    private ArrayList<Habit> allHabitDataList;
+    private ArrayList<Habit> currentList;
     private ArrayList<String> daysList;
 
-    ArrayAdapter<Habits> habitsArrayAdapter;
+    ArrayAdapter<Habit> habitsArrayAdapter;
 
     private String userName;
     private String strDay, days;
@@ -123,7 +123,7 @@ public class ViewFriendHabit extends AppCompatActivity {
                     Boolean publicHabit = (Boolean) doc.getData().get(KEY_PRIVATE);
                     getDaysList();
                     if (userID.equals(userName) && !publicHabit){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
+                        Habit tempHabit = new Habit((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
@@ -131,6 +131,7 @@ public class ViewFriendHabit extends AppCompatActivity {
                                 (Boolean) doc.getData().get(KEY_PRIVATE),
                                 (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
+
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
