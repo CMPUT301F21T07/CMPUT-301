@@ -64,7 +64,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String location = "";
     private Bitmap photo;
     private Boolean photoUploaded = false;
-    private double longtitude;
+    private double longitude;
     private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
@@ -262,9 +262,9 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         }
         if(requestCode==200){
             if(resultCode==201){
-                longtitude=data.getExtras().getDouble("Longitude",0);
+                longitude=data.getExtras().getDouble("Longitude",0);
                 latitude=data.getExtras().getDouble("Latitude",0);
-                location = longtitude + "," + latitude;
+                location = longitude + "," + latitude;
             }
         }
     }
