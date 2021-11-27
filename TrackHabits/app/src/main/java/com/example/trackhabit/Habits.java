@@ -2,7 +2,6 @@ package com.example.trackhabit;
 
 import com.google.firebase.Timestamp;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

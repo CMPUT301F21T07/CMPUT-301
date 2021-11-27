@@ -131,9 +131,11 @@ public class ViewFriendHabit extends AppCompatActivity {
                                 (Boolean) doc.getData().get(KEY_PRIVATE),
                                 (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
+
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
+                        System.out.println("**!! Calculating consistency with - # days: "+tempHabit.getEventDays()+", # Events: "+", consistency: ");
 
                     }
                 }
