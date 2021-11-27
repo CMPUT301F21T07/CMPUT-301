@@ -12,7 +12,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/open_friend_menu_button_req"
+        android:id="@+id/go_back_req"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -24,126 +24,9 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:focusable="true"
-        android:backgroundTint="@android:color/holo_orange_dark"
-        app:srcCompat ="@drawable/ic_baseline_add_circle_outline_24"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat"
-        />
-
-    <LinearLayout
-        android:id="@+id/add_new_friend_layout_req"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="95dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add friends:"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
-            android:background="@drawable/rounded_corner"
-            android:padding="5dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_friend_req"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat ="@android:drawable/ic_input_add"
-            app:backgroundTint="@android:color/holo_green_light"
-            app:fabCustomSize="45dp"
-            app:fabSize="mini"
-            app:tint = "@color/white"
-            android:outlineSpotShadowColor="@color/white"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/view_requests_layout_req"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="150dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Requests:"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
-            android:background="@drawable/rounded_corner"
-            android:padding="5dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/view_requests_req"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@android:color/holo_orange_light"
-            app:fabCustomSize="45dp"
-            app:srcCompat ="@drawable/ic_baseline_person_outline_24"
-            app:fabSize="mini"
-            tools:ignore="VectorDrawableCompat"
-            app:tint = "@color/white"
-            android:outlineSpotShadowColor="@color/white"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/go_back_layout_req"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="205dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go back:"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
-            android:background="@drawable/rounded_corner"
-            android:padding="5dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/go_back_req"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat ="@drawable/ic_baseline_arrow_back_24"
-            app:backgroundTint="@android:color/holo_red_dark"
-            app:fabCustomSize="45dp"
-            app:fabSize="mini"
-            tools:ignore="VectorDrawableCompat"
-            app:tint = "@color/white"
-            android:outlineSpotShadowColor="@color/white"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/errRequest"
-        android:layout_width="237dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="" />
+        android:backgroundTint="@android:color/holo_red_dark"
+        app:srcCompat ="@drawable/ic_baseline_arrow_back_24"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,VectorDrawableCompat" />
 
 
 </RelativeLayout>

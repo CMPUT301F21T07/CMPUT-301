@@ -76,10 +76,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng[] mLikelyPlaceLatLngs;
     Marker m;
 
+    private double getLongitude;
+    private double getLatitude;
+    private boolean getIsSingleEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Intent receive=getIntent();
+        getIsSingleEvent=receive.getExtras().getBoolean("isViewSingleEvent");
+        if(getIsSingleEvent){
+        getLongitude=receive.getExtras().getDouble("longitude");
+        getLatitude=receive.getExtras().getDouble("latitude");}
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -179,7 +186,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLng(Default));
         mMap.getUiSettings().setZoomControlsEnabled(true);}
         else{
-            getDeviceLocation();
+            if(getIsSingleEvent){
+                if(m!=null){
+                m.setPosition(new LatLng(getLatitude,getLongitude));
+                m.setTitle("Last Location");}
+                else{
+                    LatLng lastLocation=new LatLng(getLatitude,getLongitude);
+                    m=mMap.addMarker(new MarkerOptions().position(lastLocation).title("Last Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLocation));
+                    mMap.getUiSettings().setZoomControlsEnabled(true);
+                }
+
+            }
+            else{
+            getDeviceLocation();}
 
         }
 
@@ -310,7 +330,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mMap == null) {
             return;
         }
-
+        if(getIsSingleEvent){
+            return;
+        }
         if (mLocationPermissionGranted) {
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

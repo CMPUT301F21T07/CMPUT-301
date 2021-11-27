@@ -164,25 +164,26 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-                        System.out.println(date);
 
                         // Storing image to Storage
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        optionalPhotoRef = storageRef.child(dataName + ".jpg");
-                        UploadTask uploadTask = optionalPhotoRef.putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.d("TAG", "Photo Was Not Stored!");
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        if (photoUploaded) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            optionalPhotoRef = storageRef.child(dataName + ".jpg");
+                            UploadTask uploadTask = optionalPhotoRef.putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Log.d("TAG", "Photo Was Not Stored!");
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
-                            }
-                        });
+                                }
+                            });
+                        }
 
                         // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -222,6 +223,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
+        startMapsActivity.putExtra("isViewSingleEvent",false);
         startActivityForResult(startMapsActivity,200);
 
     }
@@ -241,7 +243,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             if(resultCode==201){
                 longtitude=data.getExtras().getDouble("Longitude",0);
                 latitude=data.getExtras().getDouble("Latitude",0);
-                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+                location = longtitude + "," + latitude;
             }
         }
     }
@@ -262,7 +264,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 listener = (EditEventListener) context;
             } catch (ClassCastException e) {
                 throw new ClassCastException(context.toString() + "Must implement listener");
-            }}
+
+            }
+        }
+
     }
 
     public void checkInputCorrectness() {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +39,7 @@ public class SearchFriend extends AppCompatActivity {
     private final CollectionReference friendRef = db.collection("Friends");
 
     EditText searchUsername;
-    Button addButton;
+    Button addButton, cancelButton;
     ArrayList<String> uDataList;
     ArrayList<String> fDataList;
     ArrayList<String> fwDataList;
@@ -46,7 +47,6 @@ public class SearchFriend extends AppCompatActivity {
     final String TAG = "Sample";
     TextView errView;
     private String userName;
-    int success;
 
 
     @Override
@@ -57,8 +57,9 @@ public class SearchFriend extends AppCompatActivity {
         userName = getIntent().getExtras().getString("name_key");
 
         searchUsername = findViewById(R.id.search_friend_edit);
+
         addButton = findViewById(R.id.add_friend_button);
-        errView = findViewById(R.id.errSearch);
+        cancelButton = findViewById(R.id.cancel_button);
 
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -94,6 +95,7 @@ public class SearchFriend extends AppCompatActivity {
             }
         });
 
+        cancelButton.setOnClickListener(v -> finish());
 
         addButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -119,12 +121,10 @@ public class SearchFriend extends AppCompatActivity {
                 if (userNameF.length()>0) {
                     if (!uDataList.contains(userNameF) || userNameF.equals(userName)){
                         Log.d(TAG, "Friend is not Valid");
-                        errView.setText("Friend is not Valid");
-                        success = 1;
+                        Toast.makeText(SearchFriend.this, "Friend is not Valid", Toast.LENGTH_SHORT ).show();
                     }
 
-                    if (uDataList.contains(userNameF) && !fwDataList.contains(userName) && !fDataList.contains(userNameF) && success ==0){
-
+                    if (uDataList.contains(userNameF) && !fwDataList.contains(userName) && !fDataList.contains(userNameF) && !userNameF.equals(userName)){
                         data.put("UserName",userName);
                         FIWRef
                                 .document(userName)
@@ -133,11 +133,8 @@ public class SearchFriend extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "Friend Request Sent Successfully!");
-                                        errView.setText("Friend Request Sent Successfully!");
+                                        Toast.makeText(SearchFriend.this, "Friend Request Sent Successfully!", Toast.LENGTH_SHORT ).show();
                                         searchUsername.setText("");
-                                        Intent HabitsIntent = new Intent(getApplicationContext(), HabitsActivity.class);
-                                        HabitsIntent.putExtra("name_key", userName);
-                                        startActivity(HabitsIntent);
                                         finish();
                                     }
                                 })
@@ -145,21 +142,20 @@ public class SearchFriend extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d(TAG, "Friend Request Not Sent Successfully!" + e.toString());
-                                        errView.setText("Friend Request Not Sent Successfully!");
+                                        Toast.makeText(SearchFriend.this, "Friend Request Not Sent Successfully!", Toast.LENGTH_SHORT ).show();
                                     }
                                 });
 
                     }
 
-                    if (uDataList.contains(userNameF) && fwDataList.contains(userName) && !fDataList.contains(userNameF) && success ==0){
+                    if (uDataList.contains(userNameF) && fwDataList.contains(userName) && !fDataList.contains(userNameF) && !userNameF.equals(userName)){
                         errView.setText("Friend Request Already Sent Successfully!");
+                        Toast.makeText(SearchFriend.this, "Friend Request Already Sent Successfully!", Toast.LENGTH_SHORT ).show();
                     }
 
-                    if (uDataList.contains(userNameF) && fDataList.contains(userNameF) && success ==0){
-                        //DocumentReference friendReq = db.collection("Friends In Waiting").document(userNameF);
-                        //DocumentReference friends = db.collection("Friends").document(userNameF);
+                    if (uDataList.contains(userNameF) && fDataList.contains(userNameF) &&  !userNameF.equals(userName)){
                         Log.d(TAG, "Already Friends");
-                        errView.setText("Already Friends");
+                        Toast.makeText(SearchFriend.this, "Already Friends", Toast.LENGTH_SHORT ).show();
                     }
                 }
             }
