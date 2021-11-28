@@ -15,7 +15,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_habit_name"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -29,7 +29,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_habit_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:maxLength="20"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +45,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_habit_reason"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:maxLength="30"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +64,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_habit_date"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:maxLength="2"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -78,7 +78,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_habit_month"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:maxLength="2"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -92,7 +92,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_habit_year"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:maxLength="4"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>

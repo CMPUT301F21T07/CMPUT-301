@@ -129,7 +129,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
 
-
         userName = getIntent().getExtras().getString("name_key");
         dynamicHabitListView = findViewById(R.id.dynamic_list_view);
 
@@ -149,10 +148,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 currentList.clear();
-
+                allHabitDataList.clear();
+                todayHabitDataList.clear();
                 assert value != null;
                 for(QueryDocumentSnapshot doc: value)
                 {
+
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String)doc.getData().get(KEY_USER);
                     days     = (String) doc.getData().get(KEY_DAYS);
@@ -169,7 +170,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
-
                     }
                 }
                 if (listViewAdapter.getItemCount() == 0){
@@ -180,7 +180,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 else {
                     tV1.setVisibility(View.GONE);
                     tV2.setVisibility(View.GONE);
-                    newHabitLayout.setVisibility(View.GONE);
                 }
                 listViewAdapter.notifyDataSetChanged();
             }
@@ -194,16 +193,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
              * @param isChecked Toggled on
              */
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if(isChecked) {
                     yhSwitch.setText("Your Habits Today");
                     currentList = todayHabitDataList;
-                    listViewAdapter.notifyDataSetChanged();
-                }
-
-                else{
+                }else{
                     yhSwitch.setText("All Habits");
                     currentList = allHabitDataList;
-                    listViewAdapter.notifyDataSetChanged();
                 }
                 listViewAdapter = new RecyclerAdapter(HabitsActivity.this, currentList);
                 dynamicHabitListView.setAdapter(listViewAdapter);
@@ -233,11 +228,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
     }
-    /**
-     *  Function that searches for friends
-     */
-
-
 
     /**
      *  Function that removes more options for users
@@ -280,7 +270,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         closeMenu();
         newIntent.putExtra("ID", userName);
         startActivity(newIntent);
-        // View All Habit
     }
 
 
@@ -456,6 +445,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     @Override
     public void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
+        Habit addedTempHabit = new Habit(name, userName, title, reason,startTime, itemPrivacy, days);
         data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
         data.put(KEY_DATE, startTime);
@@ -468,10 +458,11 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Habit has been added successfully!");
                     Toast.makeText(HabitsActivity.this, "Habit has been added successfully!", Toast.LENGTH_SHORT).show();
-
                 })
                 .addOnFailureListener(e -> Log.d(TAG, "Habit could not be added!" + e.toString()));
     }
+
+
     /**
      * Function that gets data from the editHabit dialog box using a listener
      * @param name Habit name
