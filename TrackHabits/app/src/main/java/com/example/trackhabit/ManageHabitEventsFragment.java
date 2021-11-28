@@ -68,6 +68,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
+    private Context context;
 
     private Boolean isOkPressed = false;
 
@@ -98,6 +99,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         this.locationPermission = locationPermission;
         this.date = date;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -185,7 +187,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-
+                        context=getContext();
                         // Storing image to Storage
                         if (photoUploaded) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -202,9 +204,11 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
+                                Toast.makeText(context,"Photo Successfully added",Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
+
 
                         // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -222,6 +226,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Log.d("TAG", "Habit Event Successfully Added!");
+                                        Toast.makeText(context,"Event added successfully",Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
