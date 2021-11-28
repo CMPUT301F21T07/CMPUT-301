@@ -105,7 +105,7 @@ To assist in forming good habits, we want a mobile application that allows one t
 | ------------- | ------------- | ------------- |
 | Sandipan Nath | snath         | snath47       | 
 
-**Removed from group due to Jackie dropping the course**
+**Removed from group on 20th November, 2021**
 
 | Name          | CCID          | Username      |
 | ------------- | ------------- | ------------- |
