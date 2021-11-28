@@ -27,8 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
-public class ViewHabitDialog extends AppCompatDialogFragment {
+public class ViewFriendHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
     private ProgressBar consistency;
@@ -69,12 +68,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
         builder.setView(view)
                 .setTitle("Habit Details")
-                .setNegativeButton("Back", (dialogInterface, i) -> {})
-                .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(habitName, userName, "Add" );
-                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
-                    dismiss();
-                }));
+                .setPositiveButton("Back", (dialogInterface, i) -> {});
 
 
         //get text views
@@ -89,7 +83,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
 
         consistency.setMax(100);
 
-                //set text views
+        //set text views
         habitNameView.setText(habitName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);

@@ -29,9 +29,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -60,7 +64,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String location = "";
     private Bitmap photo;
     private Boolean photoUploaded = false;
-    private double longtitude;
+    private double longitude;
     private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
@@ -149,8 +153,25 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             title = "Edit HabitEvent Info";
         }
 
+        // checking if event already exists
         dataName = habitName + " " + userName + " " + date;
-        System.out.println(habitEventsRef.document(dataName).get().toString());
+        DocumentReference eventRef = habitEventsRef.document(dataName);
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Toast.makeText(getContext(), "Event already exists for this day",
+                                        Toast.LENGTH_LONG).show();
+                        dismiss();
+                    }
+                } else {
+                    Log.d("TAG", "Failed with: ", task.getException());
+                }
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -166,22 +187,24 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         checkInputCorrectness();
 
                         // Storing image to Storage
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        optionalPhotoRef = storageRef.child(dataName + ".jpg");
-                        UploadTask uploadTask = optionalPhotoRef.putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.d("TAG", "Photo Was Not Stored!");
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        if (photoUploaded) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            optionalPhotoRef = storageRef.child(dataName + ".jpg");
+                            UploadTask uploadTask = optionalPhotoRef.putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Log.d("TAG", "Photo Was Not Stored!");
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
-                            }
-                        });
+                                }
+                            });
+                        }
 
                         // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -221,6 +244,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
+        startMapsActivity.putExtra("isViewSingleEvent",false);
         startActivityForResult(startMapsActivity,200);
 
     }
@@ -238,9 +262,9 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         }
         if(requestCode==200){
             if(resultCode==201){
-                longtitude=data.getExtras().getDouble("Longitude",0);
+                longitude=data.getExtras().getDouble("Longitude",0);
                 latitude=data.getExtras().getDouble("Latitude",0);
-                location = "Longitude: " + longtitude + " Latitude: " + latitude;
+                location = longitude + "," + latitude;
             }
         }
     }

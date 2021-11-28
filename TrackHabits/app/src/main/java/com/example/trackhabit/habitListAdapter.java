@@ -22,17 +22,17 @@ import java.util.List;
 /**
  * Represents an individual item in the habits listview
  */
-public class habitListAdapter  extends ArrayAdapter<Habits> {
+public class habitListAdapter  extends ArrayAdapter<Habit> {
     /**
      * The list of habits
      */
-    private final ArrayList<Habits> habits;
+    private final ArrayList<Habit> habits;
     private Context context;
 
     final int INVALID_ID = -1;
     HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-    public habitListAdapter(Context context, ArrayList<Habits> habitArrayList){
+    public habitListAdapter(Context context, ArrayList<Habit> habitArrayList){
         super(context, R.layout.habit_list_adapter, habitArrayList);
         this.habits = habitArrayList;
         this.context = context;
@@ -54,7 +54,7 @@ public class habitListAdapter  extends ArrayAdapter<Habits> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.habit_list_adapter, parent, false);
         }
 
-        Habits habit = habits.get(position);
+        Habit habit = habits.get(position);
 
         TextView habitName  = view.findViewById(R.id.habit_name);
         TextView habitTitle = view.findViewById(R.id.habit_title);

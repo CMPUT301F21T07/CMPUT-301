@@ -67,7 +67,7 @@ public class ViewEvents extends AppCompatActivity {
                     String date = (String) doc.getData().get("Date");
                     System.out.println(date);
                     System.out.println(selectedDate);
-                    if (!selectedDate.equals(date) && !userName.equals(userId)){
+                    if (!selectedDate.equals(date) || !userName.equals(userId)){
                         continue;
                     }
                     String optionalComment = (String) doc.getData().get("OptionalComment");

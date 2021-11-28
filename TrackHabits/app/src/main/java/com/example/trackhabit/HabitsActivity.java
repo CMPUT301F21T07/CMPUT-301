@@ -29,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,9 +58,9 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     RecyclerView dynamicHabitListView;
     RecyclerAdapter listViewAdapter;
 
-    private ArrayList<Habits> todayHabitDataList;
-    private ArrayList<Habits> allHabitDataList;
-    private ArrayList<Habits> currentList;
+    private ArrayList<Habit> todayHabitDataList;
+    private ArrayList<Habit> allHabitDataList;
+    private ArrayList<Habit> currentList;
     private ArrayList<String> daysList;
 
     private String userName;
@@ -127,7 +129,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
 
-
         userName = getIntent().getExtras().getString("name_key");
         dynamicHabitListView = findViewById(R.id.dynamic_list_view);
 
@@ -147,16 +148,18 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 currentList.clear();
-
+                allHabitDataList.clear();
+                todayHabitDataList.clear();
                 assert value != null;
                 for(QueryDocumentSnapshot doc: value)
                 {
+
                     Log.d(TAG, String.valueOf(doc.getData().get(KEY_NAME)));
                     String userID = (String)doc.getData().get(KEY_USER);
                     days     = (String) doc.getData().get(KEY_DAYS);
                     daysList = getDaysList(days);
                     if (userID.equals(userName)){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
+                        Habit tempHabit = new Habit((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
@@ -167,7 +170,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
-
                     }
                 }
                 if (listViewAdapter.getItemCount() == 0){
@@ -178,7 +180,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 else {
                     tV1.setVisibility(View.GONE);
                     tV2.setVisibility(View.GONE);
-                    newHabitLayout.setVisibility(View.GONE);
                 }
                 listViewAdapter.notifyDataSetChanged();
             }
@@ -192,16 +193,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
              * @param isChecked Toggled on
              */
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if(isChecked) {
                     yhSwitch.setText("Your Habits Today");
                     currentList = todayHabitDataList;
-                    listViewAdapter.notifyDataSetChanged();
-                }
-
-                else{
+                }else{
                     yhSwitch.setText("All Habits");
                     currentList = allHabitDataList;
-                    listViewAdapter.notifyDataSetChanged();
                 }
                 listViewAdapter = new RecyclerAdapter(HabitsActivity.this, currentList);
                 dynamicHabitListView.setAdapter(listViewAdapter);
@@ -231,11 +228,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = false;
     }
-    /**
-     *  Function that searches for friends
-     */
-
-
 
     /**
      *  Function that removes more options for users
@@ -278,7 +270,6 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         closeMenu();
         newIntent.putExtra("ID", userName);
         startActivity(newIntent);
-        // View All Habit
     }
 
 
@@ -294,15 +285,15 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         temp_index = listViewAdapter.getItem();
         switch(item.getItemId()) {
             case 121:
-                Habits tempOpen = currentList.get(temp_index);
+                Habit tempOpen = currentList.get(temp_index);
                 viewDialog(tempOpen);
                 return true;
             case 122:
-                Habits tempEdit = currentList.get(temp_index);
+                Habit tempEdit = currentList.get(temp_index);
                 editDialog(tempEdit);
                 return true;
             case 123:
-                Habits tempDelete = currentList.get(temp_index);
+                Habit tempDelete = currentList.get(temp_index);
                 removeHabit(tempDelete);
                 return true;
             default:
@@ -315,7 +306,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * Function that opens a fragment that allows a user to view a given habit
      * @param tempOpen This is the habit object that is being viewed
      */
-    private void viewDialog(Habits tempOpen) {
+    private void viewDialog(Habit tempOpen) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ViewHabitDialog viewHabit = new ViewHabitDialog();
         Bundle args = new Bundle();
@@ -331,7 +322,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
-    private void editDialog(Habits tempEdit) {
+    private void editDialog(Habit tempEdit) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         EditHabitDialog editHabit = new EditHabitDialog();
         Bundle args = new Bundle();
@@ -353,7 +344,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * Function that deletes a habit object for a specific user and returns a message
      * @param tempDelete This is the habit object that needs to be deleted
      */
-    private void removeHabit(Habits tempDelete) {
+    private void removeHabit(Habit tempDelete) {
         habitsRef.addSnapshotListener((value, error) -> {
             assert value != null;
             for(QueryDocumentSnapshot doc: value)
@@ -372,7 +363,38 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
 
         });
+        CollectionReference habitEventsRef = db.collection("Habit Events");
+        habitEventsRef.addSnapshotListener((value, error) -> {
+           assert value != null;
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            final StorageReference storageRef = storage.getReference();
+            StorageReference photoRef;
+           for(QueryDocumentSnapshot doc: value) {
+              String userID = (String) doc.getData().get("UserName");
+              String habitName = (String) doc.getData().get("HabitName");
+              String currentHabitName = tempDelete.getHabitName();
+              String date = (String)doc.getData().get("Date");
+              boolean photoUploaded = (Boolean)doc.getData().get("PhotoUploaded");
 
+              if (userID.equals(userName) && currentHabitName.equals(habitName)) {
+                  doc.getReference().delete().addOnSuccessListener(success -> {
+                      Log.d(TAG, "Event " + habitName + " " + date + " deleted");
+                  }).addOnFailureListener(failure -> {
+                      Log.d(TAG, "Event " + habitName + " " + date + " was not deleted!");
+                  });
+                  if (photoUploaded) {
+                      String dataName = habitName + " " + userName + " " + date + ".jpg";
+                      photoRef = storageRef.child(dataName);
+                      photoRef.delete().addOnSuccessListener(success -> {
+                          Log.d(TAG, "Image deleted");
+                      }).addOnFailureListener(failure -> {
+                          Log.d(TAG, "Image was not deleted!");
+                      });
+                  }
+
+              }
+           }
+        });
     }
 
 
@@ -423,6 +445,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     @Override
     public void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days) {
         HashMap<String, Object> data = new HashMap<>();
+        Habit addedTempHabit = new Habit(name, userName, title, reason,startTime, itemPrivacy, days);
         data.put(KEY_NAME, name);
         data.put(KEY_TITLE, title);
         data.put(KEY_DATE, startTime);
@@ -435,10 +458,11 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Habit has been added successfully!");
                     Toast.makeText(HabitsActivity.this, "Habit has been added successfully!", Toast.LENGTH_SHORT).show();
-
                 })
                 .addOnFailureListener(e -> Log.d(TAG, "Habit could not be added!" + e.toString()));
     }
+
+
     /**
      * Function that gets data from the editHabit dialog box using a listener
      * @param name Habit name

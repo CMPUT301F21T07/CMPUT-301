@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -39,12 +40,12 @@ public class ViewFriendHabit extends AppCompatActivity {
 
     ListView habitListView;
 
-    private ArrayList<Habits> todayHabitDataList;
-    private ArrayList<Habits> allHabitDataList;
-    private ArrayList<Habits> currentList;
+    private ArrayList<Habit> todayHabitDataList;
+    private ArrayList<Habit> allHabitDataList;
+    private ArrayList<Habit> currentList;
     private ArrayList<String> daysList;
 
-    ArrayAdapter<Habits> habitsArrayAdapter;
+    ArrayAdapter<Habit> habitsArrayAdapter;
 
     private String userName;
     private String strDay, days;
@@ -52,13 +53,9 @@ public class ViewFriendHabit extends AppCompatActivity {
     Integer temp_index;
     Boolean flag_for_floating = true;
 
+    FloatingActionButton extraOptionsButton, goBackButton;
 
-    Boolean switchState;
-    Switch yhSwitch;
-
-    FloatingActionButton extraOptionsButton, emptyButton, goBackButton;
-
-    LinearLayout emptyButtonLayout, goBackLayout;
+    LinearLayout goBackLayout;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
@@ -67,16 +64,10 @@ public class ViewFriendHabit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_friend_habit);
-        yhSwitch = findViewById(R.id.friend_YHSwitch);
-        switchState = yhSwitch.isChecked();
 
         extraOptionsButton = findViewById(R.id.friend_open_menu_button);
-        emptyButton        = findViewById(R.id.empty_button);
-        goBackButton    = findViewById(R.id.friend_go_back);
-
-
-        emptyButtonLayout    = findViewById(R.id.empty_button_layout);
-        goBackLayout  = findViewById(R.id.friend_go_back_layout);
+        goBackButton       = findViewById(R.id.friend_go_back);
+        goBackLayout       = findViewById(R.id.friend_go_back_layout);
 
 
         extraOptionsButton.setOnClickListener(v -> {
@@ -88,11 +79,12 @@ public class ViewFriendHabit extends AppCompatActivity {
             }
         });
 
-        emptyButton.setOnClickListener(view -> emptyFunc());
         goBackButton.setOnClickListener(view -> finish());
 
         userName = getIntent().getExtras().getString("name_key");
         habitListView = findViewById(R.id.friend_habits_list_view);
+
+        this.setTitle(userName + "'s Habits");
 
         allHabitDataList = new ArrayList<>();
         todayHabitDataList = new ArrayList<>();
@@ -123,7 +115,7 @@ public class ViewFriendHabit extends AppCompatActivity {
                     Boolean publicHabit = (Boolean) doc.getData().get(KEY_PRIVATE);
                     getDaysList();
                     if (userID.equals(userName) && !publicHabit){
-                        Habits tempHabit = new Habits((String) doc.getData().get(KEY_NAME),
+                        Habit tempHabit = new Habit((String) doc.getData().get(KEY_NAME),
                                 (String) doc.getData().get(KEY_USER),
                                 (String) doc.getData().get(KEY_TITLE),
                                 (String) doc.getData().get(KEY_REASON),
@@ -131,6 +123,7 @@ public class ViewFriendHabit extends AppCompatActivity {
                                 (Boolean) doc.getData().get(KEY_PRIVATE),
                                 (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
+
                         if (daysList.contains(strDay)){
                             todayHabitDataList.add(tempHabit);
                         }
@@ -141,31 +134,30 @@ public class ViewFriendHabit extends AppCompatActivity {
             }
         });
 
-        yhSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            /**
-             * Function that switches the habit list between today's habit list and all habit list
-             * @param buttonView Toggle switch
-             * @param isChecked Toggled on
-             */
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    yhSwitch.setText("Your Habits Today");
-                    currentList = todayHabitDataList;
-                }
-
-                else{
-                    yhSwitch.setText("All Habits");
-                    currentList = allHabitDataList;
-                }
-                habitsArrayAdapter.notifyDataSetChanged();
-            }
-        });
         habitsArrayAdapter = new habitListAdapter(ViewFriendHabit.this, currentList);
         habitListView.setAdapter(habitsArrayAdapter);
+        habitListView.setClickable(true);
+        habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> viewHabit(currentList.get(i)));
     }
 
+    private boolean viewHabit(Habit tempOpen) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        ViewFriendHabitDialog viewHabit = new ViewFriendHabitDialog();
+        Bundle args = new Bundle();
+        args.putString("user_name", userName);
+        args.putString("habit_name", tempOpen.getHabitName());
+        args.putString("habit_title", tempOpen.getHabitTitle());
+        args.putString("habit_date", dateFormat.format(tempOpen.getStartDate().toDate()));
+        args.putString("habit_reason", tempOpen.getHabitReason());
+        args.putString("habit_days", tempOpen.getDays());
+        args.putBoolean("habit_privacy", tempOpen.getPrivacy());
+        viewHabit.setArguments(args);
+        viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
+        return true;
+    }
+
+
     private void openMenu() {
-        emptyButtonLayout.setVisibility(View.VISIBLE);
         goBackLayout.setVisibility(View.VISIBLE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
@@ -173,15 +165,13 @@ public class ViewFriendHabit extends AppCompatActivity {
     }
 
     private void closeMenu() {
-        emptyButtonLayout.setVisibility(View.GONE);
         goBackLayout.setVisibility(View.GONE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = true;
     }
 
-    private void emptyFunc() {
-    }
+
 
     /**
      *  Converts letter denoting the days into full day names and adds it to a list

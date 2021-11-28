@@ -57,7 +57,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Create New User">
+            android:label="Track Habit">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

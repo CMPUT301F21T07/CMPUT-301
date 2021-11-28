@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 for (User user: userDataList){
                     if (userName.equals(user.getUserName())){
                         Log.d(TAG, "User exists already");
-                        suErrView.setText("User exists already");
+                        Toast.makeText(MainActivity.this, "User exists already", Toast.LENGTH_SHORT ).show();
                         success = 1;
 
 
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (success == 0){
                     Log.d(TAG, "New User is Valid");
-                    suErrView.setText("New User is Valid");
+                    Toast.makeText(MainActivity.this, "New User is Valid", Toast.LENGTH_SHORT ).show();
 
 
 
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "User has been added successfully!");
-                                    suErrView.setText("User has been added successfully!");
+                                    Toast.makeText(MainActivity.this, "User has been added successfully!", Toast.LENGTH_SHORT ).show();
                                     suUserName.setText("");
                                     suPassword.setText("");
                                     suConPassword.setText("");
@@ -108,11 +109,16 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d(TAG, "User could not be added!" + e.toString());
-                                    suErrView.setText("User could not be added!");
+                                    Toast.makeText(MainActivity.this, "User could not be added!", Toast.LENGTH_SHORT ).show();
                                 }
                             });
 
                 }
+                if (!password.equals(conPassword)){
+                    Log.d(TAG, "Password Does Not Match");
+                    Toast.makeText(MainActivity.this, "Password Does Not Match", Toast.LENGTH_SHORT ).show();
+                }
+
             }
         });
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
