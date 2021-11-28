@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:visibility="visible"
-    tools:context=".MainActivity">
+    android:visibility="visible">
 
 
     <TextView
@@ -32,5 +31,16 @@
         android:layout_below="@+id/eventTitle">
 
     </CalendarView>
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
+        android:text="Back" />
 </RelativeLayout>
 
