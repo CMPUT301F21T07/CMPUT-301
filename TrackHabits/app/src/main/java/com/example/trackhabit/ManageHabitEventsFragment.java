@@ -29,9 +29,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -60,10 +64,11 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private String location = "";
     private Bitmap photo;
     private Boolean photoUploaded = false;
-    private double longtitude;
+    private double longitude;
     private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
+    private Context context;
 
     private Boolean isOkPressed = false;
 
@@ -94,6 +99,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         this.locationPermission = locationPermission;
         this.date = date;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -149,8 +155,25 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             title = "Edit HabitEvent Info";
         }
 
+        // checking if event already exists
         dataName = habitName + " " + userName + " " + date;
-        System.out.println(habitEventsRef.document(dataName).get().toString());
+        DocumentReference eventRef = habitEventsRef.document(dataName);
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Toast.makeText(getContext(), "Event already exists for this day",
+                                        Toast.LENGTH_LONG).show();
+                        dismiss();
+                    }
+                } else {
+                    Log.d("TAG", "Failed with: ", task.getException());
+                }
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -164,7 +187,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-
+                        context=getContext();
                         // Storing image to Storage
                         if (photoUploaded) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -181,9 +204,11 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
+                                Toast.makeText(context,"Photo Successfully added",Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
+
 
                         // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -201,6 +226,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Log.d("TAG", "Habit Event Successfully Added!");
+                                        Toast.makeText(context,"Event added successfully",Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -241,9 +267,9 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         }
         if(requestCode==200){
             if(resultCode==201){
-                longtitude=data.getExtras().getDouble("Longitude",0);
+                longitude=data.getExtras().getDouble("Longitude",0);
                 latitude=data.getExtras().getDouble("Latitude",0);
-                location = longtitude + "," + latitude;
+                location = longitude + "," + latitude;
             }
         }
     }

@@ -14,6 +14,7 @@
 | Penelope Chen | yanzhu1       | pen-ualberta  |
 | Sagan Girod   | lgirod        | AMooseAteSagan|
 | Shrey Mandol  | mandol        | Shrey2809     |
+| Sandipan Nath | snath         | snath47       |
 
 **Removed from group due to Jackie dropping the course**
 
