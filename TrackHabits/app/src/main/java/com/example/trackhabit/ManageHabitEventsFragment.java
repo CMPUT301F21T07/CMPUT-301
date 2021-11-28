@@ -68,6 +68,8 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     private double latitude;
     private Boolean locationPermission;
     private EditEventListener listener;
+    private Context context;
+    private Boolean imageButtonPressed=false;
 
     private Boolean isOkPressed = false;
 
@@ -98,6 +100,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         this.locationPermission = locationPermission;
         this.date = date;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -161,7 +164,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    if (document.exists() && manageType.equals("Add")) {
                         Toast.makeText(getContext(), "Event already exists for this day",
                                         Toast.LENGTH_LONG).show();
                         dismiss();
@@ -185,9 +188,9 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         locationPermission = locationPermissionButton.isChecked();
 
                         checkInputCorrectness();
-
+                        context=getContext();
                         // Storing image to Storage
-                        if (photoUploaded) {
+                        if (photoUploaded && imageButtonPressed) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                             byte[] data = baos.toByteArray();
@@ -202,9 +205,11 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
+                                Toast.makeText(context,"Photo Successfully "+manageType+"ed",Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
+
 
                         // Storing habit event to Firestore
                         HashMap<String, Object> habitEventData = new HashMap<>();
@@ -222,6 +227,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Log.d("TAG", "Habit Event Successfully Added!");
+                                        Toast.makeText(context,"Event "+manageType+"ed successfully",Toast.LENGTH_LONG).show();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -238,6 +244,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
     }
 
     private void takePicture() {
+        imageButtonPressed=true;
         Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
         startActivityForResult(takePictureIntent, 100);
     }
@@ -255,7 +262,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         if (requestCode == 101) {
             Toast.makeText(getContext(), "Permission for Camera is denied!", Toast.LENGTH_SHORT).show();
         }
-        if (requestCode == 100) {
+        if (requestCode == 100 && resultCode == 102) {
             photo = (Bitmap)data.getExtras().get("data");
             optionalPhoto.setImageBitmap(photo);
             photoUploaded = true;

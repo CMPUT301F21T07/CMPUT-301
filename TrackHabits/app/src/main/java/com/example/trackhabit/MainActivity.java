@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     EditText suConPassword;
     Button Login;
     FirebaseFirestore db;
-    TextView suErrView;
     int success;
 
     @Override
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         suPassword = findViewById(R.id.suPassword);
         suConPassword = findViewById(R.id.suConPassword);
         Login = findViewById(R.id.Login);
-        suErrView = findViewById(R.id.errorView);
 
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("Users");

@@ -28,18 +28,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 
+
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
     private ProgressBar consistency;
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private final String[] privacyOptions = new String[]{"Private","Public"};
-    private Integer habitConsist = 0, amountEvents = 0;
+    private Integer habitConsist = 0, amountEvents = 0, todayDay, startDay;
     private Boolean itemPrivacy;
-
+    private String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
-    private Date startDate;
+    private Date startDate, today;
+    private Calendar startCal, todayCal;
 
 
 
@@ -66,15 +68,29 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
             e.printStackTrace();
         }
 
+        todayCal = Calendar.getInstance();
+        today = todayCal.getTime();
+        todayDay = todayCal.get(Calendar.DAY_OF_WEEK);
+        startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+        startDay = startCal.get(Calendar.DAY_OF_WEEK);
 
-        builder.setView(view)
-                .setTitle("Habit Details")
-                .setNegativeButton("Back", (dialogInterface, i) -> {})
-                .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
-                    ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(habitName, userName, "Add" );
-                    addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
-                    dismiss();
-                }));
+
+        if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){
+            builder.setView(view)
+                    .setTitle("Habit Details")
+                    .setNegativeButton("Back", (dialogInterface, i) -> {})
+                    .setPositiveButton("Add Habit Event", ((dialogInterface, i) -> {
+                        ManageHabitEventsFragment addHabitDialog = new ManageHabitEventsFragment(habitName, userName, "Add" );
+                        addHabitDialog.show(getFragmentManager(), "ADD NEW HABIT EVENT");
+                        dismiss();
+                    }));
+        } else {
+            builder.setView(view)
+                    .setTitle("Habit Details")
+                    .setNegativeButton("Back", (dialogInterface, i) -> {
+                    });
+        }
 
 
         //get text views
@@ -142,14 +158,12 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                     Log.d("TAG", String.valueOf(doc.getData().get(habitName)));
                     String habitNames = (String) doc.getData().get("HabitName");
                     String userNames = (String) doc.getData().get("UserName");
-                    String date = (String) doc.getData().get("Date");
-
-
+                    
                     if (userNames.equals(userName) && habitNames.equals(habitName)) {
                         amountEvents++;
                     }
                 }
-                Integer eventDays = countDays(startDate);
+                Integer eventDays = countDays();
                 if(eventDays > 0 && amountEvents > 0){habitConsist = 100/eventDays*amountEvents;}
                 else if(eventDays == 0){habitConsist = 100;}
                 else {habitConsist = 0;}
@@ -165,16 +179,8 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     /**
      * Function that switches the habit list between today's habit list and all habit list
      * @return buttonView Toggle switch
-     * @param startDate Toggled on
      */
-    private Integer countDays(Date startDate){
-        String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
-        Calendar todayCal = Calendar.getInstance();
-        Date today = todayCal.getTime();
-        int todayDay = todayCal.get(Calendar.DAY_OF_WEEK);
-        Calendar startCal = Calendar.getInstance();
-        startCal.setTime(startDate);
-        int startDay = startCal.get(Calendar.DAY_OF_WEEK);
+    private Integer countDays(){
 
         long milliseconds = today.getTime()-startDate.getTime(); //difference between dated in milliseconds
         float hours = milliseconds / 3600000;
