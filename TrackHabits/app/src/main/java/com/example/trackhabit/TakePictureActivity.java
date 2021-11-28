@@ -76,10 +76,11 @@ public class TakePictureActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 102) {
+        if (requestCode == 102 && resultCode==RESULT_OK) {
             setResult(102, data);
             finish();
         }
+
     }
 
 }
