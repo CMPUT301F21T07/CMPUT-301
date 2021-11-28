@@ -124,6 +124,14 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         StartDate=findViewById(R.id.Start_date);
         StartDate.setText("Date: " + date);
 
+        Button backButton = findViewById(R.id.Back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         showLocation = findViewById(R.id.show_location);
         if(locationPermission){
         showLocation.setOnClickListener(newView -> showCurrentLocation());}

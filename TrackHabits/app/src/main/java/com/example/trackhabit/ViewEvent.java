@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,6 +48,14 @@ public class ViewEvent extends AppCompatActivity {
         setContentView(R.layout.activity_view_events);
 
         EventList=findViewById(R.id.habits_list_view);
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
