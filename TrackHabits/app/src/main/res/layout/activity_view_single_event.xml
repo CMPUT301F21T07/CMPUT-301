@@ -71,7 +71,8 @@
         android:layout_toStartOf="@+id/Edit"
         android:layout_toLeftOf="@+id/Edit"
         android:layout_weight="1"
-        android:text="Delete"></Button>
+        android:text="Delete">
+    </Button>
 
     <Button
         android:id="@+id/Edit"
@@ -97,6 +98,16 @@
         android:layout_marginLeft="17dp"
         android:layout_marginTop="145dp"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal_background" />
+
+    <Button
+        android:id="@+id/Back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginBottom="-2dp"
+        android:text="Back" />
 
 
 </RelativeLayout>
