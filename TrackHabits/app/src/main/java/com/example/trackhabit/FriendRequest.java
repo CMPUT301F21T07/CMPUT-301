@@ -37,7 +37,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class FriendRequests extends AppCompatActivity {
+public class FriendRequest extends AppCompatActivity {
     ListView friendsListView;
     ArrayList<String> wFriendsList;
     ArrayAdapter<String> friendsArrayAdapter;
@@ -145,7 +145,7 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
-                                Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendRequest.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
 
                             }
                         })
@@ -153,7 +153,7 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d(TAG, "Friend Denied Successfully" + e.toString());
-                                Toast.makeText(FriendRequests.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendRequest.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -167,7 +167,7 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "Friend Accepted!");
-                                Toast.makeText(FriendRequests.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendRequest.this, "Friend Accepted!", Toast.LENGTH_SHORT).show();
 
                             }
                         })
@@ -175,7 +175,7 @@ public class FriendRequests extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d(TAG, "Friend Not Accepted Successfully" + e.toString());
-                                Toast.makeText(FriendRequests.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FriendRequest.this, "Friend Denied Successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
                 wFriendsList.remove(a_friend);

@@ -246,7 +246,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      *  Function that views all the habit events for the user so far
      */
     private void viewFriends() {
-        Intent newIntent= new Intent(HabitsActivity.this, ViewFriends.class);
+        Intent newIntent= new Intent(HabitsActivity.this, ViewFriend.class);
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);

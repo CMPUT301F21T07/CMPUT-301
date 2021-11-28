@@ -39,7 +39,7 @@ public class CalendarActivity extends AppCompatActivity {
                 {month=""+i1;}
                 String date=day+" "+month+" "+i;
                 Log.d(TAG,"onSelectedDayChange: date:"+date);
-                Intent intent=new Intent(CalendarActivity.this,ViewEvents.class);
+                Intent intent=new Intent(CalendarActivity.this,ViewEvent.class);
                 Intent lastIntent=getIntent();
                 String userID=lastIntent.getExtras().getString("ID");
                 intent.putExtra("ID",userID);

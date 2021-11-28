@@ -29,7 +29,7 @@
             android:name=".ViewFriendHabit"
             android:exported="true" />
         <activity
-            android:name=".ViewFriends"
+            android:name=".ViewFriend"
             android:exported="true"
             android:label="Your Friends" />
         <activity
@@ -41,7 +41,7 @@
             android:exported="false"
             android:label="Current Event" />
         <activity
-            android:name=".ViewEvents"
+            android:name=".ViewEvent"
             android:exported="false"
             android:label="Your Habit Events" />
         <activity
@@ -52,7 +52,7 @@
             android:name=".LogInActivity"
             android:exported="true"
             android:label="Log In" />
-        <activity android:name=".FriendRequests"
+        <activity android:name=".FriendRequest"
             android:label="Friend Requests"/>
         <activity
             android:name=".MainActivity"
