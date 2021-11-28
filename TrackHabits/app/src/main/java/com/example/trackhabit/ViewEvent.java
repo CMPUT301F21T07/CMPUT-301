@@ -29,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ViewEvents extends AppCompatActivity {
+public class ViewEvent extends AppCompatActivity {
     private ListView EventList;
     private TextView dateText;
 
@@ -51,7 +51,7 @@ public class ViewEvents extends AppCompatActivity {
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
         events=new EventList(new ArrayList<>());
-        eventAdapter= new EventListAdapter(ViewEvents.this, events);
+        eventAdapter= new EventListAdapter(ViewEvent.this, events);
         EventList.setAdapter(eventAdapter);
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -93,7 +93,7 @@ public class ViewEvents extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HabitEvent habitEvent = events.get(i);
-                Intent singleEvent  = new Intent(ViewEvents.this,ViewSingleEvent.class);
+                Intent singleEvent  = new Intent(ViewEvent.this,ViewSingleEvent.class);
                 singleEvent.putExtra("habitName", habitEvent.getHabitName());
                 singleEvent.putExtra("userName", habitEvent.getUserName());
                 singleEvent.putExtra("date",habitEvent.getDate());

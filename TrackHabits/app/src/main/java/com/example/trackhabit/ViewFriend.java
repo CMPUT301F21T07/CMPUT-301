@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ViewFriends extends AppCompatActivity {
+public class ViewFriend extends AppCompatActivity {
 
     ListView friendsListView;
     ArrayList<String> friendsList;
@@ -152,7 +152,7 @@ public class ViewFriends extends AppCompatActivity {
     }
 
     private void openUserHabits(String friendSelected) {
-        Intent friendHabitIntent = new Intent(ViewFriends.this, ViewFriendHabit.class);
+        Intent friendHabitIntent = new Intent(ViewFriend.this, ViewFriendHabit.class);
         friendHabitIntent.putExtra("name_key", friendSelected);
         startActivity(friendHabitIntent);
     }
@@ -176,7 +176,7 @@ public class ViewFriends extends AppCompatActivity {
      *  Function that accepts friend requests
      */
     private void friendRequest(){
-        Intent newIntent= new Intent(ViewFriends.this, FriendRequests.class);
+        Intent newIntent= new Intent(ViewFriend.this, FriendRequest.class);
         closeMenu();;
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
@@ -186,7 +186,7 @@ public class ViewFriends extends AppCompatActivity {
      *  Function that searches for friends
      */
     private void addFriend(){
-        Intent newIntent= new Intent(ViewFriends.this, SearchFriend.class);
+        Intent newIntent= new Intent(ViewFriend.this, SearchFriend.class);
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
