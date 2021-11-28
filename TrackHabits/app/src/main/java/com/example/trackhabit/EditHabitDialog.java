@@ -2,19 +2,23 @@
 package com.example.trackhabit;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.Timestamp;
 
@@ -23,9 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class EditHabitDialog extends AppCompatDialogFragment {
+public class EditHabitDialog extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
-    private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy;
+    private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy, habitDateString;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private HabitDialogListener returnListener;
@@ -34,6 +38,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
     private Spinner habitPrivacy;
     private Boolean itemPrivacy;
     private Date tempDate;
+    private Button editDateButton;
 
 
 
@@ -56,6 +61,8 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitMonth = getArguments().getString("habit_month");
         habitYear = getArguments().getString("habit_year");
 
+        habitDateString = habitDay + " " + habitMonth + " " + habitYear;
+
         itemPrivacy = getArguments().getBoolean("habit_privacy");
 
         //itemPrivacy = true;
@@ -75,12 +82,13 @@ public class EditHabitDialog extends AppCompatDialogFragment {
                     returnListener.updateHabit(oldName, habitName, habitTitle, habitReason, startTime, itemPrivacy, days);
                 }));
 
+
+
+
         //set up views
         habitNameView   = view.findViewById(R.id.edit_habit_name);
         habitReasonView= view.findViewById(R.id.edit_habit_reason);
         habitTitleView = view.findViewById(R.id.edit_habit_title);
-        habitStartDay = view.findViewById(R.id.edit_habit_date);
-        habitStartMonth = view.findViewById(R.id.edit_habit_month);
         habitStartYear = view.findViewById(R.id.edit_habit_year);
         habitPrivacy = view.findViewById(R.id.edit_privacy);
         monCheck    = view.findViewById(R.id.monday_edit);
@@ -90,6 +98,16 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         friCheck    = view.findViewById(R.id.friday_edit);
         satCheck    = view.findViewById(R.id.saturday_edit);
         sunCheck    = view.findViewById(R.id.sunday_edit);
+        editDateButton = view.findViewById(R.id.edit_date_button);
+
+        editDateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.setTargetFragment(EditHabitDialog.this, 0);
+                datePicker.show(getFragmentManager(), "date picker");
+            }
+        });
 
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacyOptions);
@@ -111,6 +129,15 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         }
     }
 
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+        // 1 is added to the month value as it'd show the array value instead of the month value,
+        // thus it was off by 1
+        month = month +1;
+        String habitStart = date + " " + month + " " + year;
+        habitStartYear.setText(habitStart,TextView.BufferType.EDITABLE);
+    }
+
     /**
      *  Interface created to send data back to HabitsActivity after entering data into Text views
      */
@@ -126,9 +153,7 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitNameView.setText(oldName);
         habitReasonView.setText(habitReason);
         habitTitleView.setText(habitTitle);
-        habitStartDay.setText(habitDay);
-        habitStartMonth.setText(habitMonth);
-        habitStartYear.setText(habitYear);
+        habitStartYear.setText(habitDateString);
 
         //set spinner to correct privacy setting
         if (!itemPrivacy){
@@ -162,8 +187,6 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         habitTitle = habitTitleView.getText().toString();
         habitReason = habitReasonView.getText().toString();
         privacy = habitPrivacy.getSelectedItem().toString();
-        habitDay = habitStartDay.getText().toString();
-        habitMonth = habitStartMonth.getText().toString();
         habitYear = habitStartYear.getText().toString();
 
         //get chosen privacy
@@ -189,11 +212,10 @@ public class EditHabitDialog extends AppCompatDialogFragment {
         if (sunCheck.isChecked())
             days = days + "U";
 
-        //format date correctly
-        habitStart = habitDay + " " + habitMonth + " " + habitYear;
+
 
         try {
-            tempDate=new SimpleDateFormat("dd MM yyyy").parse(habitStart);
+            tempDate=new SimpleDateFormat("dd MM yyyy").parse(habitYear);
         } catch (ParseException e) {
             Toast.makeText(getContext(), "Incorrect format for date", Toast.LENGTH_SHORT).show();
             habitStartDay.setError("Incorrect format: DD MM YYYY");

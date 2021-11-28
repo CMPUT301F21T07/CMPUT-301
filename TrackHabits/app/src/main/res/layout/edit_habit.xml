@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true">
@@ -17,7 +18,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_habit_name"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:maxLength="20"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -33,7 +34,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_habit_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:maxLength="20"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,7 +51,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_habit_reason"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:maxLength="30"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,47 +61,31 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/reason_edit"
         android:layout_centerHorizontal="true">
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/edit_day_layout"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
-            android:hint="DD">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_habit_date"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:maxLength="2"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/edit_month_layout"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
-            android:hint="MM">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_habit_month"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:maxLength="2"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/edit_year_layout"
-            android:layout_width="130dp"
+            android:layout_width="215dp"
             android:layout_height="wrap_content"
-            android:hint="YYYY">
-            <com.google.android.material.textfield.TextInputEditText
+            android:hint="Date"
+            android:paddingRight="5dp"
+            android:clickable="false">
+            <EditText
                 android:id="@+id/edit_habit_year"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:maxLength="4"
-                android:inputType="number"/>
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/edit_date_button"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:text="date"
+            android:textColor="@android:color/holo_blue_dark"
+            app:backgroundTint="@android:color/darker_gray"
+            />
 
     </LinearLayout>
 
