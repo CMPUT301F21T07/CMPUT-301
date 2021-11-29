@@ -210,4 +210,3 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     }
 
 }
-

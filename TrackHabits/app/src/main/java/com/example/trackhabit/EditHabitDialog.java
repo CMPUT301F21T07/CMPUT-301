@@ -26,6 +26,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Represents an Edit Habit Dialog
+ */
 
 public class EditHabitDialog extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
@@ -41,6 +44,11 @@ public class EditHabitDialog extends AppCompatDialogFragment implements DatePick
     private Button editDateButton;
 
 
+    /**
+     * Creates an instance that shows Edit Habit Dialog
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
 
     @NonNull
     @Override
@@ -118,6 +126,11 @@ public class EditHabitDialog extends AppCompatDialogFragment implements DatePick
 
         return builder.create();
     }
+    /**
+     *  Public function that attaches context
+     * @param context Class Context
+     */
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -128,6 +141,14 @@ public class EditHabitDialog extends AppCompatDialogFragment implements DatePick
             throw new ClassCastException(context.toString() + "Must implement listener");
         }
     }
+
+    /**
+     *  Public function that sets the date
+     * @param datePicker Class DatePicker
+     * @param year Int
+     * @param month Int
+     * @param date int
+     */
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int date) {

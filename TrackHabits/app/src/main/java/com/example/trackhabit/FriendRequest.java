@@ -36,16 +36,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+/**
+ * Represents an activity for accepting/rejecting friend requests
+ */
 
 public class FriendRequest extends AppCompatActivity {
+    //variable declaration
     ListView friendsListView;
     ArrayList<String> wFriendsList;
     ArrayAdapter<String> friendsArrayAdapter;
-
-
     FloatingActionButton goBackButton;
 
     private String userName;
+
+    //Firestore database access
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
@@ -55,14 +59,20 @@ public class FriendRequest extends AppCompatActivity {
 
 
 
+    /**
+     * Creates an instance that creates the activity for accepting/rejecting friend requests.
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_requests);
-
         userName = getIntent().getExtras().getString("name_key");
+        //set reference to firebase collection
         CollectionReference FIWRef = friendRef.document(userName).collection("Friends In Waiting");
 
+        //set list view and buttons to ui
         friendsListView = findViewById(R.id.friends_list_view_req);
         wFriendsList = new ArrayList<>();
 
@@ -71,6 +81,11 @@ public class FriendRequest extends AppCompatActivity {
 
 
         FIWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for FIWRef collection and places them in a list
+             * @param queryDocumentSnapshots document queries
+             * @param error exception error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -92,16 +107,16 @@ public class FriendRequest extends AppCompatActivity {
         goBackButton.setOnClickListener(v -> {
             finish();
         });
-
+        //list view set clickable
         friendsListView.setClickable(true);
-
+        //when list item is long clicked
         friendsListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
             registerForContextMenu(friendsListView);
             temp_index = i;
             return false;
         });
 
-
+        //create array adapter and sets the adapter to list viw
         friendsArrayAdapter = new ArrayAdapter<>(this,R.layout.friends_content_list_view,wFriendsList);
         friendsListView.setAdapter(friendsArrayAdapter);
     }
@@ -129,6 +144,7 @@ public class FriendRequest extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item){
         switch(item.getItemId()) {
+            //if friend is approved
             case R.id.approve_friend:
                 String a_friend  = wFriendsList.get(temp_index);
                 DocumentReference FIWRef = friendRef.document(userName).collection("Friends In Waiting").document(a_friend);
@@ -138,6 +154,7 @@ public class FriendRequest extends AppCompatActivity {
                 FIWRef.delete();
                 HashMap<String, Object> data = new HashMap<>();
                 data.put("UserName",a_friend);
+                //access user reference, if success add data
                 RFRef_user
                         .document(a_friend)
                         .set(data)
@@ -159,7 +176,7 @@ public class FriendRequest extends AppCompatActivity {
 
                 HashMap<String, Object> data_a = new HashMap<>();
                 data_a.put("UserName",userName);
-
+                //access other user reference, if success add data
                 RFRefO_approved
                         .document(userName)
                         .set(data)
@@ -182,7 +199,7 @@ public class FriendRequest extends AppCompatActivity {
                 friendsArrayAdapter.notifyDataSetChanged();
                 return true;
 
-
+            //if friend is denied, other user deleted from friends in waiting
             case R.id.deny_friend:
                 String d_friend = wFriendsList.get(temp_index);
                 DocumentReference FIWRef_deny = friendRef.document(userName).collection("Friends In Waiting").document(d_friend);

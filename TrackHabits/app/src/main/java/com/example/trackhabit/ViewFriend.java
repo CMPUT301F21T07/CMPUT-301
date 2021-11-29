@@ -35,35 +35,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Represents an activity for viewing friends
+ */
 public class ViewFriend extends AppCompatActivity {
-
+    // Declaring UI elements
     ListView friendsListView;
-    ArrayList<String> friendsList;
-    ArrayAdapter<String> friendsArrayAdapter;
-
     FloatingActionButton friendsOptionButton, addFriendButton, viewRequestsButton, goBackButton;
     LinearLayout addFriendLayout, viewRequestsLayout, goBackLayout;
 
+    // Declaring variables
     private String userName;
     private final String friend_list = "Real Friends";
-    private final String friend_requests = "Friends in Waiting";
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference friendRef = db.collection("Friends");
+    ArrayList<String> friendsList;
+    ArrayAdapter<String> friendsArrayAdapter;
+
+
     Boolean flag_for_floating = true;
 
     Integer temp_index;
+
+    /**
+     * Creates an instance that creates the activity for viewing friends
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
+
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference friendRef = db.collection("Friends");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_friends);
 
+        // Getting username of current user
         userName = getIntent().getExtras().getString("name_key");
         DocumentReference friendsListRef = friendRef.document(userName);
 
+        // Initializing UI elements
         friendsListView = findViewById(R.id.friends_list_view);
-        friendsList = new ArrayList<>();
 
         friendsOptionButton = findViewById(R.id.open_friend_menu_button);
         addFriendButton     = findViewById(R.id.add_friend);
@@ -74,8 +89,17 @@ public class ViewFriend extends AppCompatActivity {
         viewRequestsLayout = findViewById(R.id.view_requests_layout);
         goBackLayout       = findViewById(R.id.go_back_layout);
 
+        friendsList = new ArrayList<>();
+
+        // Getting access to collection inside of a document and iterating over it to get a list of friends
         CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
         friendsListCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for friendsListCollection collection and places them in a list
+             * @param value document queries
+             * @param error exception error
+             */
+
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 friendsList.clear();
@@ -87,6 +111,7 @@ public class ViewFriend extends AppCompatActivity {
             }
         });
 
+        // Setting up listeners for button clicks
         friendsOptionButton.setOnClickListener(v -> {
             if (flag_for_floating) {
                 openMenu();
@@ -104,13 +129,14 @@ public class ViewFriend extends AppCompatActivity {
 
         friendsListView.setClickable(true);
 
+        // Generating a context menu when long pressing on a ListView item
         friendsListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
             registerForContextMenu(friendsListView);
             temp_index = i;
             return false;
         });
 
-
+        // Initializing an adapter for the ListView
         friendsArrayAdapter = new ArrayAdapter<>(this,R.layout.friends_content_list_view,friendsList);
         friendsListView.setAdapter(friendsArrayAdapter);
     }
@@ -151,19 +177,29 @@ public class ViewFriend extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function that opens user habits activity
+     * @param friendSelected String
+     */
     private void openUserHabits(String friendSelected) {
         Intent friendHabitIntent = new Intent(ViewFriend.this, ViewFriendHabit.class);
         friendHabitIntent.putExtra("name_key", friendSelected);
         startActivity(friendHabitIntent);
     }
 
+    /**
+     * Function that removes friend
+     * @param deleteFriend String
+     */
     private void removeFriend(String deleteFriend) {
         DocumentReference userList   = friendRef.document(userName);
         DocumentReference friendList = friendRef.document(deleteFriend);
 
+        // Removing friend from current user's friends list
         CollectionReference subUserFriendsList = userList.collection(friend_list);
         subUserFriendsList.document(deleteFriend).delete();
 
+        // Removing user from selected friend's friends list
         CollectionReference subFriendFriendsList = friendList.collection(friend_list);
         subFriendFriendsList.document(userName).delete();
 
@@ -204,6 +240,9 @@ public class ViewFriend extends AppCompatActivity {
         flag_for_floating = false;
     }
 
+    /**
+     *  Function that closes the menu
+     */
     private void closeMenu() {
         addFriendLayout.setVisibility(View.GONE);
         viewRequestsLayout.setVisibility(View.GONE);
