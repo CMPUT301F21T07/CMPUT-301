@@ -50,6 +50,27 @@ public class HabitActivityTest {
     public void start() throws Exception{
         Activity activity = rule.getActivity();
     }
+    @Test
+    public void viewHabit() {
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
+        solo.waitForView(myRecyclerView);
+        View vg = myRecyclerView.getChildAt(0);
+        solo.clickLongOnView(vg);
+        //solo.clickLongOnText("test-Habit");
+        solo.clickOnText("View habit");
+        assertTrue(solo.waitForDialogToOpen(1000));
+    }
+    @Test
+    public void editHabit(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
+        solo.waitForView(myRecyclerView);
+        View vg = myRecyclerView.getChildAt(0);
+        solo.clickLongOnView(vg);
+        solo.clickOnText("Edit habit");
+        assertTrue(solo.waitForDialogToOpen(1000));
+    }
 
     @Test
     public void openAddHabitDialog(){
@@ -82,28 +103,5 @@ public class HabitActivityTest {
         solo.clickOnView(solo.getView(R.id.log_out_button));
         //assertTrue
         assertTrue(solo.waitForActivity(LogInActivity.class, 1000));
-    }
-    
-
-    @Test
-    public void viewHabit() {
-        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
-        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
-        solo.waitForView(myRecyclerView);
-        View vg = myRecyclerView.getChildAt(0);
-        solo.clickLongOnView(vg);
-        solo.clickOnText("View habit");
-        assertTrue(solo.waitForDialogToOpen(1000));
-    }
-
-    @Test
-    public void editHabit(){
-        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
-        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
-        solo.waitForView(myRecyclerView);
-        View vg = myRecyclerView.getChildAt(0);
-        solo.clickLongOnView(vg);
-        solo.clickOnText("Edit habit");
-        assertTrue(solo.waitForDialogToOpen(1000));
     }
 }
