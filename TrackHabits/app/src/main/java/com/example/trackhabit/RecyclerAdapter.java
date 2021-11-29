@@ -19,6 +19,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * Represents a Recycler Adapter
+ */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
     private ArrayList<Habit> habitsArrayList;
@@ -26,14 +29,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     int indexToReturn;
 
 
-    // RecyclerAdapter constructor
+    /**
+     * Constructer for Recycler Adapter
+     * @param context Context
+     * @param habitsArrayList ArrayList<Habit>
+     */
+
     public RecyclerAdapter(Context context, ArrayList<Habit> habitsArrayList){
         this.habitsArrayList = habitsArrayList;
         this.context = context;
     }
 
 
-    // Declaring a public class to hold the layout of the recycler view
+    /**
+     * Class that sets the view
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         TextView habitName, habitTitle, startDate;
         CardView cardView;
@@ -62,7 +72,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         }
 
     }
-
+    /**
+     * Function that creates a view
+     * @param parent ViewGroup
+     * @param viewType int
+     */
 
     @NonNull
     @Override
@@ -72,6 +86,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         View view = inflater.inflate(R.layout.habit_list_adapter, parent, false);
         return new MyViewHolder(view);
     }
+
+    /**
+     * Function that creates a view holder
+     * @param holder RecyclerAdapter.MyViewHolder
+     * @param position int
+     */
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
@@ -89,12 +109,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.startDate.setText(strDate);
     }
 
-    // Function to return which item was selected in the context menu
+
+  
+    /**
+     * Function gets item
+     * @return int
+     *
+     */
     public int getItem() {
         return indexToReturn;
     }
 
-    // Function that returns the full length of the list
+
+    /**
+     * Function gets size of item
+     * @return int
+     */
     @Override
     public int getItemCount() {
         return habitsArrayList.size();

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,7 +30,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ViewEvents extends AppCompatActivity {
+/**
+ * Represents an activity for viewing events
+ */
+public class ViewEvent extends AppCompatActivity {
     private ListView EventList;
     private TextView dateText;
 
@@ -41,19 +45,37 @@ public class ViewEvents extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
 
+    /**
+     * Creates an instance that creates the activity for viewing events.
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_events);
 
         EventList=findViewById(R.id.habits_list_view);
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         Intent intent=getIntent();
         String selectedDate=getIntent().getExtras().getString("date");
         userId = getIntent().getExtras().getString("ID");
         events=new EventList(new ArrayList<>());
-        eventAdapter= new EventListAdapter(ViewEvents.this, events);
+        eventAdapter= new EventListAdapter(ViewEvent.this, events);
         EventList.setAdapter(eventAdapter);
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for habitEventsRef collection and places them in a list
+             * @param value document queries
+             * @param error exception error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 events.clear();
@@ -90,10 +112,17 @@ public class ViewEvents extends AppCompatActivity {
         dateText.setText(intent.getStringExtra("date"));
         EventList=findViewById(R.id.habits_list_view);
         EventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * function that checks the document queries for habitEventsRef collection and places them in a list
+             * @param adapterView AdapterView
+             * @param view View
+             * @param i int
+             * @param l long
+             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HabitEvent habitEvent = events.get(i);
-                Intent singleEvent  = new Intent(ViewEvents.this,ViewSingleEvent.class);
+                Intent singleEvent  = new Intent(ViewEvent.this,ViewSingleEvent.class);
                 singleEvent.putExtra("habitName", habitEvent.getHabitName());
                 singleEvent.putExtra("userName", habitEvent.getUserName());
                 singleEvent.putExtra("date",habitEvent.getDate());

@@ -26,6 +26,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * Represents an activity for viewing friend's habits
+ */
 
 public class ViewFriendHabit extends AppCompatActivity {
     // Declaring commonly used strings
@@ -59,6 +62,11 @@ public class ViewFriendHabit extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
 
+    /**
+     * Creates an instance that creates the activity for viewing friends's habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,9 +149,9 @@ public class ViewFriendHabit extends AppCompatActivity {
     }
 
     /**
-     * Long pressing on a list view item brings up a dialog box that shows all the details of the habit
-     * @param tempOpen habit that is to be viewed in the ViewFriendHabit dialog
-     * @return true
+     * function that returns a boolean after viewing habit
+     * @param tempOpen Habit
+     * @return boolean
      */
     private boolean viewHabit(Habit tempOpen) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -162,7 +170,7 @@ public class ViewFriendHabit extends AppCompatActivity {
     }
 
     /**
-     * Function that opens up the extra buttons available to the user under this view
+     * function that opens the menu
      */
     private void openMenu() {
         goBackLayout.setVisibility(View.VISIBLE);
@@ -172,7 +180,7 @@ public class ViewFriendHabit extends AppCompatActivity {
     }
 
     /**
-     * Function that closes the extra buttons available to the user under this view
+     * function that closes the menu
      */
     private void closeMenu() {
         goBackLayout.setVisibility(View.GONE);

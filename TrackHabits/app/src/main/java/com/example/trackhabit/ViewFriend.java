@@ -35,8 +35,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ViewFriends extends AppCompatActivity {
 
+/**
+ * Represents an activity for viewing friends
+ */
+public class ViewFriend extends AppCompatActivity {
     // Declaring UI elements
     ListView friendsListView;
     FloatingActionButton friendsOptionButton, addFriendButton, viewRequestsButton, goBackButton;
@@ -49,11 +52,18 @@ public class ViewFriends extends AppCompatActivity {
     ArrayList<String> friendsList;
     ArrayAdapter<String> friendsArrayAdapter;
 
+
     Boolean flag_for_floating = true;
 
     Integer temp_index;
 
-    // Getting access to a firebase document
+    /**
+     * Creates an instance that creates the activity for viewing friends
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
+
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
 
@@ -84,6 +94,12 @@ public class ViewFriends extends AppCompatActivity {
         // Getting access to collection inside of a document and iterating over it to get a list of friends
         CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
         friendsListCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for friendsListCollection collection and places them in a list
+             * @param value document queries
+             * @param error exception error
+             */
+
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 friendsList.clear();
@@ -162,18 +178,18 @@ public class ViewFriends extends AppCompatActivity {
     }
 
     /**
-     * Function that opens up a new activity that shows the habits of a friend
-     * @param friendSelected username of the friend who's habits we want to view
+     * Function that opens user habits activity
+     * @param friendSelected String
      */
     private void openUserHabits(String friendSelected) {
-        Intent friendHabitIntent = new Intent(ViewFriends.this, ViewFriendHabit.class);
+        Intent friendHabitIntent = new Intent(ViewFriend.this, ViewFriendHabit.class);
         friendHabitIntent.putExtra("name_key", friendSelected);
         startActivity(friendHabitIntent);
     }
 
     /**
-     * Function that removes a friend from the current user as well as the friend's friends list
-     * @param deleteFriend friend that is to be removed from the user's list
+     * Function that removes friend
+     * @param deleteFriend String
      */
     private void removeFriend(String deleteFriend) {
         DocumentReference userList   = friendRef.document(userName);
@@ -196,7 +212,7 @@ public class ViewFriends extends AppCompatActivity {
      *  Function that accepts friend requests
      */
     private void friendRequest(){
-        Intent newIntent= new Intent(ViewFriends.this, FriendRequests.class);
+        Intent newIntent= new Intent(ViewFriend.this, FriendRequest.class);
         closeMenu();;
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
@@ -206,7 +222,7 @@ public class ViewFriends extends AppCompatActivity {
      *  Function that searches for friends
      */
     private void addFriend(){
-        Intent newIntent= new Intent(ViewFriends.this, SearchFriend.class);
+        Intent newIntent= new Intent(ViewFriend.this, SearchFriend.class);
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
@@ -225,7 +241,7 @@ public class ViewFriends extends AppCompatActivity {
     }
 
     /**
-     *  Function that removes more options for the user to click on
+     *  Function that closes the menu
      */
     private void closeMenu() {
         addFriendLayout.setVisibility(View.GONE);

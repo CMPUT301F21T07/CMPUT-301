@@ -27,7 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
+/**
+ * Represents an dialog for viewing habits
+ */
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
@@ -44,7 +46,11 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     private Calendar startCal, todayCal;
 
 
-
+    /**
+     * Creates an instance that creates the dialog for viewing habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -122,6 +128,10 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Function that sets days
+     */
+
     private void setDays(){
         if (days.contains("M"))
             habitDays = habitDays + "Mon";
@@ -141,6 +151,9 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
             habitDays = "None";
         }
     }
+    /**
+     * Function that gets the consistency of a habit
+     */
 
     private void getConsistency(){
 
@@ -169,7 +182,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                 else {habitConsist = 0;}
                 habitConsistView.setText(" "+valueOf(habitConsist)+" %");
                 consistency.setProgress(habitConsist);
-                System.out.println("**!! Calculating consistency with - # days: "+eventDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
+                System.out.println("Calculating consistency with - # days: "+eventDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
             }
         });
@@ -181,13 +194,16 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
      * @return buttonView Toggle switch
      */
     private Integer countDays(){
-
+        float amountDay;
         long milliseconds = today.getTime()-startDate.getTime(); //difference between dated in milliseconds
         float hours = milliseconds / 3600000;
-        float day = (hours / 24)+1;
-        float amountDay = (day / 7) * days.length();
+        float day = (hours / 24);
+        if (day >= 7 || (days.length()==7)){ amountDay = (day / 7) * days.length();}
+        else { amountDay = days.length();}
         int amountDays = (int) Math.ceil(amountDay); //round up days to include days that aren't finished
-
+        if(days.length()==7){
+            return amountDays;
+        }
 
         for (int i = 0; i < startDay-1; i++){ //if the event occurred in the same week as, but before the start date
             if (days.contains(weekdays[i])) {--amountDays;}

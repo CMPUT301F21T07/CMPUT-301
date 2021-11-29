@@ -10,7 +10,17 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * Represents a date picker fragment
+ */
 public class DatePickerFragment extends DialogFragment {
+
+    /**
+     * Creates an instance that shows an date picking instance.
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     * @return DatePickerDialog
+     */
 
     @NonNull
     @Override

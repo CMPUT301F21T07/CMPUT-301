@@ -20,9 +20,10 @@ public class HabitEvent {
      *
      * @param habitName Name of the habit
      * @param date The current date
-     * @param comment Optional comment with max 30 characters
-     * @param photoUploaded Optional bitmap photo
+     * @param comment Optional comment with max 20 characters
+     * @param photoUploaded True if photo was uploaded to FirebaseStorage
      * @param locationPermission Optional geolocation using Google data
+     * @param location String of location that is stored as longitude and latitude
      */
     public HabitEvent(String habitName, String userName, String date, String comment,
                       boolean locationPermission,String location, boolean photoUploaded) {
@@ -120,13 +121,31 @@ public class HabitEvent {
     public void setLocationPermission(boolean locationPermission) {
         this.locationPermission = locationPermission;
     }
+
+    /**
+     *Gets the location
+     *@return Returns the string of location
+     */
     public String getLocation(){return location; }
+
+    /**
+     * Sets the location permission
+     * @param location String of location in terms longitude and latitude
+     */
     public void setLocation(String location){this.location=location;}
 
+    /**
+     * Gets the boolean of photo upload
+     * @return Returns the boolean of photo upload
+     */
     public boolean getPhotoUploaded() {
         return photoUploaded;
     }
 
+    /**
+     * Sets the new boolean of photo uploaded
+     * @param photoUploaded the new boolean of photoUploaded
+     */
     public void setPhotoUploaded(boolean photoUploaded) {
         this.photoUploaded = photoUploaded;
     }
