@@ -80,18 +80,38 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     StorageReference optionalPhotoRef;
 
+    /**
+     * Interface that is implemented in ViewSingleEvent to close it
+     */
     public interface EditEventListener {
         void onOkPressed();
     }
 
+    /**
+     * Returns the instance of ManageHabitEventsFragment when it is 'Add' mode
+     * @param habitName string of selected habit's name
+     * @param userName string of selected habit's user
+     * @param manageType "Add" if Dialog Fragment adds a habit event, "Edit" if DialogFragment edits
+     */
     public ManageHabitEventsFragment(String habitName, String userName, String manageType) {
         this.habitName = habitName;
         this.userName = userName;
         this.manageType = manageType;
     }
+
+    /**
+     * Returns the instance of ManageHabitEventsFragment in "Edit" mode
+     * @param habitName string of selected habit event's habit
+     * @param userName string of selected habit event's user
+     * @param manageType "Add" if Dialog Fragment adds a habit event, "Edit" if DialogFragment edits
+     * @param comment string of selected habit event's comment
+     * @param photoUploaded True if habit event's image was stored, false otherwise
+     * @param locationPermission True if user habit event's user allowed
+     * @param date string of selected habit event's date
+     */
     public ManageHabitEventsFragment(String habitName, String userName, String manageType,
                                      String comment, Boolean photoUploaded, Boolean locationPermission,
-                                     String date) {
+                                     String date, String location) {
         this.habitName = habitName;
         this.userName = userName;
         this.manageType = manageType;
@@ -99,6 +119,7 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         this.photoUploaded = photoUploaded;
         this.locationPermission = locationPermission;
         this.date = date;
+        this.location = location;
     }
 
     @NonNull
@@ -243,12 +264,18 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 }).create();
     }
 
+    /**
+     * Starts a TakePictureActivity to get the picture from camera
+     */
     private void takePicture() {
         imageButtonPressed=true;
         Intent takePictureIntent = new Intent(getContext(), TakePictureActivity.class);
         startActivityForResult(takePictureIntent, 100);
     }
 
+    /**
+     * Starts a MapsActivity to get the location
+     */
     private void startMaps(){
         Intent startMapsActivity=new Intent(getContext(),MapsActivity.class);
         startMapsActivity.putExtra("isViewSingleEvent",false);
@@ -298,6 +325,9 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     }
 
+    /**
+     * Checks if commentEditText's input does not exceed 20 characters
+     */
     public void checkInputCorrectness() {
         String comment = commentEditText.getText().toString();
         boolean isInputCorrect = (comment.length() <= 20);
