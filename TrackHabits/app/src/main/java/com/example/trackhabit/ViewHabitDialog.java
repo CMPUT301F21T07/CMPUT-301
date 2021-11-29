@@ -169,7 +169,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
                 else {habitConsist = 0;}
                 habitConsistView.setText(" "+valueOf(habitConsist)+" %");
                 consistency.setProgress(habitConsist);
-                System.out.println("**!! Calculating consistency with - # days: "+eventDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
+                System.out.println("Calculating consistency with - # days: "+eventDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
             }
         });
@@ -181,13 +181,16 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
      * @return buttonView Toggle switch
      */
     private Integer countDays(){
-
+        float amountDay;
         long milliseconds = today.getTime()-startDate.getTime(); //difference between dated in milliseconds
         float hours = milliseconds / 3600000;
-        float day = (hours / 24)+1;
-        float amountDay = (day / 7) * days.length();
+        float day = (hours / 24);
+        if (day >= 7 || (days.length()==7)){ amountDay = (day / 7) * days.length();}
+        else { amountDay = days.length();}
         int amountDays = (int) Math.ceil(amountDay); //round up days to include days that aren't finished
-
+        if(days.length()==7){
+            return amountDays;
+        }
 
         for (int i = 0; i < startDay-1; i++){ //if the event occurred in the same week as, but before the start date
             if (days.contains(weekdays[i])) {--amountDays;}
