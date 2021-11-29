@@ -297,6 +297,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
     }
+    //The virtual location is set at around San Francisco and not the actual location of the device when testing on emulator
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
