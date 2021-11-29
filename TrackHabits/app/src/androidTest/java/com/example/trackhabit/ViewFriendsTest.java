@@ -42,8 +42,8 @@ public class ViewFriendsTest {
         solo.clickOnView(solo.getView(R.id.open_menu_button));
         solo.clickOnView(solo.getView(R.id.view_friends));
         //assertTrue
-        assertTrue(solo.waitForActivity(ViewFriends.class, 1000));
-        ViewFriends activity1 = (ViewFriends) solo.getCurrentActivity();
+        assertTrue(solo.waitForActivity(ViewFriend.class, 1000));
+        ViewFriend activity1 = (ViewFriend) solo.getCurrentActivity();
     }
     /**
      * Gets the Activity
@@ -62,10 +62,5 @@ public class ViewFriendsTest {
         solo.enterText((EditText) solo.getView(R.id.search_friend_edit),"Sagan");
         solo.clickOnView(solo.getView(R.id.add_friend_button));
         assertFalse(solo.waitForLogMessage("Friend Request Not Sent Successfully!", 1000));
-    }
-
-    @Test
-    public void acceptFriendRequest(){
-
     }
 }

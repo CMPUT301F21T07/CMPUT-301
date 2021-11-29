@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class AcceptFriendRequest {
+public class DeleteFriendTest {
     private Solo solo;
 
     @Rule
@@ -45,7 +45,7 @@ public class AcceptFriendRequest {
         solo.clickOnView(solo.getView(R.id.open_menu_button));
         solo.clickOnView(solo.getView(R.id.view_friends));
         //assertTrue
-        solo.assertCurrentActivity("Wrong", ViewFriends.class);
+        solo.assertCurrentActivity("Wrong", ViewFriend.class);
         solo.clickOnView(solo.getView(R.id.open_friend_menu_button));
         solo.clickOnView(solo.getView(R.id.add_friend));
         assertTrue(solo.waitForActivity(SearchFriend.class, 1000));
@@ -59,10 +59,6 @@ public class AcceptFriendRequest {
         solo.clickOnView(solo.getView(R.id.log_out_button));
         solo.assertCurrentActivity("Wrong", LogInActivity.class);
         LogInActivity activity1 = (LogInActivity) solo.getCurrentActivity();
-    }
-
-    @Test
-    public void AcceptRequest(){
         solo.enterText((EditText) solo.getView(R.id.logUserName), "Sagan");
         solo.enterText((EditText) solo.getView(R.id.logPassword),"Cake");
         solo.clickOnView(solo.getView(R.id.logIn));
@@ -72,14 +68,14 @@ public class AcceptFriendRequest {
         solo.clickOnView(solo.getView(R.id.view_requests));
         solo.clickLongOnText("test-login");
         solo.clickOnText("Accept Friend Request");
-        solo.assertCurrentActivity("Wrong", FriendRequests.class);
+        solo.assertCurrentActivity("Wrong", FriendRequest.class);
+        solo.clickOnView(solo.getView(R.id.go_back_req));
     }
 
-    @After
-    public void cleanUp() throws Exception{
-        solo.clickOnView(solo.getView(R.id.go_back_req));
+    @Test
+    public void DeleteFriend(){
         solo.clickLongOnText("test-login");
         solo.clickOnText("Remove friend");
+        assertFalse(solo.searchText("test-login"));
     }
-
 }

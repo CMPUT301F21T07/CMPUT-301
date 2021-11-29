@@ -43,8 +43,8 @@ public class SendFriendRequest {
         solo.clickOnView(solo.getView(R.id.open_menu_button));
         solo.clickOnView(solo.getView(R.id.view_friends));
         //assertTrue
-        solo.assertCurrentActivity("Wrong", ViewFriends.class);
-        ViewFriends activity1 = (ViewFriends) solo.getCurrentActivity();
+        solo.assertCurrentActivity("Wrong", ViewFriend.class);
+        ViewFriend activity1 = (ViewFriend) solo.getCurrentActivity();
     }
     /**
      * Gets the Activity

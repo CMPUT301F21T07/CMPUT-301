@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class NewHabitDialogTest {
+public class DeleteHabitTest {
     private Solo solo;
 
     @Rule
@@ -26,31 +26,23 @@ public class NewHabitDialogTest {
 
     /**
      * Runs before all tests and creates solo instance.
+     *
      * @throws Exception
      */
     @Before
-    public void setUp() throws Exception{
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+    public void setUp() throws Exception {
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.assertCurrentActivity("Wrong", LogInActivity.class);
         solo.enterText((EditText) solo.getView(R.id.logUserName), "test-login");
-        solo.enterText((EditText) solo.getView(R.id.logPassword),"test-password");
+        solo.enterText((EditText) solo.getView(R.id.logPassword), "test-password");
         solo.clickOnView(solo.getView(R.id.logIn));
-        assertTrue(solo.waitForActivity(HabitsActivity.class,1000));
+        assertTrue(solo.waitForActivity(HabitsActivity.class, 1000));
         solo.assertCurrentActivity("Wrong", HabitsActivity.class);
         solo.clickOnView(solo.getView(R.id.open_menu_button));
         solo.clickOnView(solo.getView(R.id.add_habit));
         // assertTrue
         assertTrue(solo.waitForDialogToOpen(1000));
         HabitsActivity activity = (HabitsActivity) solo.getCurrentActivity();
-    }
-    /**
-     * Gets the Activity
-     * @throws Exception
-     */
-
-    @Test
-    public void addHabit(){
-        //solo.clickOnButton();
         solo.enterText((EditText) solo.getView(R.id.add_habit_name), "test-Habit");
         solo.enterText((EditText) solo.getView(R.id.add_habit_title), "test-Title");
         solo.enterText((EditText) solo.getView(R.id.add_habit_reason), "test-Reason");
@@ -65,8 +57,15 @@ public class NewHabitDialogTest {
         assertTrue(solo.waitForDialogToClose(1000));
     }
 
-    @After
-    public void cleanUp() throws Exception{
+    /**
+     * Gets the Activity
+     *
+     * @throws Exception
+     */
+
+    @Test
+    public void deleteHabit() {
+        //solo.clickOnButton();
         solo.assertCurrentActivity("Wrong", HabitsActivity.class);
         solo.clickLongOnText("test-Habit");
         solo.clickOnText("Delete habit");

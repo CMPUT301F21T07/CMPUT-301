@@ -73,7 +73,7 @@ public class HabitActivityTest {
         solo.clickOnView(solo.getView(R.id.open_menu_button));
         solo.clickOnView(solo.getView(R.id.view_friends));
         //assertTrue
-        assertTrue(solo.waitForActivity(ViewFriends.class, 1000));
+        assertTrue(solo.waitForActivity(ViewFriend.class, 1000));
     }
     @Test
     public void LogOut(){
@@ -83,17 +83,7 @@ public class HabitActivityTest {
         //assertTrue
         assertTrue(solo.waitForActivity(LogInActivity.class, 1000));
     }
-
-    @Test
-    public void deleteHabit(){
-        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
-        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
-        solo.waitForView(myRecyclerView);
-        View vg = myRecyclerView.getChildAt(0);
-        solo.clickLongOnView(vg);
-        solo.clickOnText("Delete habit");
-        assertTrue(solo.waitForLogMessage("Data has been deleted successfully!"));
-    }
+    
 
     @Test
     public void viewHabit() {
