@@ -36,10 +36,12 @@ import java.util.List;
 import java.util.Map;
 
 
+
 /**
  * Represents an activity for viewing friends
  */
 public class ViewFriend extends AppCompatActivity {
+
 
     // Declaring UI elements
     ListView friendsListView;
@@ -59,15 +61,15 @@ public class ViewFriend extends AppCompatActivity {
     Integer temp_index;
 
 
+
     /**
      * Creates an instance that creates the activity for viewing friends
      * will be check on creation of instance.
      * @param savedInstanceState This is the instance state from the previous creation of habits activity
      */
-    // Getting access to a firebase document
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
-
 
 
     @Override
@@ -91,6 +93,7 @@ public class ViewFriend extends AppCompatActivity {
         addFriendLayout = findViewById(R.id.add_new_friend_layout);
         viewRequestsLayout = findViewById(R.id.view_requests_layout);
         goBackLayout       = findViewById(R.id.go_back_layout);
+
 
 
         CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
@@ -130,7 +133,6 @@ public class ViewFriend extends AppCompatActivity {
         friendsListView.setClickable(true);
 
         // Generating a context menu when long pressing on a ListView item
-
         friendsListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
             registerForContextMenu(friendsListView);
             temp_index = i;
@@ -179,6 +181,7 @@ public class ViewFriend extends AppCompatActivity {
     }
 
     /**
+
      * Function that opens user habits activity
      * @param friendSelected String
      */
@@ -189,7 +192,6 @@ public class ViewFriend extends AppCompatActivity {
     }
 
     /**
-
      * Function that removes friend
      * @param deleteFriend String
      */
@@ -214,7 +216,6 @@ public class ViewFriend extends AppCompatActivity {
      *  Function that accepts friend requests
      */
     private void friendRequest(){
-
         Intent newIntent= new Intent(ViewFriend.this, FriendRequest.class);
         closeMenu();;
         newIntent.putExtra("name_key", userName);
@@ -225,9 +226,7 @@ public class ViewFriend extends AppCompatActivity {
      *  Function that searches for friends
      */
     private void addFriend(){
-
         Intent newIntent= new Intent(ViewFriend.this, SearchFriend.class);
-
         closeMenu();
         newIntent.putExtra("name_key", userName);
         startActivity(newIntent);
