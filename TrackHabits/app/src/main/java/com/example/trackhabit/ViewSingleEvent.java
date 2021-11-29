@@ -34,28 +34,24 @@ import java.util.HashMap;
 public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEventsFragment.EditEventListener{
     private static final String TAG = "TAG" ;
 
-    private static final String KEY_TITLE   = "Title";
-    private static final String KEY_DATE    = "Start Date";
-    private static final String KEY_REASON  = "Reason";
-    private static final String KEY_DAYS    = "Days";
 
-    private Habit habit;
+
+
     private TextView Title;
-    private TextView habitNameText;
+
     private TextView Reason;
     private TextView StartDate;
     private TextView locationPermissionText;
     private TextView userNameText;
     private Button showLocation;
     private ImageView imageView;
-    private Bitmap photo;
+
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
 
 
-    private String habitTitle;
-    private String habitReason;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habit Events");
     final private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -71,7 +67,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private Boolean locationPermission;
     private Boolean photoUploaded;
     int index;
-    boolean toDelete=false;
+
 
     @Override
     public void onOkPressed() {
@@ -81,7 +77,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_event);
-
+//get all the data from ViewEvent
         Intent mIntent=getIntent();
         habitName = mIntent.getExtras().getString("habitName");
         System.out.println(habitName);
@@ -93,6 +89,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         photoUploaded = mIntent.getExtras().getBoolean("photoUploaded");
 
         String dataName = habitName + " " + userName + " " + date;
+
 
         if (photoUploaded) {
             photoRef = storageRef.child(dataName + ".jpg");
@@ -106,7 +103,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
             });
         }
-
+//setting up the single event activity
         index = mIntent.getExtras().getInt("index");
 
         Title=findViewById(R.id.showTitle);
@@ -132,6 +129,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             }
         });
 
+        //show the place where the event happened
         showLocation = findViewById(R.id.show_location);
         if(locationPermission){
         showLocation.setOnClickListener(newView -> showCurrentLocation());}
@@ -147,12 +145,12 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
                         habitName, userName, "Edit", comment, photoUploaded,
-                        locationPermission, date);
+                        locationPermission, date, location);
                 editHabitDialog.show(getSupportFragmentManager(), "EDIT NEW HABIT EVENT");
 
             }
         });
-
+//Deleting a event
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +172,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
                 HashMap<String, String> data=new HashMap<>();
                 habitsRef
+                        //delete from firestore
                         .document(dataName)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -195,6 +194,9 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
 
     }
+    /**
+     * Put the coordinates in so the marker shows on the map
+     * */
     private void showCurrentLocation(){
         Intent startMapsActivity=new Intent(ViewSingleEvent.this,MapsActivity.class);
 

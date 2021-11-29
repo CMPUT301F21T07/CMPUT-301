@@ -23,7 +23,13 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         mCalendarView=findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener(){
-
+/**
+ * @param calendarView a view of calendar
+ * @param  i year
+ * @param i1 month
+ * @param i2 day
+ * Get the date according to user selection and view a list of events on that day
+ * */
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
 
@@ -41,6 +47,7 @@ public class CalendarActivity extends AppCompatActivity {
                 {month=""+i1;}
                 String date=day+" "+month+" "+i;
                 Log.d(TAG,"onSelectedDayChange: date:"+date);
+                //start the ViewEvent activity
                 Intent intent=new Intent(CalendarActivity.this,ViewEvent.class);
                 Intent lastIntent=getIntent();
                 String userID=lastIntent.getExtras().getString("ID");
