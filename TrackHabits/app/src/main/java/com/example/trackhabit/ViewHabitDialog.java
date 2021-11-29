@@ -25,7 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
+/**
+ * Represents an dialog for viewing habits
+ */
 
 public class ViewHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
@@ -125,6 +127,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     /**
      * Function that formats the days string from single letters to 3 letter days with spaces
      */
+
     private void setDays(){
         if (days.contains("M"))
             habitDays = habitDays + "Mon";

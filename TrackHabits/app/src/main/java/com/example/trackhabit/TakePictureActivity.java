@@ -18,6 +18,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * Represents an activity for taking pictures
+ */
+
 public class TakePictureActivity extends AppCompatActivity {
     Button takePictureButton;
 
@@ -39,6 +43,9 @@ public class TakePictureActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Represents a function for the camera taking a picture
+     */
     private void camera() {
         if (ContextCompat.checkSelfPermission(TakePictureActivity.this,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -61,6 +68,11 @@ public class TakePictureActivity extends AppCompatActivity {
             setResult(101, resultIntent);
         }
     }
+
+    /**
+     * Represents a function that checks for permission result
+     * @param requestCode int
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -82,7 +94,11 @@ public class TakePictureActivity extends AppCompatActivity {
         }
 
     }
-
+    /**
+     * Represents a function checks for activity result
+     * @param requestCode int
+     * @param resultCode  int
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
