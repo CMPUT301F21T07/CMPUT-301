@@ -34,7 +34,7 @@ public class HabitActivityTest {
         solo.assertCurrentActivity("Wrong", LogInActivity.class);
         solo.enterText((EditText) solo.getView(R.id.logUserName), "test-login");
         solo.enterText((EditText) solo.getView(R.id.logPassword),"test-password");
-        solo.clickOnButton("Log In");
+        solo.clickOnView(solo.getView(R.id.logIn));
         assertTrue(solo.waitForActivity(HabitsActivity.class,1000));
 
         HabitsActivity activity = (HabitsActivity) solo.getCurrentActivity();
@@ -56,5 +56,29 @@ public class HabitActivityTest {
         solo.clickOnView(solo.getView(R.id.add_habit));
         // assertTrue
         assertTrue(solo.waitForDialogToOpen(1000));
+    }
+    @Test
+    public void openAllHabitEvents(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        solo.clickOnView(solo.getView(R.id.open_menu_button));
+        solo.clickOnView(solo.getView(R.id.view_habit_events));
+        //assertTrue
+        assertTrue(solo.waitForActivity(CalendarActivity.class, 1000));
+    }
+    @Test
+    public void ViewFriends(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        solo.clickOnView(solo.getView(R.id.open_menu_button));
+        solo.clickOnView(solo.getView(R.id.view_friends));
+        //assertTrue
+        assertTrue(solo.waitForActivity(ViewFriends.class, 1000));
+    }
+    @Test
+    public void LogOut(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        solo.clickOnView(solo.getView(R.id.open_menu_button));
+        solo.clickOnView(solo.getView(R.id.log_out_button));
+        //assertTrue
+        assertTrue(solo.waitForActivity(LogInActivity.class, 1000));
     }
 }
