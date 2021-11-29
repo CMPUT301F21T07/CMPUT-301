@@ -46,6 +46,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * Fragment that extends Dialog Fragment and manages events
+ */
+
 public class ManageHabitEventsFragment extends DialogFragment  {
 
     private TextView dateText;
@@ -122,6 +126,12 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         this.location = location;
     }
 
+    /**
+     * Creates an instance that shows the fragment
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -148,6 +158,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         selectImageButton.setOnClickListener(newView -> takePicture());
 
         locationPermissionButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * when the location permission button is clicked
+             * @param view View
+             */
             @Override
             public void onClick(View view) {
                 if(locationPermissionButton.isChecked()) {
@@ -167,6 +181,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 optionalPhotoRef = storageRef.child(dataName + ".jpg");
                 final long mb = 1024 * 1024;
                 optionalPhotoRef.getBytes(mb).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    /**
+                     * set image to optional photo
+                     * @param bytes  byte[]
+                     */
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap photo = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -181,6 +199,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         dataName = habitName + " " + userName + " " + date;
         DocumentReference eventRef = habitEventsRef.document(dataName);
         eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            /**
+             * checks if event is already added on to firebase successfully
+             * @param task Task<DocumentSnapshot
+             */
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -202,6 +224,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                 .setTitle(title)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    /**
+                     * when ok button is clicked
+                     * @param dialogInterface DialogInterface
+                     */
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         comment = commentEditText.getText().toString();
@@ -218,11 +244,19 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                             optionalPhotoRef = storageRef.child(dataName + ".jpg");
                             UploadTask uploadTask = optionalPhotoRef.putBytes(data);
                             uploadTask.addOnFailureListener(new OnFailureListener() {
+                                /**
+                                 * when photo is not stored
+                                 * @param exception Exception
+                                 */
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
                                     Log.d("TAG", "Photo Was Not Stored!");
                                 }
                             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                /**
+                                 * when photo is not stored
+                                 * @param taskSnapshot Exception
+                                 */
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d("TAG", "Photo Successfully Stored!");
@@ -245,6 +279,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                         habitEventsRef.document(dataName)
                                 .set(habitEventData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    /**
+                                     * when event successfully added
+                                     * @param unused Void
+                                     */
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Log.d("TAG", "Habit Event Successfully Added!");
@@ -252,6 +290,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
+                                    /**
+                                     * when event is not successfully added
+                                     * @param e Exception
+                                     */
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d("TAG", "Habit Event Was Not Added!");
@@ -283,6 +325,13 @@ public class ManageHabitEventsFragment extends DialogFragment  {
 
     }
 
+    /**
+     * starts events depending on result
+     * @param requestCode int
+     * @param resultCode int
+     * @param data Intent
+     */
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -303,6 +352,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
         }
     }
 
+    /**
+     * checks if ok button is pressed
+     */
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -310,6 +363,10 @@ public class ManageHabitEventsFragment extends DialogFragment  {
             listener.onOkPressed();
         }
     }
+
+    /**
+     * checks if the context is edit
+     */
 
     @Override
     public void onAttach(@NonNull Context context) {

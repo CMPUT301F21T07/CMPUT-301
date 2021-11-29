@@ -141,11 +141,19 @@ public class Habit {
         this.days = days;
     }
 
+    /**
+     * function that returns the day
+     * @return day String
+     */
     public String getDay(){
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
         String day = dayFormat.format(timestamp.toDate());
         return day;
     }
+    /**
+     * function that returns the month
+     * @return month String
+     */
 
     public String getMonth(){
         SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
@@ -153,6 +161,10 @@ public class Habit {
         return month;
     }
 
+    /**
+     * function that returns the month
+     * @return year String
+     */
     public String getYear(){
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy");
         String year = dayFormat.format(timestamp.toDate());

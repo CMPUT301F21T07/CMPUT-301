@@ -46,6 +46,10 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents the activity of maps
+ */
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -79,6 +83,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double getLongitude;
     private double getLatitude;
     private boolean getIsSingleEvent;
+    /**
+     * Creates an instance that shows a maps activity
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +116,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         onExitClicked();
     }
+    /**
+     * Creates a options menu
+     * @param menu Menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
@@ -114,7 +127,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateOptionsMenu(menu);
     }
 
-
+    /**
+     * when an item on menu is selected
+     * @param item MenuItem
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -159,6 +175,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
+
+    /**
+     * function that creates event depending on request code
+     * @param requestCode int
+     */
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -174,6 +196,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+    /**
+     * function that sets location
+     * @param googleMap GoogleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -206,7 +232,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Prompt the user for permission.
 
     }
-
+    /**
+     * when exit button is clicked
+     */
     public void onExitClicked(){
         Exit=findViewById(R.id.exitButton);
         Exit.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +252,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+    /**
+     * function that gets current likely places
+     */
     private void getCurrentPlaceLikelihoods() {
         // Use fields to define the data types to return.
         List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS,
@@ -289,6 +320,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
     }
+    /**
+     * function that gets device location
+     */
+
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -326,6 +361,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
+    /**
+     * function that picks the current place
+     */
     private void pickCurrentPlace() {
         if (mMap == null) {
             return;

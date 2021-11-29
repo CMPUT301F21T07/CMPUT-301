@@ -11,11 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Represents a calendar activity
+ */
+
 public class CalendarActivity extends AppCompatActivity {
     private static final String TAG="Calendar";
     private CalendarView mCalendarView;
 
 
+    /**
+     * Creates an instance that shows a calendar activity
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -24,6 +33,11 @@ public class CalendarActivity extends AppCompatActivity {
         mCalendarView=findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener(){
 
+
+            /**
+             * When selected day is changed
+             * @param calendarView A view of calendar
+             */
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
 
@@ -52,6 +66,10 @@ public class CalendarActivity extends AppCompatActivity {
         });
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When view is clicked
+             * @param v A view
+             */
             @Override
             public void onClick(View v) {
                 finish();

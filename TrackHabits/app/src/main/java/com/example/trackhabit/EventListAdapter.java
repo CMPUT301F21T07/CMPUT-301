@@ -16,6 +16,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * Represents a Event List Adapter that extends Habit Event arraylist Adapter
+ */
 
 public class EventListAdapter extends ArrayAdapter<HabitEvent> {
     /**

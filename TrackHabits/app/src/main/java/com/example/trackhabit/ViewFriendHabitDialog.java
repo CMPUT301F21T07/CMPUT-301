@@ -27,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Represents an dialog for viewing friend's habits
+ */
 public class ViewFriendHabitDialog extends AppCompatDialogFragment {
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
@@ -41,6 +44,11 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
     private Date startDate;
 
 
+    /**
+     * Creates an instance that creates the dialog for viewing friends's habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
 
     @NonNull
     @Override
@@ -100,6 +108,10 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Function that sets days
+     */
+
     private void setDays(){
         if (days.contains("M"))
             habitDays = habitDays + "Mon";
@@ -119,6 +131,9 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
             habitDays = "None";
         }
     }
+    /**
+     * Function that gets the consistency of a habit
+     */
 
     private void getConsistency(){
 

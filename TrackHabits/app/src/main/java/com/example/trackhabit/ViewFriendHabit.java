@@ -26,6 +26,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * Represents an activity for viewing friend's habits
+ */
 
 public class ViewFriendHabit extends AppCompatActivity {
     private static final String TAG = "TAG" ;
@@ -60,6 +63,11 @@ public class ViewFriendHabit extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
 
+    /**
+     * Creates an instance that creates the activity for viewing friends's habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +148,11 @@ public class ViewFriendHabit extends AppCompatActivity {
         habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> viewHabit(currentList.get(i)));
     }
 
+    /**
+     * function that returns a boolean after viewing habit
+     * @param tempOpen Habit
+     * @return boolean
+     */
     private boolean viewHabit(Habit tempOpen) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ViewFriendHabitDialog viewHabit = new ViewFriendHabitDialog();
@@ -156,7 +169,9 @@ public class ViewFriendHabit extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * function that opens the menu
+     */
     private void openMenu() {
         goBackLayout.setVisibility(View.VISIBLE);
 
@@ -164,6 +179,9 @@ public class ViewFriendHabit extends AppCompatActivity {
         flag_for_floating = false;
     }
 
+    /**
+     * function that closes the menu
+     */
     private void closeMenu() {
         goBackLayout.setVisibility(View.GONE);
 
