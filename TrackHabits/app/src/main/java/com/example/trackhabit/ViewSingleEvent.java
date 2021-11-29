@@ -147,7 +147,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
                         habitName, userName, "Edit", comment, photoUploaded,
-                        locationPermission, date);
+                        locationPermission, date, location);
                 editHabitDialog.show(getSupportFragmentManager(), "EDIT NEW HABIT EVENT");
 
             }
