@@ -32,6 +32,7 @@ public class habitListAdapter  extends ArrayAdapter<Habit> {
     final int INVALID_ID = -1;
     HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
+    // Constructor
     public habitListAdapter(Context context, ArrayList<Habit> habitArrayList){
         super(context, R.layout.habit_list_adapter, habitArrayList);
         this.habits = habitArrayList;
@@ -56,13 +57,16 @@ public class habitListAdapter  extends ArrayAdapter<Habit> {
 
         Habit habit = habits.get(position);
 
+        // Initializing TextView with IDs of TextViews in the layout
         TextView habitName  = view.findViewById(R.id.habit_name);
         TextView habitTitle = view.findViewById(R.id.habit_title);
         TextView startDate  = view.findViewById(R.id.date);
 
+        // Setting name and title of the habit in the TextViews
         habitName.setText(habit.getHabitName());
         habitTitle.setText(habit.getHabitTitle());
 
+        // Setting date of habit in its TextView
         Timestamp timestamp = habit.getStartDate();
         Date date = timestamp.toDate();
         DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");

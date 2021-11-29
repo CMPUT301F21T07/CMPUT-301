@@ -28,18 +28,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ViewFriendHabitDialog extends AppCompatDialogFragment {
+    // Declaring UI elements
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
     private ProgressBar consistency;
+
+    // Declaring variables
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private Integer habitConsist = 0, amountEvents = 0;
     private Boolean itemPrivacy;
 
+    // Getting access to a firebase collection
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
     private Date startDate;
-
 
 
     @NonNull
@@ -47,6 +50,7 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Inflating dialog
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.view_habit, null);
 
@@ -65,7 +69,7 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
             e.printStackTrace();
         }
 
-
+        // Building view
         builder.setView(view)
                 .setTitle("Habit Details")
                 .setPositiveButton("Back", (dialogInterface, i) -> {});
@@ -100,6 +104,7 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    // Set days of the week in the view
     private void setDays(){
         if (days.contains("M"))
             habitDays = habitDays + "Mon";
@@ -120,6 +125,8 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
         }
     }
 
+
+    // Calculate the consistency of the selected habit
     private void getConsistency(){
 
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {

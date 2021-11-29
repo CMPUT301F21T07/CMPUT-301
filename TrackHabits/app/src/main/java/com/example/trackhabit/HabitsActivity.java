@@ -44,6 +44,7 @@ import java.util.HashMap;
  */
 public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.EditDialogListener, EditHabitDialog.HabitDialogListener {
 
+    // Frequently used strings initialized
     private static final String TAG = "TAG" ;
 
     private static final String KEY_NAME    = "Name";
@@ -54,21 +55,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     private static final String KEY_USER    = "User";
     private static final String KEY_DAYS    = "Days";
 
+    // UI elements declared
     ListView habitListView;
     RecyclerView dynamicHabitListView;
     RecyclerAdapter listViewAdapter;
-
-    private ArrayList<Habit> todayHabitDataList;
-    private ArrayList<Habit> allHabitDataList;
-    private ArrayList<Habit> currentList;
-    private ArrayList<String> daysList;
-
-    private String userName;
-    private String strDay, days;
-
-    Integer temp_index;
-    Boolean flag_for_floating = true;
-
 
     Boolean switchState;
     Switch yhSwitch;
@@ -82,6 +72,19 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
 
     TextView tV1, tV2;
 
+    // Variables declared
+    private ArrayList<Habit> todayHabitDataList;
+    private ArrayList<Habit> allHabitDataList;
+    private ArrayList<Habit> currentList;
+    private ArrayList<String> daysList;
+
+    private String userName;
+    private String strDay, days;
+
+    Integer temp_index;
+    Boolean flag_for_floating = true;
+
+    // Firebase reference initialized
     private final FirebaseFirestore   db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
 
@@ -97,6 +100,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habits);
 
+        // Initializing UI elements
         yhSwitch = findViewById(R.id.YHSwitch);
         switchState = yhSwitch.isChecked();
 
@@ -124,21 +128,27 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
+        // Setting up button clicks
         viewHabitEvents.setOnClickListener(view -> viewAllHabitEvents());
         addNewHabit.setOnClickListener(view -> addNewHabit());
         viewFriendsButton.setOnClickListener(view -> viewFriends());
         logOutButton.setOnClickListener(view -> logOut());
 
+        // Getting userName from login screen
         userName = getIntent().getExtras().getString("name_key");
         dynamicHabitListView = findViewById(R.id.dynamic_list_view);
 
+        // Initializing array lists
         allHabitDataList   = new ArrayList<>();
         todayHabitDataList = new ArrayList<>();
-
         currentList = allHabitDataList;
+
+        // Getting the current date
         Date date = new Date();
         DateFormat day        = new SimpleDateFormat("EEEE");
         strDay  = day.format(date);
+
+        // Iterating through database to get a user's habits
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             /**
              * Function that updates the Firebase database on an event
@@ -185,7 +195,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
-
+        // Checking if switch is toggled on or off
         yhSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Function that switches the habit list between today's habit list and all habit list
@@ -206,11 +216,12 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
         });
 
+        // Initializing RecyclerAdapter and setting it as the adapter for our dynamicListView
         listViewAdapter = new RecyclerAdapter(HabitsActivity.this, currentList);
-
         dynamicHabitListView.setAdapter(listViewAdapter);
         dynamicHabitListView.setLayoutManager(new LinearLayoutManager(HabitsActivity.this));
 
+        // Initializing a ItemTouchHelper to make items in our recycler view moveable
         itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(dynamicHabitListView);
     }
@@ -321,7 +332,10 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         viewHabit.show(getSupportFragmentManager(), "VIEW HABIT DETAILS");
     }
 
-
+    /**
+     * Function that opens a fragment that allows a user to edit a given habit
+     * @param tempEdit This is the habit object that is being viewed
+     */
     private void editDialog(Habit tempEdit) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         EditHabitDialog editHabit = new EditHabitDialog();
@@ -345,6 +359,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
      * @param tempDelete This is the habit object that needs to be deleted
      */
     private void removeHabit(Habit tempDelete) {
+
+        // Deleting habits from the habits collection
         habitsRef.addSnapshotListener((value, error) -> {
             assert value != null;
             for(QueryDocumentSnapshot doc: value)
@@ -363,6 +379,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
             }
 
         });
+
+        // Deleting habit events from the Habit Events collections
         CollectionReference habitEventsRef = db.collection("Habit Events");
         habitEventsRef.addSnapshotListener((value, error) -> {
            assert value != null;
@@ -410,7 +428,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
     }
 
 
-    /**
+    /*
      *  Converts letter denoting the days into full day names and adds it to a list
      */
     private ArrayList<String> getDaysList(String daysOfWeek) {
@@ -453,6 +471,8 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
         data.put(KEY_PRIVATE, itemPrivacy);
         data.put(KEY_USER, userName);
         data.put(KEY_DAYS, days);
+
+        // Adding data of new habit to firebase
         habitsRef.document(name)
                 .set(data)
                 .addOnSuccessListener(aVoid -> {
@@ -490,6 +510,7 @@ public class HabitsActivity extends AppCompatActivity implements NewHabitDialog.
                 .addOnFailureListener(e -> Log.d(TAG, "Habit could not be updated!" + e.toString()));
     }
 
+    // Initializing a SimpleCallback to allowing reordering the habits list
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
