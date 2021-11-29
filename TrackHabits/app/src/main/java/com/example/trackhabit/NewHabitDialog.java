@@ -34,6 +34,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents the Dialog of a new habit
+ */
+
 public class NewHabitDialog extends AppCompatDialogFragment implements TextWatcher, DatePickerDialog.OnDateSetListener {
     private EditText habitNameEditText, habitTitleEditText, habitReasonEditText, habitStartDate;
     private Spinner  habitPrivate;
@@ -52,6 +56,10 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
 
     public Button positiveButton, addDateButton;
 
+    /**
+     * function when the dialog starts
+     */
+
     @Override
     public void onStart() {
         super.onStart();
@@ -62,6 +70,12 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
         }
 
     }
+
+    /**
+     * Creates an instance that shows a dialog of a new habit
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
 
     @NonNull
     @Override
@@ -119,6 +133,10 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
     }
 
     // Function that is called when the fragment is associated with its activity
+
+    /**
+     * function when fragment is attached to activity
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -134,6 +152,13 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {    }
 
+    /**
+     * function on text is changed
+     * @param charSequence CharSequence
+     * @param i int
+     * @param i1 int
+     * @param i2 int
+     */
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         String tempHabitName   = habitNameEditText.getText().toString();
@@ -150,6 +175,10 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
         }
     }
 
+    /**
+     * function when after text is changed
+     * @param editable Editable
+     */
     @Override
     public void afterTextChanged(Editable editable) {
         String tempHabitName   = habitNameEditText.getText().toString();
@@ -169,6 +198,14 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
     public interface EditDialogListener{
         void addedHabit(String name, String title, String reason, Timestamp startTime, Boolean itemPrivacy, String days);
     }
+
+    /**
+     * function to set date
+     * @param datePicker DatePicker
+     * @param year int
+     * @param month int
+     * @param date int
+     */
 
     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
         // 1 is added to the month value as it'd show the array value instead of the month value,

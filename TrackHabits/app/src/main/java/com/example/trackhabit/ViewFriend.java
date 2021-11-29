@@ -35,6 +35,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents an activity for viewing friends
+ */
+
 public class ViewFriend extends AppCompatActivity {
 
     ListView friendsListView;
@@ -53,6 +57,12 @@ public class ViewFriend extends AppCompatActivity {
     Boolean flag_for_floating = true;
 
     Integer temp_index;
+
+    /**
+     * Creates an instance that creates the activity for viewing friends
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +86,11 @@ public class ViewFriend extends AppCompatActivity {
 
         CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
         friendsListCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for friendsListCollection collection and places them in a list
+             * @param value document queries
+             * @param error exception error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 friendsList.clear();
@@ -151,11 +166,20 @@ public class ViewFriend extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function that opens user habits activity
+     * @param friendSelected String
+     */
     private void openUserHabits(String friendSelected) {
         Intent friendHabitIntent = new Intent(ViewFriend.this, ViewFriendHabit.class);
         friendHabitIntent.putExtra("name_key", friendSelected);
         startActivity(friendHabitIntent);
     }
+
+    /**
+     * Function that removes friend
+     * @param deleteFriend String
+     */
 
     private void removeFriend(String deleteFriend) {
         DocumentReference userList   = friendRef.document(userName);
@@ -204,6 +228,9 @@ public class ViewFriend extends AppCompatActivity {
         flag_for_floating = false;
     }
 
+    /**
+     *  Function that closes the menu
+     */
     private void closeMenu() {
         addFriendLayout.setVisibility(View.GONE);
         viewRequestsLayout.setVisibility(View.GONE);
