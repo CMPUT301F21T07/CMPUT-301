@@ -53,6 +53,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Inflating dialog
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.view_habit, null);
 
@@ -78,7 +79,7 @@ public class ViewHabitDialog extends AppCompatDialogFragment {
         startCal.setTime(startDate);
         startDay = startCal.get(Calendar.DAY_OF_WEEK); //get day of the week for start day
 
-
+        //build conditional view
         if(days.contains(weekdays[todayDay-1]) && today.getTime()>startDate.getTime()){ //if an event is scheduled to occur today
             builder.setView(view)
                     .setTitle("Habit Details")

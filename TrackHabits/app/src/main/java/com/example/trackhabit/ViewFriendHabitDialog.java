@@ -144,7 +144,8 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
 
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             /**
-             * Function that gets information from the Firebase database on an event
+             * Function that gets Events from the Firebase database on an event
+             * and keeps track of the amount of events for a given habit and user to calculate consistency
              * @param value This is the message that holds any supported value type
              * @param error This is an error
              */
@@ -152,22 +153,23 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 assert value != null;
-                for(QueryDocumentSnapshot doc: value) {
+                for(QueryDocumentSnapshot doc: value) { //search through habit events for a given habit and user
                     Log.d("TAG", String.valueOf(doc.getData().get(habitName)));
                     String habitNames = (String) doc.getData().get("HabitName");
                     String userNames = (String) doc.getData().get("UserName");
-                    String date = (String) doc.getData().get("Date");
-
 
                     if (userNames.equals(userName) && habitNames.equals(habitName)) {
                         amountEvents++;
                     }
                 }
-                Integer eventDays = countDays(startDate);
-                if(eventDays > 0 && amountEvents > 0){habitConsist = 100/eventDays*amountEvents;}
-                else if(eventDays == 0){habitConsist = 100;}
-                else {habitConsist = 0;}
-                habitConsistView.setText(" "+valueOf(habitConsist)+" %");
+
+                Integer eventDays = countDays(startDate); //get the number of event days
+
+                if(eventDays > 0 && amountEvents > 0){habitConsist = 100/eventDays*amountEvents;} //if there have been event Days and events then calculate consistency
+                else if(eventDays == 0){habitConsist = 100;} //if there aren't any event days, then any number of events is 100% consistency
+                else {habitConsist = 0;} //if there have been event days, but not events then consistency = 0%
+
+                habitConsistView.setText(" "+habitConsist+" %");
                 consistency.setProgress(habitConsist);
                 System.out.println("**!! Calculating consistency with - # days: "+eventDays+", # Events: "+amountEvents+", consistency: "+habitConsist);
 
@@ -177,37 +179,32 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
     }
 
     /**
-     * Function that switches the habit list between today's habit list and all habit list
-     * @return buttonView Toggle switch
-     * @param startDate Toggled on
+     * Function that calculates the number of event days,
+     * where an event day is the number of days a Habit should have occurred on between the start date and today inclusively
+     * @param startDate Date object of the day the habit started on
+     * @return eventDays As an Integer of the amount of days a habit should have events for
      */
     private Integer countDays(Date startDate){
         String[] weekdays = new String[]{"U", "M", "T", "W", "R", "F", "S"};
+
         Calendar todayCal = Calendar.getInstance();
-        Date today = todayCal.getTime();
-        int todayDay = todayCal.get(Calendar.DAY_OF_WEEK);
+        Date today = todayCal.getTime(); //get today's date
+
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
-        int startDay = startCal.get(Calendar.DAY_OF_WEEK);
+        int startDay = startCal.get(Calendar.DAY_OF_WEEK); //get day of the week for start date
 
-        float amountDay;
-        long milliseconds = today.getTime()-startDate.getTime(); //difference between dated in milliseconds
+        int eventDays = 0;
+        long milliseconds = today.getTime()-startDate.getTime(); //difference between start date and today in milliseconds
         float hours = milliseconds / 3600000;
         float day = (hours / 24);
-        if (day >= 7 || (days.length()==7)){ amountDay = (day / 7) * days.length();}
-        else { amountDay = days.length();}
-        int amountDays = (int) Math.ceil(amountDay); //round up days to include days that aren't finished
-        if(days.length()==7){
-            return amountDays;
-        }
+        int dayNum = (int) Math.ceil(day); //round up to include today as a day
 
-        for (int i = 0; i < startDay-1; i++){ //if the event occurred in the same week as, but before the start date
-            if (days.contains(weekdays[i])) {--amountDays;}
+        for (int x = startDay, y = 0; y < dayNum;x++,y++){ //starting at the weekday of the start date, cycle through weekdays for the amount of days between the start date and today
+            if(x==8){x = 1;} //if weekday is passed saturday, set it to sunday
+            if (days.contains(weekdays[x-1])) {eventDays++;} //add an event day if the habit is scheduled to occur on this weekday
         }
-        for (int i = 0; i <= todayDay-1; i++){ //events in an incomplete current week
-            if (days.contains(weekdays[i])) {++amountDays;}
-        }
-        return amountDays;
+        return eventDays;
     }
 
 

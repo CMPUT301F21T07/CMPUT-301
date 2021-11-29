@@ -31,7 +31,7 @@ import java.util.Date;
  */
 
 public class EditHabitDialog extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
-    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartMonth, habitStartYear;
+    private TextView habitNameView, habitTitleView, habitReasonView, habitStartDay, habitStartYear;
     private String userName, oldName, habitName, habitTitle, habitStart, habitReason, habitDay, habitMonth, habitYear, privacy, habitDateString;
     private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
     private final String[] privacyOptions = new String[]{"Private","Public"};
