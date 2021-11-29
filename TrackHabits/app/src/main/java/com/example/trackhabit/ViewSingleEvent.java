@@ -31,35 +31,27 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Represents an activity for viewing a single habit
- */
-
 public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEventsFragment.EditEventListener{
     private static final String TAG = "TAG" ;
 
-    private static final String KEY_TITLE   = "Title";
-    private static final String KEY_DATE    = "Start Date";
-    private static final String KEY_REASON  = "Reason";
-    private static final String KEY_DAYS    = "Days";
 
-    private Habit habit;
+
+
     private TextView Title;
-    private TextView habitNameText;
+
     private TextView Reason;
     private TextView StartDate;
     private TextView locationPermissionText;
     private TextView userNameText;
     private Button showLocation;
     private ImageView imageView;
-    private Bitmap photo;
+
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
 
 
-    private String habitTitle;
-    private String habitReason;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habit Events");
     final private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -75,25 +67,17 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private Boolean locationPermission;
     private Boolean photoUploaded;
     int index;
-    boolean toDelete=false;
 
-    /**
-     * function that checks if ok is pressed
-     */
+
     @Override
     public void onOkPressed() {
         finish();
     }
-    /**
-     * Creates an instance that creates the dialog for viewing a habit
-     * will be check on creation of instance.
-     * @param savedInstanceState This is the instance state from the previous creation of habits activity
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_event);
-
+//get all the data from ViewEvent
         Intent mIntent=getIntent();
         habitName = mIntent.getExtras().getString("habitName");
         System.out.println(habitName);
@@ -106,15 +90,12 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
         String dataName = habitName + " " + userName + " " + date;
 
+
         if (photoUploaded) {
             photoRef = storageRef.child(dataName + ".jpg");
             imageView = findViewById(R.id.imageView);
             final long mb = 1024 * 1024;
             photoRef.getBytes(mb).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                /**
-                 * function taht checks if the photo is referenced successfully
-                 * @param bytes byte[]
-                 */
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap photo = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -122,7 +103,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
             });
         }
-
+//setting up the single event activity
         index = mIntent.getExtras().getInt("index");
 
         Title=findViewById(R.id.showTitle);
@@ -142,16 +123,13 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
         Button backButton = findViewById(R.id.Back);
         backButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Function that occurs when the back button is pressed
-             * @param v View
-             */
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
+        //show the place where the event happened
         showLocation = findViewById(R.id.show_location);
         if(locationPermission){
         showLocation.setOnClickListener(newView -> showCurrentLocation());}
@@ -163,10 +141,6 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         Deleting=findViewById(R.id.Delete);
 
         Editing.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Function that occurs when the Editing button is pressed
-             * @param view View
-             */
             @Override
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
@@ -176,31 +150,20 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
             }
         });
-
+//Deleting a event
         Deleting.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Function that occurs when the Deleting button is pressed
-             * @param view View
-             */
             @Override
             public void onClick(View view) {
                 String dataName = habitName + " " + userName + " " + date;
                 if (photoUploaded) {
                     storageRef.child(dataName + ".jpg").delete()
                             .addOnFailureListener(new OnFailureListener() {
-                                /**
-                                 * Function that checks exceptions
-                                 * @param e Exception
-                                 */
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d("TAG", "Photo was not deleted!");
                                 }
                             })
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                /**
-                                 * Function that checks for exception failure
-                                 */
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Log.d("TAG", "Photo was successfully deleted!");
@@ -209,21 +172,16 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
                 HashMap<String, String> data=new HashMap<>();
                 habitsRef
+                        //delete from firestore
                         .document(dataName)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            /**
-                             * Function that checks if data is added successfully
-                             */
                             @Override
                             public void onSuccess(Void unused) {
                                 Log.d(TAG,"Data has been deleted successfully!");
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
-                    /**
-                     * Function that checks if data is added not successfully
-                     */
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG,"Cannot delete data"+e.toString());
@@ -237,8 +195,8 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
     }
     /**
-     * Function that shows the current location
-     */
+     * Put the coordinates in so the marker shows on the map
+     * */
     private void showCurrentLocation(){
         Intent startMapsActivity=new Intent(ViewSingleEvent.this,MapsActivity.class);
 
@@ -252,4 +210,3 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     }
 
 }
-
