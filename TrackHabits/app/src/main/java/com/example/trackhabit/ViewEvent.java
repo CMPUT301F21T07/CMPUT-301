@@ -99,6 +99,7 @@ public class ViewEvent extends AppCompatActivity {
         dateText.setText(intent.getStringExtra("date"));
         EventList=findViewById(R.id.habits_list_view);
         EventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //View the details of a single event
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HabitEvent habitEvent = events.get(i);
@@ -112,6 +113,7 @@ public class ViewEvent extends AppCompatActivity {
                 singleEvent.putExtra("photoUploaded", habitEvent.getPhotoUploaded());
                 singleEvent.putExtra("location",habitEvent.getLocation());
                 startActivityForResult(singleEvent,0);
+                //remove the event from firestore
                 Intent receive=getIntent();
                 boolean toDelete=receive.getExtras().getBoolean("toDelete");
                 if (toDelete) {

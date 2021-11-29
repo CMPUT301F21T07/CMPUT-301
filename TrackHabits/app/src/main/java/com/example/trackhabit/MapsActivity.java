@@ -94,7 +94,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
         // Set up the views
@@ -143,7 +143,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * installed Google Play services and returned to the app.
      */
     private void getLocationPermission() {
-        /*
+        /**
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
@@ -159,6 +159,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
+    /**
+     * @param requestCode code to identify the activity
+     * @param permissions The requested permissions. Never null.
+     * @param  grantResults code that signifies if the permission is granted. Never null
+     * */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -174,11 +179,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+    /**
+     * googleMap A non-null instance of a GoogleMap
+     * */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getLocationPermission();
-        // Add a marker in Sydney and move the camera
+        // Add a marker in US and move the camera
         System.out.println(mLocationPermissionGranted);
         if(mLocationPermissionGranted==false){
         LatLng Default = new LatLng(37.4219983, -122.084);
@@ -326,6 +334,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e("Exception: %s", e.getMessage());
         }
     }
+    /*
+    * Put the marker according to the clicks on map
+    *
+    * */
     private void pickCurrentPlace() {
         if (mMap == null) {
             return;

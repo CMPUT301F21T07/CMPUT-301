@@ -81,7 +81,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_event);
-
+//get all the data from ViewEvent
         Intent mIntent=getIntent();
         habitName = mIntent.getExtras().getString("habitName");
         System.out.println(habitName);
@@ -93,6 +93,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         photoUploaded = mIntent.getExtras().getBoolean("photoUploaded");
 
         String dataName = habitName + " " + userName + " " + date;
+
 
         if (photoUploaded) {
             photoRef = storageRef.child(dataName + ".jpg");
@@ -106,7 +107,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
             });
         }
-
+//setting up the single event activity
         index = mIntent.getExtras().getInt("index");
 
         Title=findViewById(R.id.showTitle);
@@ -132,6 +133,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             }
         });
 
+        //show the place where the event happened
         showLocation = findViewById(R.id.show_location);
         if(locationPermission){
         showLocation.setOnClickListener(newView -> showCurrentLocation());}
@@ -152,7 +154,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
             }
         });
-
+//Deleting a event
         Deleting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +176,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                 }
                 HashMap<String, String> data=new HashMap<>();
                 habitsRef
+                        //delete from firestore
                         .document(dataName)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
