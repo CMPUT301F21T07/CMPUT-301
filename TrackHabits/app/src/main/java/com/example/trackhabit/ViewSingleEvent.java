@@ -34,28 +34,24 @@ import java.util.HashMap;
 public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEventsFragment.EditEventListener{
     private static final String TAG = "TAG" ;
 
-    private static final String KEY_TITLE   = "Title";
-    private static final String KEY_DATE    = "Start Date";
-    private static final String KEY_REASON  = "Reason";
-    private static final String KEY_DAYS    = "Days";
 
-    private Habit habit;
+
+
     private TextView Title;
-    private TextView habitNameText;
+
     private TextView Reason;
     private TextView StartDate;
     private TextView locationPermissionText;
     private TextView userNameText;
     private Button showLocation;
     private ImageView imageView;
-    private Bitmap photo;
+
     //    private TextView consistency;
     private Button Editing;
     private Button Deleting;
 
 
-    private String habitTitle;
-    private String habitReason;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitsRef = db.collection("Habit Events");
     final private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -71,7 +67,7 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     private Boolean locationPermission;
     private Boolean photoUploaded;
     int index;
-    boolean toDelete=false;
+
 
     @Override
     public void onOkPressed() {
@@ -198,6 +194,9 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
 
     }
+    /**
+     * Put the coordinates in so the marker shows on the map
+     * */
     private void showCurrentLocation(){
         Intent startMapsActivity=new Intent(ViewSingleEvent.this,MapsActivity.class);
 
