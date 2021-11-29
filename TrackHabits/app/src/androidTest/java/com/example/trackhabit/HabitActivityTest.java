@@ -3,9 +3,11 @@ package com.example.trackhabit;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -80,5 +82,38 @@ public class HabitActivityTest {
         solo.clickOnView(solo.getView(R.id.log_out_button));
         //assertTrue
         assertTrue(solo.waitForActivity(LogInActivity.class, 1000));
+    }
+
+    @Test
+    public void deleteHabit(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
+        solo.waitForView(myRecyclerView);
+        View vg = myRecyclerView.getChildAt(0);
+        solo.clickLongOnView(vg);
+        solo.clickOnText("Delete habit");
+        assertTrue(solo.waitForLogMessage("Data has been deleted successfully!"));
+    }
+
+    @Test
+    public void viewHabit() {
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
+        solo.waitForView(myRecyclerView);
+        View vg = myRecyclerView.getChildAt(0);
+        solo.clickLongOnView(vg);
+        solo.clickOnText("View habit");
+        assertTrue(solo.waitForDialogToOpen(1000));
+    }
+
+    @Test
+    public void editHabit(){
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        RecyclerView myRecyclerView = (RecyclerView) solo.getView(R.id.dynamic_list_view);
+        solo.waitForView(myRecyclerView);
+        View vg = myRecyclerView.getChildAt(0);
+        solo.clickLongOnView(vg);
+        solo.clickOnText("Edit habit");
+        assertTrue(solo.waitForDialogToOpen(1000));
     }
 }

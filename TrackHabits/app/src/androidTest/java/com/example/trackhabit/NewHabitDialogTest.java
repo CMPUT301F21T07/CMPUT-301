@@ -32,9 +32,13 @@ public class NewHabitDialogTest {
         solo.assertCurrentActivity("Wrong", LogInActivity.class);
         solo.enterText((EditText) solo.getView(R.id.logUserName), "test-login");
         solo.enterText((EditText) solo.getView(R.id.logPassword),"test-password");
-        solo.clickOnButton("Log In");
+        solo.clickOnView(solo.getView(R.id.logIn));
         assertTrue(solo.waitForActivity(HabitsActivity.class,1000));
-
+        solo.assertCurrentActivity("Wrong", HabitsActivity.class);
+        solo.clickOnView(solo.getView(R.id.open_menu_button));
+        solo.clickOnView(solo.getView(R.id.add_habit));
+        // assertTrue
+        assertTrue(solo.waitForDialogToOpen(1000));
         HabitsActivity activity = (HabitsActivity) solo.getCurrentActivity();
     }
     /**
@@ -47,9 +51,19 @@ public class NewHabitDialogTest {
     }
 
     @Test
-    public void deleteHabit(){
+    public void addHabit(){
         //solo.clickOnButton();
-        solo.clickOnText("Delete");
-        assertFalse(solo.waitForLogMessage("Data has been deleted successfully!"));
+        solo.enterText((EditText) solo.getView(R.id.add_habit_name), "test-Habit");
+        solo.enterText((EditText) solo.getView(R.id.add_habit_title), "test-Title");
+        solo.enterText((EditText) solo.getView(R.id.add_habit_reason), "test-Reason");
+        solo.enterText((EditText) solo.getView(R.id.add_habit_date), "01");
+        solo.enterText((EditText) solo.getView(R.id.add_habit_month), "01");
+        solo.enterText((EditText) solo.getView(R.id.add_habit_year), "2021");
+        solo.clickOnView(solo.getView(R.id.select_privacy));
+        solo.clickOnText("Public");
+        solo.clickOnCheckBox(0);
+        solo.clickOnCheckBox(1);
+        solo.clickOnButton("Ok");
+        assertTrue(solo.waitForDialogToClose(1000));
     }
 }
