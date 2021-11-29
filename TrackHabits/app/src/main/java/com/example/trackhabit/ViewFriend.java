@@ -36,13 +36,10 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * Represents an activity for viewing friends
  */
 public class ViewFriend extends AppCompatActivity {
-
-
     // Declaring UI elements
     ListView friendsListView;
     FloatingActionButton friendsOptionButton, addFriendButton, viewRequestsButton, goBackButton;
@@ -60,13 +57,12 @@ public class ViewFriend extends AppCompatActivity {
 
     Integer temp_index;
 
-
-
     /**
      * Creates an instance that creates the activity for viewing friends
      * will be check on creation of instance.
      * @param savedInstanceState This is the instance state from the previous creation of habits activity
      */
+
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference friendRef = db.collection("Friends");
@@ -84,7 +80,6 @@ public class ViewFriend extends AppCompatActivity {
         // Initializing UI elements
         friendsListView = findViewById(R.id.friends_list_view);
 
-
         friendsOptionButton = findViewById(R.id.open_friend_menu_button);
         addFriendButton     = findViewById(R.id.add_friend);
         viewRequestsButton  = findViewById(R.id.view_requests);
@@ -94,8 +89,9 @@ public class ViewFriend extends AppCompatActivity {
         viewRequestsLayout = findViewById(R.id.view_requests_layout);
         goBackLayout       = findViewById(R.id.go_back_layout);
 
+        friendsList = new ArrayList<>();
 
-
+        // Getting access to collection inside of a document and iterating over it to get a list of friends
         CollectionReference friendsListCollection = friendsListRef.collection(friend_list);
         friendsListCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             /**
@@ -103,6 +99,7 @@ public class ViewFriend extends AppCompatActivity {
              * @param value document queries
              * @param error exception error
              */
+
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 friendsList.clear();
@@ -181,7 +178,6 @@ public class ViewFriend extends AppCompatActivity {
     }
 
     /**
-
      * Function that opens user habits activity
      * @param friendSelected String
      */

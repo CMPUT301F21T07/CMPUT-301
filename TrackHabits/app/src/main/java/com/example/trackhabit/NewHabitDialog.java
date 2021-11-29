@@ -39,27 +39,28 @@ import java.util.List;
  */
 
 public class NewHabitDialog extends AppCompatDialogFragment implements TextWatcher, DatePickerDialog.OnDateSetListener {
+
+    // Initializing UI elements
     private EditText habitNameEditText, habitTitleEditText, habitReasonEditText, habitStartDate;
     private Spinner  habitPrivate;
+    private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
+    public Button positiveButton, addDateButton;
+
+    // Declaring/Initializing variables
     private final String[] privacy = new String[]{"Private","Public"};
-    private String userName, item, habitName, habitTitle, habitStart, habitReason, day, month, year;
+    private String userName, item, habitName, habitTitle, habitStart, habitReason;
     private String days = "";
     private Boolean itemPrivacy;
     private Boolean flag = true;
     private EditDialogListener  returnListener;
     private Date tempDate;
     private Timestamp startTime;
-    private CheckBox monCheck, tueCheck, wedCheck, thuCheck, friCheck, satCheck, sunCheck;
-    Boolean dayInput = false, monthInput = false;
 
-    TextInputLayout newTextInput;
 
-    public Button positiveButton, addDateButton;
 
     /**
-     * function when the dialog starts
+     * Function when the dialog starts
      */
-
     @Override
     public void onStart() {
         super.onStart();
@@ -80,13 +81,17 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Initialzing a builder for the dialog fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Initialzing a layout inflater and then inflating a view
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_habit, null);
 
+        // Getting username of the user
         userName = getArguments().getString("user_name");
 
+        // Initializing UI elements of the dialog fragment
         habitNameEditText   = view.findViewById(R.id.add_habit_name);
         habitReasonEditText = view.findViewById(R.id.add_habit_reason);
         habitTitleEditText  = view.findViewById(R.id.add_habit_title);
@@ -103,7 +108,12 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
 
         addDateButton = view.findViewById(R.id.add_date_button);
 
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
+                requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacy);
+        habitPrivate.setAdapter(spinnerArrayAdapter);
 
+
+        // Building the dialog fragment
         builder.setView(view)
                 .setTitle("Add new habit")
                 .setNegativeButton("Cancel", (dialogInterface, i) -> {})
@@ -113,7 +123,7 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
                 }));
 
 
-
+        // Setting up a listener for a button click
         addDateButton.setOnClickListener(new View.OnClickListener(){
                                               @Override
                                               public void onClick(View v) {
@@ -123,11 +133,8 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
                                               }
                                               });
 
+        // Initializing a textWatcher
         habitStartDate.addTextChangedListener(this);
-
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
-                requireActivity(), android.R.layout.simple_spinner_dropdown_item, privacy);
-        habitPrivate.setAdapter(spinnerArrayAdapter);
 
         return builder.create();
     }
@@ -148,7 +155,7 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
         }
     }
 
-
+    // Functions of the TextWatecher
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {    }
 
@@ -166,6 +173,7 @@ public class NewHabitDialog extends AppCompatDialogFragment implements TextWatch
         String tempHabitReason = habitReasonEditText.getText().toString();
         String tempDate         = habitStartDate.getText().toString();
 
+        // Check if text fields are empty or not
         if (habitStartDate.getText().hashCode() == charSequence.hashCode()){
             Boolean value = (tempHabitName.length() != 0 && tempHabitTitle.length() !=0 &&
                     tempHabitReason.length()!=0 && tempDate.length()!=0);

@@ -28,6 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private Context context;
     int indexToReturn;
 
+
     /**
      * Constructer for Recycler Adapter
      * @param context Context
@@ -41,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
     /**
-     * Function that sets the view
+     * Class that sets the view
      */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         TextView habitName, habitTitle, startDate;
@@ -80,6 +81,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflating the layout view for each item in
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.habit_list_adapter, parent, false);
         return new MyViewHolder(view);
@@ -93,8 +95,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
+        // Getting position of current habit
         Habit habit = habitsArrayList.get(position);
 
+        // Setting values of the TextViews
         holder.habitName.setText(habit.getHabitName());
         holder.habitTitle.setText(habit.getHabitTitle());
 
@@ -105,15 +109,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.startDate.setText(strDate);
     }
 
+
+  
     /**
      * Function gets item
      * @return int
      *
      */
-
     public int getItem() {
         return indexToReturn;
     }
+
 
     /**
      * Function gets size of item
