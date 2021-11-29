@@ -45,7 +45,7 @@ public class CalendarActivity extends AppCompatActivity {
                     month="0"+i1;
                 }else
                 {month=""+i1;}
-                String date=day+"/"+month+"/"+i;
+                String date=day+" "+month+" "+i;
                 Log.d(TAG,"onSelectedDayChange: date:"+date);
                 //start the ViewEvent activity
                 Intent intent=new Intent(CalendarActivity.this,ViewEvent.class);

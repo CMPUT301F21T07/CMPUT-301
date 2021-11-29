@@ -69,6 +69,7 @@ public class ViewEvent extends AppCompatActivity {
 
                 for(QueryDocumentSnapshot doc: value)
                 {
+                    //retrieving all the data from firestore to put into ViewSingleEvent
                     Log.d("TAG", String.valueOf(doc.getData().get("HabitName")));
                     System.out.println("Checkpoint");
                     String habitName = (String) doc.getData().get("HabitName");
