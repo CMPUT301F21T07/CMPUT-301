@@ -51,7 +51,7 @@ public class ViewFriendHabit extends AppCompatActivity {
     private ArrayList<Habit> allHabitDataList;
     private ArrayList<String> daysList;
 
-    ArrayAdapter<Habit> habitsArrayAdapter;
+    HabitListAdapter habitsArrayAdapter;
 
     private String userName;
     private String strDay, days;
@@ -140,7 +140,7 @@ public class ViewFriendHabit extends AppCompatActivity {
         });
 
         // Initializing the list view to display habits in the allHabitDataList
-        habitsArrayAdapter = new habitListAdapter(ViewFriendHabit.this, allHabitDataList);
+        habitsArrayAdapter = new HabitListAdapter(ViewFriendHabit.this, allHabitDataList);
         habitListView.setAdapter(habitsArrayAdapter);
         habitListView.setClickable(true);
 
