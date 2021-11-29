@@ -61,7 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // location retrieved by the Fused Location Provider.
     Location mLastKnownLocation;
 
-    // A default location (Sydney, Australia) and default zoom to use when location permission is
+    // A default location (San Francisco) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(37.4219983, -122.084);
     private static final int DEFAULT_ZOOM = 15;
@@ -297,6 +297,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
     }
+    //The virtual location is set at around San Francisco and not the actual location of the device when testing on emulator
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
