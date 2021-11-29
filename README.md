@@ -98,7 +98,7 @@ To assist in forming good habits, we want a mobile application that allows one t
 
 * US 06.01.02 [new] : As a doer, I want the location for a habit event to be specified using a map within the app, with the current phone position as the default location.
 
-# Members Notes
+**Members Notes**
 
 **Joined on 22nd November, 2021**
 | Name          | CCID          | Username      |
