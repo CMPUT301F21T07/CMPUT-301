@@ -30,14 +30,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+/**
+ * Represents the activity to search and add a friend
+ */
 
 public class SearchFriend extends AppCompatActivity {
 
+    //access Firestore database
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    //private final CollectionReference friendWRef = db.collection("Friends In Waiting");
+    //create reference to user and friend collections
     final CollectionReference userReference = db.collection("Users");
     private final CollectionReference friendRef = db.collection("Friends");
 
+    //setting variables
     EditText searchUsername;
     Button addButton, cancelButton;
     ArrayList<String> uDataList;
@@ -48,7 +53,11 @@ public class SearchFriend extends AppCompatActivity {
     TextView errView;
     private String userName;
 
-
+    /**
+     * Creates an instance that shows search friend activity
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +65,19 @@ public class SearchFriend extends AppCompatActivity {
 
         userName = getIntent().getExtras().getString("name_key");
 
+        //setting variables to the ui ids
+
         searchUsername = findViewById(R.id.search_friend_edit);
 
         addButton = findViewById(R.id.add_friend_button);
         cancelButton = findViewById(R.id.cancel_button);
 
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for user reference collection and places them in a list
+             * @param queryDocumentSnapshots document queries
+             * @param error exception error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -76,10 +92,16 @@ public class SearchFriend extends AppCompatActivity {
                 }
             }
         });
+        //create reference to the user's existing friends
         CollectionReference realFriendsRef = friendRef.document(userName).collection("Real Friends");
 
 
         realFriendsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            /**
+             * function that checks the document queries for friends reference collection and places them in a list
+             * @param queryDocumentSnapshots document queries
+             * @param error exception error
+             */
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -97,12 +119,22 @@ public class SearchFriend extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> finish());
 
+        //when the add button is clicked
         addButton.setOnClickListener( new View.OnClickListener() {
+            /**
+             * function when add button is clicked
+             * @param view View
+             */
             @Override
             public void onClick(View view) {
                 final String userNameF = searchUsername.getText().toString();
                 CollectionReference FIWRef = friendRef.document(userNameF).collection("Friends In Waiting");
                 FIWRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    /**
+                     * function that checks the document queries for friends reference collection and places them in a list
+                     * @param queryDocumentSnapshots document queries
+                     * @param error exception error
+                     */
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                             FirebaseFirestoreException error) {
@@ -118,18 +150,23 @@ public class SearchFriend extends AppCompatActivity {
                     }
                 });
                 HashMap<String, Object> data = new HashMap<>();
+                //if the text box is not empty
                 if (userNameF.length()>0) {
+                    // if the username is not valid
                     if (!uDataList.contains(userNameF) || userNameF.equals(userName)){
                         Log.d(TAG, "Friend is not Valid");
                         Toast.makeText(SearchFriend.this, "Friend is not Valid", Toast.LENGTH_SHORT ).show();
                     }
-
+                    //if the user name is valid and not already friends
                     if (uDataList.contains(userNameF) && !fwDataList.contains(userName) && !fDataList.contains(userNameF) && !userNameF.equals(userName)){
                         data.put("UserName",userName);
                         FIWRef
                                 .document(userName)
                                 .set(data)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    /**
+                                     * function if friend request is sent successfully
+                                     */
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "Friend Request Sent Successfully!");
@@ -139,6 +176,9 @@ public class SearchFriend extends AppCompatActivity {
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
+                                    /**
+                                     * function if friend request is sent not successfully
+                                     */
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d(TAG, "Friend Request Not Sent Successfully!" + e.toString());
@@ -147,12 +187,12 @@ public class SearchFriend extends AppCompatActivity {
                                 });
 
                     }
-
+                    //friend request is already sent
                     if (uDataList.contains(userNameF) && fwDataList.contains(userName) && !fDataList.contains(userNameF) && !userNameF.equals(userName)){
                         errView.setText("Friend Request Already Sent Successfully!");
                         Toast.makeText(SearchFriend.this, "Friend Request Already Sent Successfully!", Toast.LENGTH_SHORT ).show();
                     }
-
+                    //already friends with the other user
                     if (uDataList.contains(userNameF) && fDataList.contains(userNameF) &&  !userNameF.equals(userName)){
                         Log.d(TAG, "Already Friends");
                         Toast.makeText(SearchFriend.this, "Already Friends", Toast.LENGTH_SHORT ).show();

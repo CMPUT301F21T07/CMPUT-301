@@ -31,6 +31,10 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents an activity for viewing a single habit
+ */
+
 public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEventsFragment.EditEventListener{
     private static final String TAG = "TAG" ;
 
@@ -69,10 +73,18 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
     int index;
 
 
+    /**
+     * function that checks if ok is pressed
+     */
     @Override
     public void onOkPressed() {
         finish();
     }
+    /**
+     * Creates an instance that creates the dialog for viewing a habit
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +108,10 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
             imageView = findViewById(R.id.imageView);
             final long mb = 1024 * 1024;
             photoRef.getBytes(mb).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                /**
+                 * function taht checks if the photo is referenced successfully
+                 * @param bytes byte[]
+                 */
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap photo = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -123,6 +139,10 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
 
         Button backButton = findViewById(R.id.Back);
         backButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Function that occurs when the back button is pressed
+             * @param v View
+             */
             @Override
             public void onClick(View v) {
                 finish();
@@ -141,6 +161,10 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         Deleting=findViewById(R.id.Delete);
 
         Editing.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Function that occurs when the Editing button is pressed
+             * @param view View
+             */
             @Override
             public void onClick(View view) {
                 ManageHabitEventsFragment editHabitDialog = new ManageHabitEventsFragment(
@@ -152,18 +176,29 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
         });
 //Deleting a event
         Deleting.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Function that occurs when the Deleting button is pressed
+             * @param view View
+             */
             @Override
             public void onClick(View view) {
                 String dataName = habitName + " " + userName + " " + date;
                 if (photoUploaded) {
                     storageRef.child(dataName + ".jpg").delete()
                             .addOnFailureListener(new OnFailureListener() {
+                                /**
+                                 * Function that checks exceptions
+                                 * @param e Exception
+                                 */
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d("TAG", "Photo was not deleted!");
                                 }
                             })
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                /**
+                                 * Function that checks for exception failure
+                                 */
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Log.d("TAG", "Photo was successfully deleted!");
@@ -176,12 +211,18 @@ public class ViewSingleEvent extends AppCompatActivity implements ManageHabitEve
                         .document(dataName)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            /**
+                             * Function that checks if data is added successfully
+                             */
                             @Override
                             public void onSuccess(Void unused) {
                                 Log.d(TAG,"Data has been deleted successfully!");
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
+                    /**
+                     * Function that checks if data is added not successfully
+                     */
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG,"Cannot delete data"+e.toString());

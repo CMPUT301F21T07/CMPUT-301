@@ -26,8 +26,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * Represents an activity for viewing friend's habits
+ */
 
 public class ViewFriendHabit extends AppCompatActivity {
+    // Declaring commonly used strings
     private static final String TAG = "TAG" ;
 
     private static final String KEY_NAME    = "Name";
@@ -38,11 +42,13 @@ public class ViewFriendHabit extends AppCompatActivity {
     private static final String KEY_USER    = "User";
     private static final String KEY_DAYS    = "Days";
 
+    // Declaring UI elements
     ListView habitListView;
+    FloatingActionButton extraOptionsButton, goBackButton;
+    LinearLayout goBackLayout;
 
-    private ArrayList<Habit> todayHabitDataList;
+    // Declaring variables
     private ArrayList<Habit> allHabitDataList;
-    private ArrayList<Habit> currentList;
     private ArrayList<String> daysList;
 
     ArrayAdapter<Habit> habitsArrayAdapter;
@@ -50,26 +56,31 @@ public class ViewFriendHabit extends AppCompatActivity {
     private String userName;
     private String strDay, days;
 
-    Integer temp_index;
     Boolean flag_for_floating = true;
 
-    FloatingActionButton extraOptionsButton, goBackButton;
-
-    LinearLayout goBackLayout;
-
+    // Initializing access to Firestore database
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference habitsRef = db.collection("Habits");
 
+    /**
+     * Creates an instance that creates the activity for viewing friends's habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_friend_habit);
 
+
+        // Initializing buttons and layouts
         extraOptionsButton = findViewById(R.id.friend_open_menu_button);
         goBackButton       = findViewById(R.id.friend_go_back);
         goBackLayout       = findViewById(R.id.friend_go_back_layout);
+        habitListView = findViewById(R.id.friend_habits_list_view);
 
 
+        // Setting up button click listeners
         extraOptionsButton.setOnClickListener(v -> {
             if (flag_for_floating) {
                 openMenu();
@@ -81,19 +92,19 @@ public class ViewFriendHabit extends AppCompatActivity {
 
         goBackButton.setOnClickListener(view -> finish());
 
+        // Getting username of a friend from the previous activity
         userName = getIntent().getExtras().getString("name_key");
-        habitListView = findViewById(R.id.friend_habits_list_view);
 
         this.setTitle(userName + "'s Habits");
 
+        // Initializing array lists
         allHabitDataList = new ArrayList<>();
-        todayHabitDataList = new ArrayList<>();
 
-
-        currentList = allHabitDataList;
         Date date = new Date();
         DateFormat day        = new SimpleDateFormat("EEEE");
         strDay  = day.format(date);
+
+        // Iterating over the habits list to get list of habits of a friend
         habitsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             /**
              * Function that updates the Firebase database on an event
@@ -102,8 +113,7 @@ public class ViewFriendHabit extends AppCompatActivity {
              */
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                currentList.clear();
-
+                allHabitDataList.clear();
                 assert value != null;
                 for(QueryDocumentSnapshot doc: value)
                 {
@@ -123,23 +133,26 @@ public class ViewFriendHabit extends AppCompatActivity {
                                 (Boolean) doc.getData().get(KEY_PRIVATE),
                                 (String) doc.getData().get(KEY_DAYS));
                         allHabitDataList.add(tempHabit);
-
-                        if (daysList.contains(strDay)){
-                            todayHabitDataList.add(tempHabit);
-                        }
-
                     }
                 }
                 habitsArrayAdapter.notifyDataSetChanged();
             }
         });
 
-        habitsArrayAdapter = new habitListAdapter(ViewFriendHabit.this, currentList);
+        // Initializing the list view to display habits in the allHabitDataList
+        habitsArrayAdapter = new habitListAdapter(ViewFriendHabit.this, allHabitDataList);
         habitListView.setAdapter(habitsArrayAdapter);
         habitListView.setClickable(true);
-        habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> viewHabit(currentList.get(i)));
+
+        // Setting up long press on a list view item
+        habitListView.setOnItemLongClickListener((adapterView, view, i, l) -> viewHabit(allHabitDataList.get(i)));
     }
 
+    /**
+     * function that returns a boolean after viewing habit
+     * @param tempOpen Habit
+     * @return boolean
+     */
     private boolean viewHabit(Habit tempOpen) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ViewFriendHabitDialog viewHabit = new ViewFriendHabitDialog();
@@ -156,7 +169,9 @@ public class ViewFriendHabit extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * function that opens the menu
+     */
     private void openMenu() {
         goBackLayout.setVisibility(View.VISIBLE);
 
@@ -164,14 +179,15 @@ public class ViewFriendHabit extends AppCompatActivity {
         flag_for_floating = false;
     }
 
+    /**
+     * function that closes the menu
+     */
     private void closeMenu() {
         goBackLayout.setVisibility(View.GONE);
 
         extraOptionsButton.setImageResource(R.drawable.ic_baseline_not_interested_24);
         flag_for_floating = true;
     }
-
-
 
     /**
      *  Converts letter denoting the days into full day names and adds it to a list

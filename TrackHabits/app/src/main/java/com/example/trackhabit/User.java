@@ -1,7 +1,7 @@
 package com.example.trackhabit;
 
 /**
- * This represents the user information
+ * This Object Class represents the user information
  */
 public class User {
     private final String username;
@@ -12,10 +12,16 @@ public class User {
         this.password = password;
     }
 
-    String getUserName(){
+    /**
+     * This function gets the username
+     */
+    String getUserName() {
         return this.username;
     }
 
+    /**
+     * This function gets the password
+     */
     String getPassword(){
         return this.password;
     }

@@ -27,26 +27,38 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Represents an dialog for viewing friend's habits
+ */
 public class ViewFriendHabitDialog extends AppCompatDialogFragment {
+    // Declaring UI elements
     private TextView habitNameView, habitTitleView, habitReasonView, habitStartDateView, habitPrivacyView, habitDaysView, habitConsistView;
 
     private ProgressBar consistency;
+
+    // Declaring variables
     private String userName, habitName, habitTitle, habitStart, habitReason, days, habitDays = "";
     private final String[] privacyOptions = new String[]{"Private","Public"};
     private Integer habitConsist = 0, amountEvents = 0;
     private Boolean itemPrivacy;
 
+    // Getting access to a firebase collection
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference habitEventsRef = db.collection("Habit Events");
     private Date startDate;
 
 
-
+    /**
+     * Creates an instance that creates the dialog for viewing friends's habits
+     * will be check on creation of instance.
+     * @param savedInstanceState This is the instance state from the previous creation of habits activity
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Inflating dialog
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.view_habit, null);
 
@@ -65,7 +77,7 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
             e.printStackTrace();
         }
 
-
+        // Building view
         builder.setView(view)
                 .setTitle("Habit Details")
                 .setPositiveButton("Back", (dialogInterface, i) -> {});
@@ -100,6 +112,9 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Function that sets days
+     */
     private void setDays(){
         if (days.contains("M"))
             habitDays = habitDays + "Mon";
@@ -119,7 +134,12 @@ public class ViewFriendHabitDialog extends AppCompatDialogFragment {
             habitDays = "None";
         }
     }
+    /**
+     * Function that gets the consistency of a habit
+     */
 
+
+    // Calculate the consistency of the selected habit
     private void getConsistency(){
 
         habitEventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
