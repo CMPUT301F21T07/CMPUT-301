@@ -38,7 +38,9 @@ public class TakePictureActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Requests an access to camera to take a picture, then starts ActionImageCaptureActivity
+     */
     private void camera() {
         if (ContextCompat.checkSelfPermission(TakePictureActivity.this,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -61,6 +63,8 @@ public class TakePictureActivity extends AppCompatActivity {
             setResult(101, resultIntent);
         }
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
